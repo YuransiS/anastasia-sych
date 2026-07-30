@@ -18,8 +18,6 @@ import {
   MessageCircle,
   Award,
   ArrowRight,
-  Camera,
-  Sliders,
   Check,
   ShieldCheck,
   Brain,
@@ -80,13 +78,6 @@ export default function DiagnosticLanding() {
 
   // FAQ open items state
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
-  // Before / After Slider Toggle
-  const [beforeAfterStates, setBeforeAfterStates] = useState<Record<number, "before" | "after">>({
-    0: "after",
-    1: "after",
-    2: "after",
-  });
 
   // Handle modal open
   const handleOpenModal = () => {
@@ -237,8 +228,6 @@ export default function DiagnosticLanding() {
       name: "Олена, 34 роки",
       achievement: "-12 кг без зривів та заборон",
       desc: "Прийшла після 5 повторних дієт. Сформували новий раціон та позбулися вечірнього заїдання стресу.",
-      beforeTag: "До: 78 кг, зриви кожні 4 дні",
-      afterTag: "Після: 66 кг, стабільний результат",
       stats: ["-12 кг ваги", "Без тяги до солодкого", "Впевненість у тілі"],
     },
     {
@@ -246,8 +235,6 @@ export default function DiagnosticLanding() {
       name: "Марія, 29 років",
       achievement: "-8 кг та спокій з їжею",
       desc: "Раніше кожен тиждень починався з понеділка. Навчилися харчуватися без драм та підрахунку калорій.",
-      beforeTag: "До: Страх їжі, хаос в раціоні",
-      afterTag: "Після: Інтуїтивний спокій, -8 кг",
       stats: ["-8 кг ваги", "Легкість після їди", "Відновлення сну"],
     },
     {
@@ -255,8 +242,6 @@ export default function DiagnosticLanding() {
       name: "Вікторія, 41 рік",
       achievement: "-15 кг та комплексне відновлення",
       desc: "Мала проблеми зі спиною та енергією. Поєднали медичний підхід, дихання та збалансоване харчування.",
-      beforeTag: "До: Біль у спині, хронічна втома",
-      afterTag: "Після: Енергія, -2 розміри одягу",
       stats: ["-15 кг ваги", "Свобода від обмежень", "Гардероб на 2 розміри менший"],
     },
   ];
@@ -308,8 +293,8 @@ export default function DiagnosticLanding() {
         </div>
       </div>
 
-      {/* 2. RESTRUCTURED LIGHT HERO SECTION WITH PROMINENT EXPERT BACKGROUND */}
-      <section className="relative min-h-[85vh] flex flex-col justify-end pb-12 pt-16 px-4 sm:px-6 overflow-hidden">
+      {/* 2. HERO SECTION WITH BADGE AT VERY TOP & PROMINENT OFFER TITLE */}
+      <section className="relative min-h-[85vh] flex flex-col justify-between pt-3 pb-10 px-4 sm:px-6 overflow-hidden">
         
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
@@ -326,9 +311,9 @@ export default function DiagnosticLanding() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-[#f8fafc]/90 to-transparent sm:bg-gradient-to-r sm:from-[#f8fafc] sm:via-[#f8fafc]/85 sm:to-transparent z-10" />
         </div>
 
-        <div className="max-w-4xl mx-auto w-full relative z-20 space-y-6">
+        <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col justify-between h-full space-y-6 pt-1">
           
-          {/* ITEM 1: VERY TOP BADGE */}
+          {/* ITEM 1: VERY TOP BADGE IN HEADER AREA */}
           <div>
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200 text-slate-800 text-xs font-medium backdrop-blur-md shadow-sm">
               <span className="font-bold text-[#0284c7]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
@@ -340,23 +325,23 @@ export default function DiagnosticLanding() {
             </div>
           </div>
 
-          {/* ITEM 2 & 3: TITLE AND SUBTITLE SHIFTED DOWNWARDS, NO CONTAINER BOX */}
-          <div className="space-y-3 pt-6 sm:pt-12">
+          {/* ITEM 2 & 3: PROMINENT OFFER HEADLINE & SMALLER SUBTITLE */}
+          <div className="space-y-3 pt-4 sm:pt-8">
             
-            {/* MAIN HEADLINE */}
-            <h1 className="text-2.5xl sm:text-4xl font-accent leading-tight text-slate-900 tracking-tight max-w-3xl">
+            {/* MAIN OFFER HEADLINE (LARGER FONT text-3xl sm:text-5xl) */}
+            <h1 className="text-3xl sm:text-5xl font-accent leading-tight font-extrabold text-slate-900 tracking-tight max-w-3xl drop-shadow-sm">
               {currentOffer.title}
             </h1>
 
-            {/* SUBTITLE (Smaller font, NO container box/border) */}
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
+            {/* SUBTITLE (SMALLER FONT text-xs sm:text-sm) */}
+            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-2xl font-normal">
               {currentOffer.subtitle}
             </p>
 
           </div>
 
           {/* ITEM 4, 5, 6: PRICING ROW, CTA BUTTON, TRUST BADGES */}
-          <div className="space-y-3 pt-4 max-w-xl">
+          <div className="space-y-3 pt-2 max-w-xl">
             
             {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
             <div className="flex items-center gap-3 font-bold">
@@ -554,25 +539,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 7. GUARANTEE BANNER */}
-      <section className="py-8 px-4 sm:px-6 max-w-4xl mx-auto">
-        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-emerald-200 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left bg-emerald-50/50">
-          <div className="p-4 rounded-2xl bg-emerald-100 text-[#059669] shrink-0 border border-emerald-200">
-            <ShieldCheck className="w-12 h-12" />
-          </div>
-          <div className="space-y-1.5">
-            <div className="inline-block px-2.5 py-0.5 rounded bg-emerald-100 text-[#059669] text-[11px] font-bold uppercase tracking-wider">
-              100% ГАРАНТІЯ КОРИСТІ
-            </div>
-            <h3 className="text-xl font-accent text-slate-900">НЕ ВПЕВНЕНІ? СТИСЛО СПРОБУЙТЕ.</h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Якщо під час 60 хвилин діагностики ви зрозумієте, що зустріч не була для вас корисною — ми повернемо кошти у повному обсязі без зайвих запитань.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. SYSTEM DIAGRAM + RESULTS */}
+      {/* 8. SYSTEM DIAGRAM + CLEAN RESULTS CARDS */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="why-works">
         <div className="max-w-5xl mx-auto space-y-10">
           
@@ -606,82 +573,34 @@ export default function DiagnosticLanding() {
             </div>
           </div>
 
-          {/* BEFORE / AFTER SLIDER CARDS */}
+          {/* CLEAN RESULTS CARDS */}
           <div className="pt-6 space-y-6" id="reviews">
             <div className="text-center space-y-1">
-              <h3 className="text-xl sm:text-2xl font-accent text-slate-900">BEFORE / AFTER РЕЗУЛЬТАТИ</h3>
-              <p className="text-xs text-slate-500">Натисніть «До / Після» для перегляду прогресу:</p>
+              <h3 className="text-xl sm:text-2xl font-accent text-slate-900">РЕЗУЛЬТАТИ КЛІЄНТІВ</h3>
+              <p className="text-xs text-slate-500">Історії трансформацій за медичною методологією:</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {resultsData.map((res) => {
-                const activeTab = beforeAfterStates[res.id] || "after";
-
-                return (
-                  <div key={res.id} className="glass-card p-5 rounded-3xl border border-slate-200 space-y-4 flex flex-col justify-between bg-white">
-                    <div className="w-full h-64 rounded-2xl bg-slate-100 border border-slate-200 relative overflow-hidden flex flex-col justify-between p-4">
-                      <div className="flex justify-between items-center z-10">
-                        <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-white/90 text-slate-800 border border-slate-200 shadow-sm">
-                          {activeTab === "before" ? res.beforeTag : res.afterTag}
-                        </span>
-                        <Sliders className="w-4 h-4 text-slate-400" />
-                      </div>
-
-                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 space-y-1.5 pointer-events-none">
-                        <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center transition-colors ${
-                          activeTab === "before"
-                            ? "bg-slate-200 border-slate-300 text-slate-600"
-                            : "bg-sky-100 border-sky-200 text-[#0284c7]"
-                        }`}>
-                          <Camera className="w-8 h-8" />
-                        </div>
-                        <span className="text-[11px] font-bold text-slate-800 uppercase tracking-wider">
-                          [ Фото {activeTab === "before" ? "ДО" : "ПІСЛЯ"} — {res.name.split(",")[0]} ]
-                        </span>
-                        <span className="text-[10px] text-slate-500">
-                          {activeTab === "before" ? "Початковий стан & зриви" : res.achievement}
-                        </span>
-                      </div>
-
-                      <div className="relative z-10 grid grid-cols-2 p-1 bg-white/90 rounded-xl border border-slate-200 text-xs font-bold">
-                        <button
-                          onClick={() => setBeforeAfterStates({ ...beforeAfterStates, [res.id]: "before" })}
-                          className={`py-1.5 rounded-lg transition-all ${
-                            activeTab === "before" ? "bg-slate-700 text-white shadow" : "text-slate-500"
-                          }`}
-                        >
-                          До
-                        </button>
-                        <button
-                          onClick={() => setBeforeAfterStates({ ...beforeAfterStates, [res.id]: "after" })}
-                          className={`py-1.5 rounded-lg transition-all ${
-                            activeTab === "after" ? "bg-[#0284c7] text-white shadow" : "text-slate-500"
-                          }`}
-                        >
-                          Після
-                        </button>
-                      </div>
+              {resultsData.map((res) => (
+                <div key={res.id} className="glass-card p-6 rounded-3xl border border-slate-200 space-y-4 flex flex-col justify-between bg-white shadow-sm hover:shadow-md transition-shadow">
+                  <div className="space-y-3">
+                    <div className="inline-block px-3 py-1 rounded-full bg-sky-50 text-[#0284c7] text-xs font-bold border border-sky-100">
+                      {res.achievement}
                     </div>
-
-                    <div className="space-y-2">
-                      <div className="inline-block px-3 py-1 rounded-full bg-sky-50 text-[#0284c7] text-xs font-bold border border-sky-100">
-                        {res.achievement}
-                      </div>
-                      <h3 className="text-lg font-bold text-slate-900">{res.name}</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">{res.desc}</p>
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-100 space-y-1">
-                      {res.stats.map((st, sIdx) => (
-                        <div key={sIdx} className="flex items-center gap-2 text-xs font-medium text-[#0284c7]">
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>{st}</span>
-                        </div>
-                      ))}
-                    </div>
+                    <h3 className="text-lg font-bold text-slate-900">{res.name}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">{res.desc}</p>
                   </div>
-                );
-              })}
+
+                  <div className="pt-4 border-t border-slate-100 space-y-1.5">
+                    {res.stats.map((st, sIdx) => (
+                      <div key={sIdx} className="flex items-center gap-2 text-xs font-medium text-[#0284c7]">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>{st}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -883,8 +802,8 @@ export default function DiagnosticLanding() {
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
       </footer>
 
-      {/* 12. STICKY MOBILE BOTTOM CTA BAR */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 z-50 flex items-center justify-between gap-3 shadow-2xl">
+      {/* 12. STICKY MOBILE BOTTOM CTA BAR (PERMANENTLY VISIBLE, SHIFTED CLOSER TO BUTTON) */}
+      <div className="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 z-50 flex items-center justify-between gap-2.5 shadow-2xl">
         <div className="flex flex-col">
           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Діагностика 60 хв</span>
           <div className="flex items-baseline gap-1.5 font-bold">
@@ -895,26 +814,26 @@ export default function DiagnosticLanding() {
 
         <motion.button
           whileTap={{ scale: 0.95 }}
-          animate={{ scale: [1, 1.04, 1] }}
+          animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           onClick={handleOpenModal}
           className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-xs sm:text-sm shadow-xl glow-primary animate-pulse cursor-pointer flex items-center gap-2 border border-[#0284c7]/40 shrink-0"
         >
-          <Sparkles className="w-4 h-4 text-sky-200 animate-spin" />
+          <Sparkles className="w-4 h-4 text-sky-200" />
           <span>Записатись на діагностику</span>
         </motion.button>
       </div>
 
-      {/* LEAD REGISTRATION MODAL (CENTERED EXACTLY IN MOBILE VIEWPORT) */}
+      {/* LEAD REGISTRATION MODAL (CENTRALIZED DEAD CENTER IN VIEWPORT) */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="fixed inset-0 z-[100] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 my-auto text-slate-900 max-h-[85vh] overflow-y-auto"
+              className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 my-auto text-slate-900 max-h-[90vh] overflow-y-auto"
             >
               <button
                 onClick={() => setIsModalOpen(false)}
