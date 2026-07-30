@@ -28,8 +28,7 @@ import {
   Check,
   Shield,
   Activity,
-  Zap,
-  HelpCircle
+  Zap
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -106,20 +105,17 @@ export default function DiagnosticLanding() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. Name validation
     if (!formData.name.trim()) {
       setErrorMessage("Будь ласка, вкажіть ваше ім'я.");
       return;
     }
 
-    // 2. Phone validation (including 075 Vodafone and 077 Kyivstar operator codes)
     const phoneVal = validateUkrainianPhone(formData.phone);
     if (!phoneVal.isValid) {
       setErrorMessage(phoneVal.error || "Введіть дійсний номер мобільного телефону України.");
       return;
     }
 
-    // 3. Telegram handle validation
     const tgVal = validateTelegramHandle(formData.telegram);
     if (!tgVal.isValid) {
       setErrorMessage(tgVal.error || "Введіть коректний Telegram нікнейм.");
@@ -178,7 +174,38 @@ export default function DiagnosticLanding() {
     }
   };
 
-  // Data Content per TZ
+  // Dynamic Content mapping for Offers 1, 2, 3
+  const getOfferContent = () => {
+    if (offerVariant === "2") {
+      return {
+        title: "Постійні зриви на солодке та переїдання?",
+        subtitle: "Втомилися починати щопонеділка та відчувати провину за кожен з'їдений шматочок?",
+        p1: "Запрошую вас на діагностику, де ми знайдемо першопричину харчових зривів та навчимося харчуватися без драм і жорстких заборон.",
+        p2: "Розберемо, чому саме у вашому випадку самообмеження призводять до ще більших зривів, і що заважає сформувати здорові звички.",
+        highlight: "Знайдемо, як повернути контроль над харчуванням та легкість у тілі без постійної боротьби із собою."
+      };
+    }
+    if (offerVariant === "3") {
+      return {
+        title: "Втратили впевненість у собі та власному тілі?",
+        subtitle: "Не хочете дивитися у дзеркало чи купувати одяг більшого розміру після чергової невдалої спроби?",
+        p1: "Запрошую вас на діагностику, де ми побудуємо комплексний покроковий шлях до повернення вашої форми та впевненості.",
+        p2: "Розберемо, що заважає утримувати результат тривалий час і як зробити здоровий спосіб життя вашою природною частиною.",
+        highlight: "Створимо план, при якому результат залишиться з вами назавжди, а не зникне після завершення програми."
+      };
+    }
+    // Offer 1 (Default)
+    return {
+      title: "Після закінчення дієти здається, що тепер можна нарешті наїстися?",
+      subtitle: "Дивишся в дзеркало і тобі не подобається відображення? Марафон закінчився, мотивація зникла, а старі звички повернулися?",
+      p1: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон.",
+      p2: "Розберемо, чому саме у вашому випадку дієти і марафони не дали довготривалого результату, і що заважає повернутись до тіла, у якому ви почуватиметеся впевнено.",
+      highlight: "На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав після завершення програми."
+    };
+  };
+
+  const currentOffer = getOfferContent();
+
   const problemItems = [
     "Після дієти знову повертаються старі звички.",
     "Постійно починаю «з понеділка».",
@@ -265,7 +292,7 @@ export default function DiagnosticLanding() {
     },
     {
       q: "Онлайн чи офлайн?",
-      a: "Формат проведення онлайн у Zoom. Ви можете приєднатися з будь-якого куточка світу.",
+      a: "Формат проведения онлайн у Zoom. Ви можете приєднатися з будь-якого куточка світу.",
     },
     {
       q: "Чи буде запис?",
@@ -281,17 +308,6 @@ export default function DiagnosticLanding() {
     },
   ];
 
-  // Dynamic Hooks for Offer 1, 2, 3
-  const getOfferHeadline = () => {
-    if (offerVariant === "2") {
-      return "Втомилися від постійних зривів на солодке та переїдання?";
-    }
-    if (offerVariant === "3") {
-      return "Хочете нарешті повернутися до тіла, у якому почуватиметеся впевнено?";
-    }
-    return "Після закінчення дієти здається, що тепер можна нарешті наїстися?";
-  };
-
   return (
     <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-28 sm:pb-12 gpu-layer">
       {/* Top Banner Offer Badge */}
@@ -305,9 +321,8 @@ export default function DiagnosticLanding() {
         <span>Спеціальна вартість діагностики — <b className="text-[#ffdc82]">480 грн</b> замість <span className="line-through opacity-75">1190 грн</span></span>
       </motion.div>
 
-      {/* Hero Section - Mobile First Optimized */}
+      {/* Hero Section - Dynamically isolated by Offer 1, 2, 3 */}
       <header className="relative pt-6 pb-12 sm:pt-16 sm:pb-24 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
-        {/* Background Ambient SVG & Glows */}
         <div className="absolute top-10 right-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#ffdc82]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-40 left-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#c33624]/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -323,15 +338,17 @@ export default function DiagnosticLanding() {
               <span>Персональна діагностика 60 хвилин</span>
             </motion.div>
 
+            {/* DYNAMIC OFFER TITLE */}
             <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
               className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight"
             >
-              {getOfferHeadline()}
+              {currentOffer.title}
             </motion.h1>
 
+            {/* DYNAMIC OFFER SUBTITLE & PARAGRAPHS */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -339,20 +356,20 @@ export default function DiagnosticLanding() {
               className="space-y-3 text-[#8e9bb0] text-sm sm:text-base leading-relaxed"
             >
               <p className="text-white/95 font-medium text-base sm:text-lg">
-                Дивишся в дзеркало і тобі не подобається відображення? Марафон закінчився, мотивація зникла, а старі звички повернулися?
+                {currentOffer.subtitle}
               </p>
               <p>
-                Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон.
+                {currentOffer.p1}
               </p>
               <p>
-                Розберемо, чому саме у вашому випадку дієти і марафони не дали довготривалого результату, і що заважає повернутись до тіла, у якому ви почуватиметеся впевнено.
+                {currentOffer.p2}
               </p>
               <p className="text-[#ffdc82]/90 font-medium pt-1">
-                На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав після завершення програми.
+                {currentOffer.highlight}
               </p>
             </motion.div>
 
-            {/* Mobile First Diagnostic Details Cards */}
+            {/* Diagnostic Details Badge */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -879,7 +896,7 @@ export default function DiagnosticLanding() {
         </motion.button>
       </div>
 
-      {/* LEAD REGISTRATION MODAL WITH ENHANCED VALIDATION & HELPER BUTTONS */}
+      {/* LEAD REGISTRATION MODAL */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
@@ -965,7 +982,6 @@ export default function DiagnosticLanding() {
                           placeholder="@username"
                           className="w-full pl-10 pr-36 py-3 rounded-xl bg-[#131924] border border-[#222c3d] text-white text-sm focus:outline-none focus:border-[#ffdc82]"
                         />
-                        {/* INLINE "В мене немає нікнейму" HELPER BUTTON */}
                         <button
                           type="button"
                           onClick={handleNoTelegramClick}
