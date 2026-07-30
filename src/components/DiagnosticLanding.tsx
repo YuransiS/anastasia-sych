@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { motion as m } from "framer-motion";
 import {
   CheckCircle2,
-  XCircle,
   Clock,
   Video,
   Sparkles,
   ChevronDown,
-  UserCheck,
   ShieldAlert,
   Calendar,
   Send,
@@ -22,15 +22,10 @@ import {
   HeartPulse,
   Brain,
   ArrowRight,
-  Flame,
   Camera,
   Sliders,
   Check,
   ShieldCheck,
-  Zap,
-  Lock,
-  RefreshCw,
-  Gift
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -71,7 +66,7 @@ export default function DiagnosticLanding() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Interactive Checklist selection state for Block 2
+  // Interactive Checklist selection state
   const [selectedProblems, setSelectedProblems] = useState<number[]>([]);
 
   // FAQ open items state
@@ -194,6 +189,7 @@ export default function DiagnosticLanding() {
   const getOfferContent = () => {
     if (offerVariant === "2") {
       return {
+        badge: "ОФЕР #2 • ЗРИВИ ТА ПЕРЕЇДАННЯ",
         title: "Постійні зриви на солодке та переїдання?",
         subtitle: "Втомилися починати щопонеділка та відчувати провину за кожен з'їдений шматочок?",
         p1: "Запрошую вас на діагностику, де ми знайдемо першопричину харчових зривів та навчимося харчуватися без драм і жорстких заборон.",
@@ -203,6 +199,7 @@ export default function DiagnosticLanding() {
     }
     if (offerVariant === "3") {
       return {
+        badge: "ОФЕР #3 • ВПЕВНЕНІСТЬ ТА ВІДНОВЛЕННЯ ТІЛА",
         title: "Втратили впевненість у собі та власному тілі?",
         subtitle: "Не хочете дивитися у дзеркало чи купувати одяг більшого розміру після чергової невдалої спроби?",
         p1: "Запрошую вас на діагностику, де ми побудуємо комплексний покроковий шлях до повернення вашої форми та впевненості.",
@@ -212,6 +209,7 @@ export default function DiagnosticLanding() {
     }
     // Offer 1 (Default)
     return {
+      badge: "ОФЕР #1 • РЕЗУЛЬТАТ ПІСЛЯ ДІЄТИ",
       title: "Після закінчення дієти здається, що тепер можна нарешті наїстися?",
       subtitle: "Дивишся в дзеркало і тобі не подобається відображення? Марафон закінчився, мотивація зникла, а старі звички повернулися?",
       p1: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон.",
@@ -240,27 +238,6 @@ export default function DiagnosticLanding() {
     "Чому здорове харчування викликає тривогу чи паніку.",
     "Що потрібно змінити вже зараз.",
     "Який шлях буде найефективнішим у вашій ситуації.",
-  ];
-
-  const whatYouGetItems = [
-    "розуміння причини",
-    "персональні рекомендації",
-    "покроковий план",
-    "розуміння наступного кроку",
-  ];
-
-  const suitableForItems = [
-    "вже багато разів худнули, але результат не вдається утримати",
-    "втомилися від дієт",
-    "хочете навчитися нормально харчуватись",
-    "хочете перестати зриватися",
-    "хочете повернути собі свою впевненість",
-  ];
-
-  const notSuitableForItems = [
-    "шукаєте чарівну таблетку",
-    "не готові нічого змінювати",
-    "шукаєте швидкого вирішення проблеми",
   ];
 
   const stepsItems = [
@@ -351,7 +328,7 @@ export default function DiagnosticLanding() {
       {/* 2. HEADER NAVIGATION BAR (header-navline) */}
       <header className="border-b border-[#222c3d] bg-[#0b0f17]/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#c33624] text-[#ffdc82] font-accent font-bold flex items-center justify-center text-base shadow-md">
+          <div className="w-8 h-8 rounded-full bg-[#c33624] text-[#ffdc82] font-accent font-bold flex items-center justify-center text-base shadow-md border border-[#ffdc82]/40">
             AS
           </div>
           <span className="font-accent font-bold text-white text-base sm:text-lg">Анастасія Сич</span>
@@ -373,136 +350,116 @@ export default function DiagnosticLanding() {
         </button>
       </header>
 
-      {/* 3. HERO OFFER SECTION (SPLITSCOMBO TYPE) */}
-      <section className="relative pt-6 pb-12 sm:pt-12 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
-        {/* Glowing Background Orbs */}
-        <div className="absolute top-10 right-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#ffdc82]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-40 left-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#c33624]/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 3. HERO OFFER SECTION WITH BACKGROUND EXPERT PHOTO (SPLITSCOMBO TYPE) */}
+      <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center pt-8 pb-16 px-4 sm:px-6 overflow-hidden">
+        
+        {/* HERO BACKGROUND IMAGE OF ANASTASIA (splitscombo hero__model) */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/anastasia_hero_blue.webp"
+            alt="Анастасія Сич"
+            fill
+            priority
+            className="object-cover object-top sm:object-right filter brightness-90 contrast-105"
+            sizes="100vw"
+          />
+          {/* Dark gradient overlay layers to ensure ultra-legible text & splitscombo feel */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f17] via-[#0b0f17]/90 to-[#0b0f17]/40 sm:to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-[#0b0f17]/70 z-10" />
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
-          
-          {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-5 text-left">
+        <div className="max-w-6xl mx-auto w-full relative z-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* Start / Access Pill (splitscombo hero__top-bar) */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#131924] border border-[#ffdc82]/30 text-white text-xs sm:text-sm font-medium">
-              <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ</span>
-              <span className="text-[#8e9bb0]">|</span>
-              <div className="flex items-center gap-1.5 text-white/90">
-                <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
-                <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
-              </div>
-            </div>
-
-            {/* DYNAMIC TITLE */}
-            <h1 className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight">
-              {currentOffer.title}
-            </h1>
-
-            {/* DYNAMIC SUBTITLE & PARAGRAPHS */}
-            <div className="space-y-3 text-[#8e9bb0] text-sm sm:text-base leading-relaxed">
-              <p className="text-white/95 font-medium text-base sm:text-lg">
-                {currentOffer.subtitle}
-              </p>
-              <p>{currentOffer.p1}</p>
-              <p>{currentOffer.p2}</p>
-              <p className="text-[#ffdc82]/90 font-medium pt-1">{currentOffer.highlight}</p>
-            </div>
-
-            {/* SPLITSCOMBO OFFER PRICING & BUTTON BOX (hero__offer-box) */}
-            <div className="glass-card p-5 sm:p-6 rounded-3xl border border-[#ffdc82]/30 space-y-4 relative overflow-hidden">
+            {/* Hero Left Content Overlay */}
+            <div className="lg:col-span-8 space-y-5 text-left">
               
-              {/* Spinning Discount Stamp (-60% OFF) */}
-              <div className="absolute -top-3 -right-3 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center pointer-events-none">
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#ffdc82] animate-spin-slow opacity-60" />
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#c33624] text-white flex flex-col items-center justify-center text-center shadow-lg transform rotate-12 border border-[#ffdc82]/40">
-                  <span className="text-xs sm:text-sm font-extrabold font-accent leading-none">-60%</span>
-                  <span className="text-[9px] font-bold text-[#ffdc82] uppercase">OFF</span>
+              {/* Offer Variant Badge & Start Date Pill */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs font-medium backdrop-blur-md shadow-lg">
+                  <span className="font-bold text-[#ffdc82]">{currentOffer.badge}</span>
+                  <span className="text-[#8e9bb0]">|</span>
+                  <div className="flex items-center gap-1.5 text-white/90">
+                    <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
+                    <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
+                  </div>
                 </div>
               </div>
 
-              {/* Price Badges Container */}
-              <div className="flex items-center gap-4">
-                <div className="price-box-current px-5 py-3 rounded-2xl flex flex-col items-center justify-center">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-[#ffdc82] font-accent">480 грн</span>
-                </div>
-                <div className="price-box-old px-4 py-2.5 rounded-2xl flex flex-col items-center justify-center">
-                  <span className="text-xs text-[#8e9bb0] uppercase font-semibold">було</span>
-                  <span className="text-lg font-bold text-white/50">1190 грн</span>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <motion.button
-                whileTap={{ scale: 0.97 }}
-                onClick={handleOpenModal}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/30"
+              {/* DYNAMIC TITLE */}
+              <m.h1
+                key={currentOffer.title}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight drop-shadow-md"
               >
-                <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
+                {currentOffer.title}
+              </m.h1>
 
-              {/* Trust badges footer */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#222c3d] text-center text-[11px] text-[#8e9bb0]">
-                <div className="flex items-center justify-center gap-1">
-                  <Video className="w-3.5 h-3.5 text-[#ffdc82]" />
-                  <span>Zoom 60 хв</span>
+              {/* DYNAMIC SUBTITLE & PARAGRAPHS */}
+              <div className="space-y-3 text-[#e8ecf4] text-sm sm:text-base leading-relaxed bg-[#0b0f17]/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#ffdc82]/20 shadow-xl max-w-2xl">
+                <p className="text-white font-semibold text-base sm:text-lg border-b border-[#222c3d] pb-2">
+                  {currentOffer.subtitle}
+                </p>
+                <p className="text-[#8e9bb0]">{currentOffer.p1}</p>
+                <p className="text-[#8e9bb0]">{currentOffer.p2}</p>
+                <p className="text-[#ffdc82] font-bold pt-1">{currentOffer.highlight}</p>
+              </div>
+
+              {/* SPLITSCOMBO OFFER PRICING & BUTTON BOX (hero__offer-box) */}
+              <div className="glass-card p-5 sm:p-6 rounded-3xl border-2 border-[#ffdc82]/40 space-y-4 relative overflow-hidden shadow-2xl max-w-xl">
+                
+                {/* Spinning Discount Stamp (-60% OFF) */}
+                <div className="absolute -top-3 -right-3 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center pointer-events-none z-20">
+                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#ffdc82] animate-spin-slow opacity-70" />
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#c33624] text-white flex flex-col items-center justify-center text-center shadow-2xl transform rotate-12 border border-[#ffdc82]">
+                    <span className="text-xs sm:text-sm font-extrabold font-accent leading-none">-60%</span>
+                    <span className="text-[9px] font-bold text-[#ffdc82] uppercase">OFF</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-center gap-1">
-                  <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
-                  <span>Медичний фахівець</span>
+
+                {/* Price Badges Container */}
+                <div className="flex items-center gap-4">
+                  <div className="price-box-current px-5 py-3 rounded-2xl flex flex-col items-center justify-center">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-[#ffdc82] font-accent">480 грн</span>
+                  </div>
+                  <div className="price-box-old px-4 py-2.5 rounded-2xl flex flex-col items-center justify-center">
+                    <span className="text-xs text-[#8e9bb0] uppercase font-semibold">було</span>
+                    <span className="text-lg font-bold text-white/50">1190 грн</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>100% користь</span>
+
+                {/* Action Button */}
+                <m.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleOpenModal}
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
+                >
+                  <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
+                  <ArrowRight className="w-5 h-5" />
+                </m.button>
+
+                {/* Trust badges footer */}
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#222c3d] text-center text-[11px] text-[#8e9bb0]">
+                  <div className="flex items-center justify-center gap-1">
+                    <Video className="w-3.5 h-3.5 text-[#ffdc82]" />
+                    <span>Zoom 60 хв</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1">
+                    <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
+                    <span>Медична освіта</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>100% користь</span>
+                  </div>
                 </div>
+
               </div>
 
             </div>
 
           </div>
-
-          {/* Hero Right Photo Container Placeholder */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative max-w-sm w-full">
-              <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-[#ffdc82] to-[#c33624] opacity-35 blur-xl pointer-events-none" />
-
-              <div className="relative glass-card p-3.5 rounded-3xl border border-[#ffdc82]/30 overflow-hidden shadow-2xl">
-                <div className="w-full h-96 sm:h-[420px] rounded-2xl bg-[#131924] border border-[#222c3d] relative overflow-hidden flex flex-col justify-between p-5">
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#131924]/80 to-transparent z-10" />
-
-                  <div className="relative z-20 flex justify-between items-start">
-                    <div className="px-3 py-1 bg-[#0b0f17]/90 backdrop-blur-md rounded-full text-xs text-[#ffdc82] border border-[#ffdc82]/30 flex items-center gap-1.5 font-semibold">
-                      <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
-                      <span>Вища медична освіта</span>
-                    </div>
-
-                    <div className="p-2 rounded-xl bg-[#0b0f17]/80 border border-white/10 text-white/40">
-                      <Camera className="w-4 h-4" />
-                    </div>
-                  </div>
-
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 space-y-2 pointer-events-none">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-[#c33624]/30 to-[#ffdc82]/30 border border-[#ffdc82]/30 flex items-center justify-center text-[#ffdc82]">
-                      <User className="w-12 h-12" />
-                    </div>
-                    <span className="text-xs font-bold text-[#8e9bb0] uppercase tracking-widest pt-2">[ Фото Анастасії Сич ]</span>
-                    <span className="text-[11px] text-[#8e9bb0]/70">Медичний нутриціолог & Фахівець реабілітації</span>
-                  </div>
-
-                  <div className="relative z-20 space-y-1">
-                    <h3 className="text-2xl font-accent text-white">Анастасія Сич</h3>
-                    <p className="text-[#ffdc82] text-sm font-medium">8+ років досвіду роботи з жіночим здоров'ям</p>
-                    <div className="flex items-center gap-2 pt-1">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium">Медичний підхід</span>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-[#c33624]/20 text-[#c33624] font-medium">Без суворих дієт</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
@@ -523,9 +480,8 @@ export default function DiagnosticLanding() {
             {problemItems.map((item, idx) => {
               const isSelected = selectedProblems.includes(idx);
               return (
-                <motion.div
+                <div
                   key={idx}
-                  whileTap={{ scale: 0.98 }}
                   onClick={() => toggleProblem(idx)}
                   className={`p-4 rounded-2xl cursor-pointer transition-all duration-200 border flex items-start gap-3.5 ${
                     isSelected
@@ -541,7 +497,7 @@ export default function DiagnosticLanding() {
                     )}
                   </div>
                   <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -557,29 +513,42 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 5. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto">
-        <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[#ffdc82]/30 relative overflow-hidden text-center space-y-6">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#ffdc82]/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 5. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH YOGA PHOTO */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
+        <div className="glass-card p-6 sm:p-10 rounded-3xl border border-[#ffdc82]/30 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden">
+          
+          <div className="md:col-span-7 space-y-5 text-left">
+            <span className="text-[#c33624] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
 
-          <span className="text-[#c33624] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
+            <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
+              Чому дієти працюють лише тимчасово?
+            </h2>
 
-          <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
-            Чому дієти працюють лише тимчасово?
-          </h2>
+            <div className="space-y-3 text-sm sm:text-base text-[#e8ecf4] leading-relaxed">
+              <p className="font-bold text-[#ffdc82] text-base sm:text-lg">
+                Ви не ліниві. Не слабохарактерні. І проблема не у відсутності мотивації.
+              </p>
+              <p className="text-[#8e9bb0]">
+                Проблема в тому, що більшість жінок намагаються змінити поведінку, не розібравшись із причиною, через яку вони постійно повертаються до старих звичок.
+              </p>
+            </div>
 
-          <div className="space-y-4 text-sm sm:text-lg text-[#e8ecf4] leading-relaxed max-w-2xl mx-auto">
-            <p className="font-bold text-[#ffdc82] text-lg sm:text-xl">
-              Ви не ліниві. Не слабохарактерні. І проблема не у відсутності мотивації.
-            </p>
-            <p className="text-[#8e9bb0]">
-              Проблема в тому, що більшість жінок намагаються змінити поведінку, не розібравшись із причиною, через яку вони постійно повертаються до старих звичок.
-            </p>
+            <div className="inline-block px-5 py-3 rounded-2xl bg-[#c33624]/20 border border-[#c33624]/40 text-white font-bold text-xs sm:text-sm">
+              Саме це ми знаходимо під час діагностики.
+            </div>
           </div>
 
-          <div className="inline-block px-6 py-3 rounded-2xl bg-[#c33624]/20 border border-[#c33624]/40 text-white font-bold text-sm sm:text-base shadow-inner">
-            Саме це ми знаходимо під час діагностики.
+          <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-[#ffdc82]/20 shadow-xl">
+            <Image
+              src="/images/anastasia_yoga_white.webp"
+              alt="Анастасія Сич на йога-килимку"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-60" />
           </div>
+
         </div>
       </section>
 
@@ -603,13 +572,13 @@ export default function DiagnosticLanding() {
           </div>
 
           <div className="text-center pt-2">
-            <motion.button
+            <m.button
               whileTap={{ scale: 0.96 }}
               onClick={handleOpenModal}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red"
             >
               Записатись на діагностику
-            </motion.button>
+            </m.button>
           </div>
         </div>
       </section>
@@ -620,7 +589,7 @@ export default function DiagnosticLanding() {
           <div className="text-center space-y-2">
             <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
-              Як проходить діагностична програма
+              Як проходит діагностична програма
             </h2>
           </div>
 
@@ -662,7 +631,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 9. SYSTEM DIAGRAM + RESULTS SHOWCASE (splitscombo results section) */}
+      {/* 9. SYSTEM DIAGRAM + RESULTS SHOWCASE WITH OUTDOOR PHOTO (splitscombo results section) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]" id="why-works">
         <div className="max-w-5xl mx-auto space-y-10">
           
@@ -779,7 +748,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 10. AUTHOR SECTION (splitscombo about) */}
+      {/* 10. AUTHOR SECTION WITH ELEGANT BLACK DRESS PHOTO (splitscombo about) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[#ffdc82]/30 space-y-8">
           <div className="max-w-3xl space-y-3 text-left">
@@ -812,12 +781,18 @@ export default function DiagnosticLanding() {
             </div>
 
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-sm h-80 rounded-2xl bg-[#131924] border border-[#222c3d] relative overflow-hidden flex flex-col justify-between p-5">
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 space-y-2 pointer-events-none">
-                  <div className="w-20 h-20 rounded-full bg-[#ffdc82]/10 border border-[#ffdc82]/30 flex items-center justify-center text-[#ffdc82]">
-                    <User className="w-10 h-10" />
-                  </div>
-                  <span className="text-xs font-bold text-[#8e9bb0] uppercase tracking-widest pt-2">[ Фото Анастасії ]</span>
+              <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-[#ffdc82]/30 relative shadow-2xl">
+                <Image
+                  src="/images/anastasia_portrait_black.webp"
+                  alt="Анастасія Сич"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 35vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-50" />
+                <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[#0b0f17]/90 backdrop-blur-md border border-[#ffdc82]/30 text-center">
+                  <span className="text-xs font-bold text-white">Анастасія Сич</span>
+                  <p className="text-[10px] text-[#ffdc82]">Медичний нутриціолог</p>
                 </div>
               </div>
             </div>
@@ -943,7 +918,7 @@ export default function DiagnosticLanding() {
 
                   <AnimatePresence>
                     {isOpen && (
-                      <motion.div
+                      <m.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -952,7 +927,7 @@ export default function DiagnosticLanding() {
                         <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#8e9bb0] border-t border-[#222c3d]/50 pt-3 leading-relaxed">
                           {item.a}
                         </div>
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
                 </div>
@@ -984,7 +959,7 @@ export default function DiagnosticLanding() {
           </div>
         </div>
 
-        <motion.button
+        <m.button
           whileTap={{ scale: 0.95 }}
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -993,14 +968,14 @@ export default function DiagnosticLanding() {
         >
           <Sparkles className="w-4 h-4 text-[#ffdc82] animate-spin" />
           <span>Записатись за 480 грн</span>
-        </motion.button>
+        </m.button>
       </div>
 
       {/* LEAD REGISTRATION MODAL */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-            <motion.div
+            <m.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -1143,7 +1118,7 @@ export default function DiagnosticLanding() {
                   </button>
                 </div>
               )}
-            </motion.div>
+            </m.div>
           </div>
         )}
       </AnimatePresence>
