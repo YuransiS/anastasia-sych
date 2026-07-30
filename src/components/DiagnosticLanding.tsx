@@ -76,7 +76,7 @@ export default function DiagnosticLanding() {
     2: "after",
   });
 
-  // Countdown timer state for splitscombo-style sticky bar
+  // Countdown timer state for sticky bar
   const [timeLeft, setTimeLeft] = useState({ minutes: 29, seconds: 55 });
 
   useEffect(() => {
@@ -287,11 +287,11 @@ export default function DiagnosticLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-32 sm:pb-16 gpu-layer">
+    <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-32 sm:pb-24 gpu-layer">
 
-      {/* 1. SPLITSCOMBO INFINITE MARQUEE TICKER (s1-trackLine) */}
-      <div className="bg-[#c33624] text-white py-2 overflow-hidden border-b border-[#ffdc82]/30 shadow-md relative z-40">
-        <div className="animate-marquee font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-6">
+      {/* 1. FAST TICKER (8s SPEED, NO HEADER) */}
+      <div className="bg-[#c33624] text-white py-2.5 overflow-hidden border-b border-[#ffdc82]/30 shadow-md sticky top-0 z-40">
+        <div className="animate-marquee font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
           <span>🔥 Персональна діагностика 60 хвилин</span>
           <span>✦</span>
           <span>Знижка -60% діє сьогодні</span>
@@ -310,147 +310,94 @@ export default function DiagnosticLanding() {
         </div>
       </div>
 
-      {/* 2. HEADER NAVIGATION BAR (header-navline) */}
-      <header className="border-b border-[#222c3d] bg-[#0b0f17]/90 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#c33624] text-[#ffdc82] font-accent font-bold flex items-center justify-center text-base shadow-md border border-[#ffdc82]/40">
-            AS
-          </div>
-          <span className="font-accent font-bold text-white text-base sm:text-lg">Анастасія Сич</span>
+      {/* 2. HERO SECTION WITH BACKGROUND EXPERT PHOTO (MOBILE & DESKTOP BACKGROUND) */}
+      <section className="relative min-h-[90vh] sm:min-h-[85vh] flex items-end sm:items-center pt-8 pb-16 px-4 sm:px-6 overflow-hidden">
+        
+        {/* FULL EXPERT BACKGROUND PHOTO ON MOBILE & DESKTOP */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/anastasia_hero_blue.webp"
+            alt="Анастасія Сич - Медичний нутриціолог"
+            fill
+            priority
+            unoptimized
+            className="object-cover object-top sm:object-right opacity-90 filter brightness-105 contrast-105"
+            sizes="100vw"
+          />
+          {/* Gradient overlays for crystal clear text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/90 to-transparent sm:bg-gradient-to-r sm:from-[#0b0f17] sm:via-[#0b0f17]/85 sm:to-transparent z-10" />
         </div>
 
-        <nav className="hidden md:flex items-center gap-6 text-xs text-[#8e9bb0] font-medium">
-          <a href="#program" className="hover:text-[#ffdc82] transition-colors">Програма</a>
-          <a href="#why-works" className="hover:text-[#ffdc82] transition-colors">Чому це працює</a>
-          <a href="#author" className="hover:text-[#ffdc82] transition-colors">Про автора</a>
-          <a href="#reviews" className="hover:text-[#ffdc82] transition-colors">Результати</a>
-          <a href="#faq" className="hover:text-[#ffdc82] transition-colors">FAQ</a>
-        </nav>
-
-        <button
-          onClick={handleOpenModal}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white text-xs font-bold shadow-md glow-red hover:opacity-90 transition-all cursor-pointer"
-        >
-          Записатись
-        </button>
-      </header>
-
-      {/* 3. HERO OFFER SECTION WITH PROMINENT EXPERT PHOTO */}
-      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
-        
-        {/* Glow Effects */}
-        <div className="absolute top-10 right-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#ffdc82]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-40 left-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#c33624]/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+        <div className="max-w-4xl mx-auto w-full relative z-20 space-y-6 pt-12 sm:pt-6">
           
-          {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-5 text-left">
-            
-            {/* Start Date Pill */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#131924] border border-[#ffdc82]/30 text-white text-xs sm:text-sm font-medium">
-              <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ</span>
-              <span className="text-[#8e9bb0]">|</span>
-              <div className="flex items-center gap-1.5 text-white/90">
-                <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
-                <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
-              </div>
+          {/* Start Date Pill */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs sm:text-sm font-medium backdrop-blur-md shadow-lg">
+            <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
+            <span className="text-[#8e9bb0]">|</span>
+            <div className="flex items-center gap-1.5 text-white/90">
+              <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
+              <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
             </div>
-
-            {/* DYNAMIC TITLE */}
-            <h1 className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight">
-              {currentOffer.title}
-            </h1>
-
-            {/* DYNAMIC SUBTITLE / DESCRIPTION */}
-            <p className="text-[#8e9bb0] text-base sm:text-xl leading-relaxed">
-              {currentOffer.subtitle}
-            </p>
-
-            {/* SPLITSCOMBO OFFER PRICING & BUTTON BOX (hero__offer-box) */}
-            <div className="glass-card p-5 sm:p-6 rounded-3xl border border-[#ffdc82]/30 space-y-4 relative overflow-hidden shadow-2xl">
-              
-              {/* Spinning Discount Stamp (-60% OFF) */}
-              <div className="absolute -top-3 -right-3 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center pointer-events-none">
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#ffdc82] animate-spin-slow opacity-70" />
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#c33624] text-white flex flex-col items-center justify-center text-center shadow-lg transform rotate-12 border border-[#ffdc82]/40">
-                  <span className="text-xs sm:text-sm font-extrabold font-accent leading-none">-60%</span>
-                  <span className="text-[9px] font-bold text-[#ffdc82] uppercase">OFF</span>
-                </div>
-              </div>
-
-              {/* Price Badges Container */}
-              <div className="flex items-center gap-4">
-                <div className="price-box-current px-5 py-3 rounded-2xl flex flex-col items-center justify-center">
-                  <span className="text-2xl sm:text-3xl font-extrabold text-[#ffdc82] font-accent">480 грн</span>
-                </div>
-                <div className="price-box-old px-4 py-2.5 rounded-2xl flex flex-col items-center justify-center">
-                  <span className="text-xs text-[#8e9bb0] uppercase font-semibold">було</span>
-                  <span className="text-lg font-bold text-white/50">1190 грн</span>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <motion.button
-                whileTap={{ scale: 0.97 }}
-                onClick={handleOpenModal}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/30"
-              >
-                <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-
-              {/* Trust badges footer */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#222c3d] text-center text-[11px] text-[#8e9bb0]">
-                <div className="flex items-center justify-center gap-1">
-                  <Video className="w-3.5 h-3.5 text-[#ffdc82]" />
-                  <span>Zoom 60 хв</span>
-                </div>
-                <div className="flex items-center justify-center gap-1">
-                  <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
-                  <span>Медичний фахівець</span>
-                </div>
-                <div className="flex items-center justify-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>100% користь</span>
-                </div>
-              </div>
-
-            </div>
-
           </div>
 
-          {/* Hero Right Photo Container (EXPERT STANDING PHOTO) */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative max-w-sm w-full">
-              <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-[#ffdc82] to-[#c33624] opacity-35 blur-xl pointer-events-none" />
+          {/* DYNAMIC TITLE */}
+          <h1 className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight drop-shadow-lg">
+            {currentOffer.title}
+          </h1>
 
-              <div className="relative glass-card p-3 rounded-3xl border border-[#ffdc82]/30 overflow-hidden shadow-2xl">
-                <div className="w-full h-[440px] sm:h-[480px] rounded-2xl relative overflow-hidden">
-                  <Image
-                    src="/images/anastasia_hero_blue.webp"
-                    alt="Анастасія Сич - Медичний нутриціолог"
-                    fill
-                    priority
-                    className="object-cover object-center filter brightness-105"
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-80" />
+          {/* DYNAMIC SUBTITLE / DESCRIPTION */}
+          <p className="text-[#e8ecf4] text-base sm:text-xl leading-relaxed max-w-2xl bg-[#0b0f17]/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#ffdc82]/20 shadow-xl">
+            {currentOffer.subtitle}
+          </p>
 
-                  <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-[#0b0f17]/90 backdrop-blur-md border border-[#ffdc82]/30 text-left">
-                    <span className="text-sm font-bold text-white block font-accent">Анастасія Сич</span>
-                    <span className="text-xs text-[#ffdc82] font-medium block">Медичний нутриціолог & Реабілітолог</span>
-                    <span className="text-[10px] text-[#8e9bb0] block pt-0.5">8+ років досвіду • Вища медична освіта</span>
-                  </div>
-                </div>
+          {/* STREAMLINED INLINE PRICING & ACTION BUTTON (1 ROW ABOVE BUTTON) */}
+          <div className="space-y-3 pt-2 max-w-xl">
+            
+            {/* 1 INLINE ROW PRICING (No big container box) */}
+            <div className="flex items-center gap-3 justify-start font-bold">
+              <span className="text-3xl sm:text-4xl font-extrabold text-[#ffdc82] font-accent drop-shadow">
+                480 грн
+              </span>
+              <span className="text-base sm:text-lg line-through text-white/50">
+                1190 грн
+              </span>
+              <span className="text-xs px-2.5 py-1 rounded-full bg-[#c33624] text-white font-extrabold uppercase shadow">
+                -60% знижка
+              </span>
+            </div>
+
+            {/* ACTION CTA BUTTON */}
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={handleOpenModal}
+              className="w-full py-4 sm:py-4.5 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-xl shadow-2xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
+            >
+              <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
+              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-[#ffdc82]" />
+            </motion.button>
+
+            {/* Trust Badges Bar */}
+            <div className="flex items-center gap-4 text-center text-xs text-[#8e9bb0] pt-1">
+              <div className="flex items-center gap-1.5">
+                <Video className="w-4 h-4 text-[#ffdc82]" />
+                <span>Zoom 60 хв</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Award className="w-4 h-4 text-[#ffdc82]" />
+                <span>Медична освіта</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>100% користь</span>
               </div>
             </div>
+
           </div>
 
         </div>
       </section>
 
-      {/* 4. BLOCK 2: SELF-RECOGNITION CHECKLIST */}
+      {/* 3. BLOCK 2: SELF-RECOGNITION CHECKLIST */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
@@ -500,7 +447,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 5. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH YOGA PHOTO */}
+      {/* 4. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH HD YOGA PHOTO */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
         <div className="glass-card p-6 sm:p-10 rounded-3xl border border-[#ffdc82]/30 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden">
           
@@ -530,6 +477,7 @@ export default function DiagnosticLanding() {
               src="/images/anastasia_yoga_white.webp"
               alt="Анастасія Сич на йога-килимку"
               fill
+              unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
             />
@@ -539,7 +487,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 6. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC */}
+      {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]" id="program">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
@@ -570,7 +518,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 7. STEP-BY-STEP PROGRAM GRID (splitscombo s7-grid) */}
+      {/* 6. STEP-BY-STEP PROGRAM GRID */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
         <div className="space-y-8">
           <div className="text-center space-y-2">
@@ -600,7 +548,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 8. SPLITSCOMBO GUARANTEE & RISK-FREE BANNER (s3-guarantee) */}
+      {/* 7. GUARANTEE BANNER */}
       <section className="py-8 px-4 sm:px-6 max-w-4xl mx-auto">
         <div className="glass-card p-6 sm:p-8 rounded-3xl border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left bg-gradient-to-r from-[#131924] via-[#101a26] to-[#131924]">
           <div className="p-4 rounded-2xl bg-emerald-500/20 text-emerald-400 shrink-0 border border-emerald-500/30">
@@ -618,11 +566,10 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 9. SYSTEM DIAGRAM + RESULTS SHOWCASE WITH OUTDOOR PHOTO (splitscombo results section) */}
+      {/* 8. SYSTEM DIAGRAM + RESULTS */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]" id="why-works">
         <div className="max-w-5xl mx-auto space-y-10">
           
-          {/* WHY THIS PROGRAM WORKS DIAGRAM */}
           <div className="text-center space-y-3">
             <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Комплексна методологія</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white">
@@ -735,7 +682,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 10. AUTHOR SECTION WITH ELEGANT BLACK DRESS PHOTO (splitscombo about) */}
+      {/* 9. AUTHOR SECTION WITH ELEGANT BLACK DRESS HD PHOTO */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[#ffdc82]/30 space-y-8">
           <div className="max-w-3xl space-y-3 text-left">
@@ -773,6 +720,7 @@ export default function DiagnosticLanding() {
                   src="/images/anastasia_portrait_black.webp"
                   alt="Анастасія Сич"
                   fill
+                  unoptimized
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 35vw"
                 />
@@ -787,7 +735,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 11. ACCESS OPTIONS PRICING CARDS (splitscombo pricing) */}
+      {/* 10. ACCESS OPTIONS PRICING CARDS */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-t border-[#222c3d]">
         <div className="max-w-4xl mx-auto space-y-8 text-center">
           <div className="space-y-2">
@@ -879,7 +827,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 12. FAQ ACCORDION (splitscombo asks) */}
+      {/* 11. FAQ ACCORDION */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-3xl mx-auto" id="faq">
         <div className="space-y-8">
           <div className="text-center space-y-2">
@@ -929,32 +877,27 @@ export default function DiagnosticLanding() {
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
       </footer>
 
-      {/* 13. STICKY PROMO BAR WITH COUNTDOWN TIMER (splitscombo promo-card-wrapper) */}
+      {/* 12. ALWAYS STICKY BOTTOM MOBILE BAR WITH PULSING ACTION BUTTON */}
       <div className="fixed bottom-0 left-0 right-0 p-3 bg-[#0b0f17]/95 backdrop-blur-xl border-t border-[#ffdc82]/30 z-50 flex items-center justify-between gap-3 shadow-2xl">
         <div className="flex items-center gap-3">
-          {/* Timer Display */}
-          <div className="hidden xs:flex flex-col text-[10px] text-[#8e9bb0]">
-            <span className="uppercase font-bold tracking-wider text-[#ffdc82]">ЗНИЖКА ДІЄ ЩЕ:</span>
-            <span className="font-accent font-bold text-white text-sm">
-              {String(timeLeft.minutes).padStart(2, "0")}:{String(timeLeft.seconds).padStart(2, "0")}
-            </span>
-          </div>
-
-          <div>
-            <div className="text-[10px] text-[#8e9bb0] uppercase font-bold">Діагностика 60 хв</div>
-            <div className="text-sm font-bold text-[#ffdc82]">480 грн <span className="line-through text-[10px] text-[#8e9bb0]">1190 грн</span></div>
+          <div className="flex flex-col">
+            <span className="text-[10px] text-[#8e9bb0] font-bold uppercase tracking-wider">Діагностика 60 хв</span>
+            <div className="flex items-baseline gap-1.5 font-bold">
+              <span className="text-base text-[#ffdc82]">480 грн</span>
+              <span className="line-through text-[10px] text-white/50">1190 грн</span>
+            </div>
           </div>
         </div>
 
         <motion.button
           whileTap={{ scale: 0.95 }}
-          animate={{ scale: [1, 1.03, 1] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           onClick={handleOpenModal}
-          className="px-5 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-xs sm:text-sm shadow-xl glow-red cursor-pointer flex items-center gap-2 border border-[#ffdc82]/40"
+          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-xs sm:text-sm shadow-xl glow-red cursor-pointer flex items-center gap-2 border border-[#ffdc82]/40 shrink-0"
         >
           <Sparkles className="w-4 h-4 text-[#ffdc82] animate-spin" />
-          <span>Записатись за 480 грн</span>
+          <span>Записатись на діагностику</span>
         </motion.button>
       </div>
 
