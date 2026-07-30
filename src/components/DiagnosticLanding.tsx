@@ -273,25 +273,25 @@ export default function DiagnosticLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-36 sm:pb-24 gpu-layer">
+    <div className="min-h-screen bg-[#050505] text-[#f5f5f5] selection:bg-[#00c8b7] selection:text-[#050505] pb-36 sm:pb-24 gpu-layer">
 
-      {/* 1. FAST TICKER (8s SPEED) */}
-      <div className="bg-[#c33624] text-white py-2 overflow-hidden border-b border-[#ffdc82]/30 shadow-md sticky top-0 z-40">
+      {/* 1. FAST TICKER (8s SPEED, SPLITSCOMBO TEAL BANNER) */}
+      <div className="bg-[#006073] text-white py-2 overflow-hidden border-b border-[#00c8b7]/40 shadow-md sticky top-0 z-40">
         <div className="animate-marquee font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
           <span>🔥 Персональна діагностика 60 хвилин</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Знижка -60% діє сьогодні</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Анастасія Сич • Медичний підхід</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Запис 1-на-1 в Zoom</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>🔥 Персональна діагностика 60 хвилин</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Знижка -60% діє сьогодні</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Анастасія Сич • Медичний підхід</span>
-          <span>✦</span>
+          <span className="text-[#00c8b7]">✦</span>
           <span>Запис 1-на-1 в Zoom</span>
         </div>
       </div>
@@ -299,7 +299,7 @@ export default function DiagnosticLanding() {
       {/* 2. RESTRUCTURED HERO SECTION */}
       <section className="relative min-h-[92vh] sm:min-h-[85vh] flex flex-col justify-between pt-4 pb-12 px-4 sm:px-6 overflow-hidden">
         
-        {/* HERO BACKGROUND PHOTO (SHIFTED UPWARDS TO CROP TOP 25% EMPTY WALL SPACE) */}
+        {/* HERO BACKGROUND PHOTO */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/anastasia_hero_blue.webp"
@@ -307,28 +307,28 @@ export default function DiagnosticLanding() {
             fill
             priority
             unoptimized
-            className="object-cover object-[center_35%] filter brightness-100 contrast-105"
+            className="object-cover object-[center_35%] filter brightness-105 contrast-105"
             sizes="100vw"
           />
-          {/* Subtle gradient vignette for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/85 to-transparent sm:bg-gradient-to-r sm:from-[#0b0f17] sm:via-[#0b0f17]/80 sm:to-transparent z-10" />
+          {/* Dark gradient vignettes for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/85 to-transparent sm:bg-gradient-to-r sm:from-[#050505] sm:via-[#050505]/80 sm:to-transparent z-10" />
         </div>
 
         <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col justify-between h-full space-y-6 pt-2">
           
           {/* ITEM 1: VERY TOP BADGE */}
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs font-medium backdrop-blur-md shadow-lg">
-              <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
-              <span className="text-[#8e9bb0]">|</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#050505]/90 border border-[#00c8b7]/40 text-white text-xs font-medium backdrop-blur-md shadow-lg">
+              <span className="font-bold text-[#00c8b7]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
+              <span className="text-[#a0a0a0]">|</span>
               <div className="flex items-center gap-1.5 text-white/90">
-                <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
+                <Calendar className="w-3.5 h-3.5 text-[#00c8b7]" />
                 <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
               </div>
             </div>
           </div>
 
-          {/* ITEM 2 & 3: TITLE AND SUBTITLE SHIFTED DOWNWARDS, NO CONTAINER BOX */}
+          {/* ITEM 2 & 3: TITLE AND SUBTITLE */}
           <div className="space-y-3 pt-12 sm:pt-24">
             
             {/* MAIN HEADLINE */}
@@ -336,53 +336,53 @@ export default function DiagnosticLanding() {
               {currentOffer.title}
             </h1>
 
-            {/* SUBTITLE (Smaller font text-sm/text-base, NO container box/border) */}
-            <p className="text-[#8e9bb0] text-sm sm:text-base leading-relaxed max-w-2xl font-normal drop-shadow">
+            {/* SUBTITLE (Smaller font, NO container box/border) */}
+            <p className="text-[#a0a0a0] text-sm sm:text-base leading-relaxed max-w-2xl font-normal drop-shadow">
               {currentOffer.subtitle}
             </p>
 
           </div>
 
-          {/* ITEM 4, 5, 6: PRICING ROW, CTA BUTTON, TRUST BADGES (STACKED DOWNWARDS) */}
+          {/* ITEM 4, 5, 6: PRICING ROW, CTA BUTTON, TRUST BADGES */}
           <div className="space-y-3 pt-4 max-w-xl">
             
             {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
             <div className="flex items-center gap-3 font-bold">
-              <span className="text-3xl sm:text-4xl font-extrabold text-[#ffdc82] font-accent drop-shadow">
+              <span className="text-3xl sm:text-4xl font-extrabold text-[#00c8b7] font-accent drop-shadow">
                 480 грн
               </span>
               <span className="text-base sm:text-lg line-through text-white/50">
                 1190 грн
               </span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#c33624] text-white font-extrabold uppercase shadow">
+              <span className="text-xs px-2.5 py-1 rounded-full bg-[#fe451d] text-white font-extrabold uppercase shadow">
                 -60% знижка
               </span>
             </div>
 
-            {/* ACTION CTA BUTTON WITH PULSING GLOW EFFECT */}
+            {/* ACTION CTA BUTTON WITH PULSING CORAL GLOW */}
             <motion.button
               whileTap={{ scale: 0.97 }}
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-2xl glow-red animate-pulse flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#fe451d] to-[#c82901] text-white font-bold text-base sm:text-lg shadow-2xl glow-coral animate-pulse flex items-center justify-center gap-3 cursor-pointer border border-[#00c8b7]/40"
             >
               <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-              <ArrowRight className="w-5 h-5 text-[#ffdc82]" />
+              <ArrowRight className="w-5 h-5 text-[#00c8b7]" />
             </motion.button>
 
             {/* TRUST BADGES DIRECTLY UNDERNEATH THE BUTTON */}
-            <div className="flex items-center gap-4 text-center text-xs text-[#8e9bb0] pt-1">
+            <div className="flex items-center gap-4 text-center text-xs text-[#a0a0a0] pt-1">
               <div className="flex items-center gap-1.5">
-                <Video className="w-4 h-4 text-[#ffdc82]" />
+                <Video className="w-4 h-4 text-[#00c8b7]" />
                 <span>Zoom 60 хв</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Award className="w-4 h-4 text-[#ffdc82]" />
+                <Award className="w-4 h-4 text-[#00c8b7]" />
                 <span>Медична освіта</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <ShieldCheck className="w-4 h-4 text-[#00c8b7]" />
                 <span>100% користь</span>
               </div>
             </div>
@@ -393,14 +393,14 @@ export default function DiagnosticLanding() {
       </section>
 
       {/* 3. BLOCK 2: SELF-RECOGNITION CHECKLIST */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0a0a0a] border-y border-[#242424]">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Тест-самодіагностика</span>
+            <span className="text-[#00c8b7] text-xs font-bold uppercase tracking-widest">Тест-самодіагностика</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
               Можливо, зараз ви впізнаєте себе хоча б в одному з цих пунктів:
             </h2>
-            <p className="text-[#8e9bb0] text-xs sm:text-sm">
+            <p className="text-[#a0a0a0] text-xs sm:text-sm">
               Оберіть пункти, які описують вашу поточну ситуацію:
             </p>
           </div>
@@ -414,15 +414,15 @@ export default function DiagnosticLanding() {
                   onClick={() => toggleProblem(idx)}
                   className={`p-4 rounded-2xl cursor-pointer transition-all duration-200 border flex items-start gap-3.5 ${
                     isSelected
-                      ? "bg-[#c33624]/20 border-[#c33624] text-white shadow-lg glow-red"
-                      : "bg-[#131924] border-[#222c3d] text-[#8e9bb0] hover:border-[#ffdc82]/30 hover:text-white"
+                      ? "bg-[#fe451d]/20 border-[#fe451d] text-white shadow-lg glow-coral"
+                      : "bg-[#121212] border-[#242424] text-[#a0a0a0] hover:border-[#00c8b7]/30 hover:text-white"
                   }`}
                 >
-                  <div className={`p-1 rounded-full mt-0.5 shrink-0 ${isSelected ? "text-[#c33624]" : "text-[#8e9bb0]"}`}>
+                  <div className={`p-1 rounded-full mt-0.5 shrink-0 ${isSelected ? "text-[#fe451d]" : "text-[#a0a0a0]"}`}>
                     {isSelected ? (
-                      <CheckCircle2 className="w-5 h-5 text-[#c33624]" />
+                      <CheckCircle2 className="w-5 h-5 text-[#fe451d]" />
                     ) : (
-                      <div className="w-5 h-5 rounded-full border-2 border-[#8e9bb0]/30" />
+                      <div className="w-5 h-5 rounded-full border-2 border-[#a0a0a0]/30" />
                     )}
                   </div>
                   <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
@@ -431,12 +431,12 @@ export default function DiagnosticLanding() {
             })}
           </div>
 
-          <div className="glass-card p-5 sm:p-6 rounded-2xl border border-[#ffdc82]/30 text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#c33624]/20 text-[#c33624] mb-1">
+          <div className="glass-card p-5 sm:p-6 rounded-2xl border border-[#00c8b7]/30 text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-[#fe451d]/20 text-[#fe451d] mb-1">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <p className="text-white font-medium text-sm sm:text-base">
-              Якщо хоча б <span className="text-[#ffdc82] font-bold">2–3 пункти про вас</span> — причина може бути значно глибшою, ніж просто «немає сили волі».
+              Якщо хоча б <span className="text-[#00c8b7] font-bold">2–3 пункти про вас</span> — причина може бути значно глибшою, ніж просто «немає сили волі».
             </p>
           </div>
         </div>
@@ -444,30 +444,30 @@ export default function DiagnosticLanding() {
 
       {/* 4. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH HD YOGA PHOTO */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
-        <div className="glass-card p-6 sm:p-10 rounded-3xl border border-[#ffdc82]/30 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden">
+        <div className="glass-card p-6 sm:p-10 rounded-3xl border border-[#00c8b7]/30 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden">
           
           <div className="md:col-span-7 space-y-5 text-left">
-            <span className="text-[#c33624] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
+            <span className="text-[#fe451d] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
 
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
               Чому дієти працюють лише тимчасово?
             </h2>
 
-            <div className="space-y-3 text-sm sm:text-base text-[#e8ecf4] leading-relaxed">
-              <p className="font-bold text-[#ffdc82] text-base sm:text-lg">
+            <div className="space-y-3 text-sm sm:text-base text-[#f5f5f5] leading-relaxed">
+              <p className="font-bold text-[#00c8b7] text-base sm:text-lg">
                 Ви не ліниві. Не слабохарактерні. І проблема не у відсутності мотивації.
               </p>
-              <p className="text-[#8e9bb0]">
+              <p className="text-[#a0a0a0]">
                 Проблема в тому, що більшість жінок намагаються змінити поведінку, не розібравшись із причиною, через яку вони постійно повертаються до старих звичок.
               </p>
             </div>
 
-            <div className="inline-block px-5 py-3 rounded-2xl bg-[#c33624]/20 border border-[#c33624]/40 text-white font-bold text-xs sm:text-sm">
+            <div className="inline-block px-5 py-3 rounded-2xl bg-[#fe451d]/20 border border-[#fe451d]/40 text-white font-bold text-xs sm:text-sm">
               Саме це ми знаходимо під час діагностики.
             </div>
           </div>
 
-          <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-[#ffdc82]/20 shadow-xl">
+          <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-[#00c8b7]/20 shadow-xl">
             <Image
               src="/images/anastasia_yoga_white.webp"
               alt="Анастасія Сич на йога-килимку"
@@ -476,24 +476,24 @@ export default function DiagnosticLanding() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-60" />
           </div>
 
         </div>
       </section>
 
       {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]" id="program">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0a0a0a] border-y border-[#242424]" id="program">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
             <h2 className="text-2xl sm:text-4xl font-accent text-white">Що буде на діагностиці</h2>
-            <p className="text-[#ffdc82] font-semibold text-base sm:text-lg">За 60 хвилин ми розберемо:</p>
+            <p className="text-[#00c8b7] font-semibold text-base sm:text-lg">За 60 хвилин ми розберемо:</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {diagnosticItems.map((item, idx) => (
-              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-[#ffdc82]/15 flex items-start gap-3.5">
-                <div className="p-2 rounded-xl bg-emerald-500/15 text-emerald-400 shrink-0 mt-0.5">
+              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-[#00c8b7]/20 flex items-start gap-3.5">
+                <div className="p-2 rounded-xl bg-[#00c8b7]/15 text-[#00c8b7] shrink-0 mt-0.5">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <span className="text-white font-medium text-sm sm:text-base leading-snug">{item}</span>
@@ -505,7 +505,7 @@ export default function DiagnosticLanding() {
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={handleOpenModal}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#fe451d] to-[#c82901] text-white font-bold text-base sm:text-lg shadow-xl glow-coral"
             >
               Записатись на діагностику
             </motion.button>
@@ -517,7 +517,7 @@ export default function DiagnosticLanding() {
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
+            <span className="text-[#00c8b7] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
               Як проходить діагностична програма
             </h2>
@@ -525,15 +525,15 @@ export default function DiagnosticLanding() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {stepsItems.map((st, idx) => (
-              <div key={idx} className="glass-card p-5 rounded-2xl border border-[#ffdc82]/20 space-y-3 relative flex flex-col justify-between">
+              <div key={idx} className="glass-card p-5 rounded-2xl border border-[#00c8b7]/20 space-y-3 relative flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-[#c33624]/20 text-[#c33624] font-bold text-[10px]">
+                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-[#fe451d]/20 text-[#fe451d] font-bold text-[10px]">
                     {st.step}
                   </div>
                   <h3 className="font-bold text-white text-sm leading-snug">{st.title}</h3>
-                  <p className="text-xs text-[#8e9bb0] leading-relaxed">{st.desc}</p>
+                  <p className="text-xs text-[#a0a0a0] leading-relaxed">{st.desc}</p>
                 </div>
-                <div className="pt-2 border-t border-[#222c3d]/60 flex items-center justify-between text-[10px] text-[#ffdc82]">
+                <div className="pt-2 border-t border-[#242424] flex items-center justify-between text-[10px] text-[#00c8b7]">
                   <span>Крок #{idx + 1}</span>
                   <Check className="w-3.5 h-3.5" />
                 </div>
@@ -545,16 +545,16 @@ export default function DiagnosticLanding() {
 
       {/* 7. GUARANTEE BANNER */}
       <section className="py-8 px-4 sm:px-6 max-w-4xl mx-auto">
-        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left bg-gradient-to-r from-[#131924] via-[#101a26] to-[#131924]">
-          <div className="p-4 rounded-2xl bg-emerald-500/20 text-emerald-400 shrink-0 border border-emerald-500/30">
+        <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[#00c8b7]/30 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left bg-gradient-to-r from-[#121212] via-[#0d161a] to-[#121212]">
+          <div className="p-4 rounded-2xl bg-[#00c8b7]/20 text-[#00c8b7] shrink-0 border border-[#00c8b7]/30">
             <ShieldCheck className="w-12 h-12" />
           </div>
           <div className="space-y-1.5">
-            <div className="inline-block px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[11px] font-bold uppercase tracking-wider">
+            <div className="inline-block px-2.5 py-0.5 rounded bg-[#00c8b7]/20 text-[#00c8b7] text-[11px] font-bold uppercase tracking-wider">
               100% ГАРАНТІЯ КОРИСТІ
             </div>
             <h3 className="text-xl font-accent text-white">НЕ ВПЕВНЕНІ? СТИСЛО СПРОБУЙТЕ.</h3>
-            <p className="text-xs sm:text-sm text-[#8e9bb0] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#a0a0a0] leading-relaxed">
               Якщо під час 60 хвилин діагностики ви зрозумієте, що зустріч не була для вас корисною — ми повернемо кошти у повному обсязі без зайвих запитань.
             </p>
           </div>
@@ -562,36 +562,36 @@ export default function DiagnosticLanding() {
       </section>
 
       {/* 8. SYSTEM DIAGRAM + RESULTS */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-y border-[#222c3d]" id="why-works">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0a0a0a] border-y border-[#242424]" id="why-works">
         <div className="max-w-5xl mx-auto space-y-10">
           
           <div className="text-center space-y-3">
-            <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Комплексна методологія</span>
+            <span className="text-[#00c8b7] text-xs font-bold uppercase tracking-widest">Комплексна методологія</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white">
-              ЧОМУ ЦЯ СИСТЕМА <span className="text-[#ffdc82]">ПРАЦЮЄ</span>
+              ЧОМУ ЦЯ СИСТЕМА <span className="text-[#00c8b7]">ПРАЦЮЄ</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="glass-card p-5 rounded-2xl border border-[#ffdc82]/20 space-y-2">
-              <Award className="w-6 h-6 text-[#ffdc82] mx-auto" />
+            <div className="glass-card p-5 rounded-2xl border border-[#00c8b7]/20 space-y-2">
+              <Award className="w-6 h-6 text-[#00c8b7] mx-auto" />
               <div className="font-bold text-white text-sm">Вища медична освіта</div>
-              <p className="text-[11px] text-[#8e9bb0]">Аналіз аналізів та гормонального тла</p>
+              <p className="text-[11px] text-[#a0a0a0]">Аналіз аналізів та гормонального тла</p>
             </div>
-            <div className="glass-card p-5 rounded-2xl border border-[#ffdc82]/20 space-y-2">
-              <Brain className="w-6 h-6 text-[#c33624] mx-auto" />
+            <div className="glass-card p-5 rounded-2xl border border-[#00c8b7]/20 space-y-2">
+              <Brain className="w-6 h-6 text-[#fe451d] mx-auto" />
               <div className="font-bold text-white text-sm">Аналіз причин зривів</div>
-              <p className="text-[11px] text-[#8e9bb0]">Прибираємо психосоматику переїдання</p>
+              <p className="text-[11px] text-[#a0a0a0]">Прибираємо психосоматику переїдання</p>
             </div>
-            <div className="glass-card p-5 rounded-2xl border border-[#ffdc82]/20 space-y-2">
-              <HeartPulse className="w-6 h-6 text-[#ffdc82] mx-auto" />
+            <div className="glass-card p-5 rounded-2xl border border-[#00c8b7]/20 space-y-2">
+              <HeartPulse className="w-6 h-6 text-[#00c8b7] mx-auto" />
               <div className="font-bold text-white text-sm">Реабілітація & Дихання</div>
-              <p className="text-[11px] text-[#8e9bb0]">Зняття тривожності та напруги</p>
+              <p className="text-[11px] text-[#a0a0a0]">Зняття тривожності та напруги</p>
             </div>
-            <div className="glass-card p-5 rounded-2xl border border-[#ffdc82]/20 space-y-2">
-              <ShieldCheck className="w-6 h-6 text-emerald-400 mx-auto" />
+            <div className="glass-card p-5 rounded-2xl border border-[#00c8b7]/20 space-y-2">
+              <ShieldCheck className="w-6 h-6 text-[#00c8b7] mx-auto" />
               <div className="font-bold text-white text-sm">Стійкі звички</div>
-              <p className="text-[11px] text-[#8e9bb0]">Результат залишається назавжди</p>
+              <p className="text-[11px] text-[#a0a0a0]">Результат залишається назавжди</p>
             </div>
           </div>
 
@@ -599,7 +599,7 @@ export default function DiagnosticLanding() {
           <div className="pt-6 space-y-6" id="reviews">
             <div className="text-center space-y-1">
               <h3 className="text-xl sm:text-2xl font-accent text-white">BEFORE / AFTER РЕЗУЛЬТАТИ</h3>
-              <p className="text-xs text-[#8e9bb0]">Натисніть «До / Після» для перегляду прогресу:</p>
+              <p className="text-xs text-[#a0a0a0]">Натисніть «До / Після» для перегляду прогресу:</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -607,36 +607,36 @@ export default function DiagnosticLanding() {
                 const activeTab = beforeAfterStates[res.id] || "after";
 
                 return (
-                  <div key={res.id} className="glass-card p-5 rounded-3xl border border-[#ffdc82]/20 space-y-4 flex flex-col justify-between">
-                    <div className="w-full h-64 rounded-2xl bg-[#131924] border border-[#222c3d] relative overflow-hidden flex flex-col justify-between p-4">
+                  <div key={res.id} className="glass-card p-5 rounded-3xl border border-[#00c8b7]/20 space-y-4 flex flex-col justify-between">
+                    <div className="w-full h-64 rounded-2xl bg-[#121212] border border-[#242424] relative overflow-hidden flex flex-col justify-between p-4">
                       <div className="flex justify-between items-center z-10">
-                        <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-[#0b0f17]/90 text-[#ffdc82] border border-[#ffdc82]/30">
+                        <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-[#050505]/90 text-[#00c8b7] border border-[#00c8b7]/30">
                           {activeTab === "before" ? res.beforeTag : res.afterTag}
                         </span>
-                        <Sliders className="w-4 h-4 text-[#8e9bb0]" />
+                        <Sliders className="w-4 h-4 text-[#a0a0a0]" />
                       </div>
 
                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 space-y-1.5 pointer-events-none">
                         <div className={`w-16 h-16 rounded-2xl border flex items-center justify-center transition-colors ${
                           activeTab === "before"
-                            ? "bg-[#c33624]/20 border-[#c33624]/40 text-[#c33624]"
-                            : "bg-emerald-500/20 border-emerald-500/40 text-emerald-400"
+                            ? "bg-[#fe451d]/20 border-[#fe451d]/40 text-[#fe451d]"
+                            : "bg-[#00c8b7]/20 border-[#00c8b7]/40 text-[#00c8b7]"
                         }`}>
                           <Camera className="w-8 h-8" />
                         </div>
                         <span className="text-[11px] font-bold text-white uppercase tracking-wider">
                           [ Фото {activeTab === "before" ? "ДО" : "ПІСЛЯ"} — {res.name.split(",")[0]} ]
                         </span>
-                        <span className="text-[10px] text-[#8e9bb0]">
+                        <span className="text-[10px] text-[#a0a0a0]">
                           {activeTab === "before" ? "Початковий стан & зриви" : res.achievement}
                         </span>
                       </div>
 
-                      <div className="relative z-10 grid grid-cols-2 p-1 bg-[#0b0f17]/90 rounded-xl border border-[#222c3d] text-xs font-bold">
+                      <div className="relative z-10 grid grid-cols-2 p-1 bg-[#050505]/90 rounded-xl border border-[#242424] text-xs font-bold">
                         <button
                           onClick={() => setBeforeAfterStates({ ...beforeAfterStates, [res.id]: "before" })}
                           className={`py-1.5 rounded-lg transition-all ${
-                            activeTab === "before" ? "bg-[#c33624] text-white shadow" : "text-[#8e9bb0]"
+                            activeTab === "before" ? "bg-[#fe451d] text-white shadow" : "text-[#a0a0a0]"
                           }`}
                         >
                           До
@@ -644,7 +644,7 @@ export default function DiagnosticLanding() {
                         <button
                           onClick={() => setBeforeAfterStates({ ...beforeAfterStates, [res.id]: "after" })}
                           className={`py-1.5 rounded-lg transition-all ${
-                            activeTab === "after" ? "bg-emerald-600 text-white shadow" : "text-[#8e9bb0]"
+                            activeTab === "after" ? "bg-[#00c8b7] text-[#050505] shadow" : "text-[#a0a0a0]"
                           }`}
                         >
                           Після
@@ -653,16 +653,16 @@ export default function DiagnosticLanding() {
                     </div>
 
                     <div className="space-y-2">
-                      <div className="inline-block px-3 py-1 rounded-full bg-[#c33624]/20 text-[#c33624] text-xs font-bold">
+                      <div className="inline-block px-3 py-1 rounded-full bg-[#fe451d]/20 text-[#fe451d] text-xs font-bold">
                         {res.achievement}
                       </div>
                       <h3 className="text-lg font-bold text-white">{res.name}</h3>
-                      <p className="text-xs text-[#8e9bb0] leading-relaxed">{res.desc}</p>
+                      <p className="text-xs text-[#a0a0a0] leading-relaxed">{res.desc}</p>
                     </div>
 
-                    <div className="pt-3 border-t border-[#222c3d] space-y-1">
+                    <div className="pt-3 border-t border-[#242424] space-y-1">
                       {res.stats.map((st, sIdx) => (
-                        <div key={sIdx} className="flex items-center gap-2 text-xs font-medium text-[#ffdc82]">
+                        <div key={sIdx} className="flex items-center gap-2 text-xs font-medium text-[#00c8b7]">
                           <Sparkles className="w-3.5 h-3.5" />
                           <span>{st}</span>
                         </div>
@@ -679,27 +679,27 @@ export default function DiagnosticLanding() {
 
       {/* 9. AUTHOR SECTION WITH ELEGANT BLACK DRESS HD PHOTO */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
-        <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[#ffdc82]/30 space-y-8">
+        <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[#00c8b7]/30 space-y-8">
           <div className="max-w-3xl space-y-3 text-left">
-            <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Про автора</span>
+            <span className="text-[#00c8b7] text-xs font-bold uppercase tracking-widest">Про автора</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
               Привіт! Я — Анастасія Сич
             </h2>
-            <p className="text-[#8e9bb0] text-sm">Медичний нутриціолог та фахівець реабілітації з понад 8-річним досвідом</p>
+            <p className="text-[#a0a0a0] text-sm">Медичний нутриціолог та фахівець реабілітації з понад 8-річним досвідом</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-[#e8ecf4] leading-relaxed">
+            <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-[#f5f5f5] leading-relaxed">
               <p className="font-semibold text-white">
                 Я маю вищу медичну освіту та допомагаю жінкам змінювати не лише тіло, а й ставлення до харчування та себе.
               </p>
 
-              <p className="text-[#8e9bb0]">
+              <p className="text-[#a0a0a0]">
                 Мій підхід сформувався завдяки власному досвіду відновлення після складного періоду та травми хребта. Саме тоді я переконалася, що результат неможливий без комплексної роботи із тілом та мисленням.
               </p>
 
-              <div className="p-4 rounded-2xl bg-[#131924] border border-[#ffdc82]/20 space-y-2">
-                <p className="font-bold text-[#ffdc82] text-xs uppercase tracking-wider">У своїй роботі я поєдную:</p>
+              <div className="p-4 rounded-2xl bg-[#121212] border border-[#00c8b7]/20 space-y-2">
+                <p className="font-bold text-[#00c8b7] text-xs uppercase tracking-wider">У своїй роботі я поєдную:</p>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-white font-medium">
                   <li className="flex items-center gap-2">✓ медичний підхід</li>
                   <li className="flex items-center gap-2">✓ реабілітацію та дихання</li>
@@ -710,7 +710,7 @@ export default function DiagnosticLanding() {
             </div>
 
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-[#ffdc82]/30 relative shadow-2xl">
+              <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-[#00c8b7]/30 relative shadow-2xl">
                 <Image
                   src="/images/anastasia_portrait_black.webp"
                   alt="Анастасія Сич"
@@ -719,10 +719,10 @@ export default function DiagnosticLanding() {
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 35vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-50" />
-                <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[#0b0f17]/90 backdrop-blur-md border border-[#ffdc82]/30 text-center">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-50" />
+                <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[#050505]/90 backdrop-blur-md border border-[#00c8b7]/30 text-center">
                   <span className="text-xs font-bold text-white">Анастасія Сич</span>
-                  <p className="text-[10px] text-[#ffdc82]">Медичний нутриціолог</p>
+                  <p className="text-[10px] text-[#00c8b7]">Медичний нутриціолог</p>
                 </div>
               </div>
             </div>
@@ -731,39 +731,39 @@ export default function DiagnosticLanding() {
       </section>
 
       {/* 10. ACCESS OPTIONS PRICING CARDS */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0d131f] border-t border-[#222c3d]">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-[#0a0a0a] border-t border-[#242424]">
         <div className="max-w-4xl mx-auto space-y-8 text-center">
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-4xl font-accent text-white">ОБЕРІТЬ ВАШ ФОРМАТ</h2>
-            <p className="text-[#8e9bb0] text-xs sm:text-sm">Зарезервуйте ваше місце на найближчі дати</p>
+            <p className="text-[#a0a0a0] text-xs sm:text-sm">Зарезервуйте ваше місце на найближчі дати</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
             
             {/* CARD 1: BASE DIAGNOSTIC */}
-            <div className="glass-card p-6 rounded-3xl border border-[#ffdc82]/20 flex flex-col justify-between space-y-6">
+            <div className="glass-card p-6 rounded-3xl border border-[#00c8b7]/20 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-accent text-white">ПЕРСОНАЛЬНА ДІАГНОСТИКА</h3>
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#131924] text-[#ffdc82] border border-[#ffdc82]/20">60 хвилин</span>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#121212] text-[#00c8b7] border border-[#00c8b7]/20">60 хвилин</span>
                 </div>
 
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-accent font-extrabold text-[#ffdc82]">480 грн</span>
-                  <span className="text-sm line-through text-[#8e9bb0]">1190 грн</span>
+                  <span className="text-3xl font-accent font-extrabold text-[#00c8b7]">480 грн</span>
+                  <span className="text-sm line-through text-[#a0a0a0]">1190 грн</span>
                 </div>
 
-                <ul className="space-y-2.5 text-xs text-[#e8ecf4]">
+                <ul className="space-y-2.5 text-xs text-[#f5f5f5]">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffdc82] shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Персональна зустріч 1-на-1 в Zoom</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffdc82] shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Аналіз причин зривів та переїдання</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#ffdc82] shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Покроковий план дій</span>
                   </li>
                 </ul>
@@ -771,40 +771,40 @@ export default function DiagnosticLanding() {
 
               <button
                 onClick={handleOpenModal}
-                className="w-full py-3.5 rounded-xl bg-[#131924] border border-[#ffdc82]/40 text-[#ffdc82] font-bold text-sm hover:bg-[#ffdc82] hover:text-[#0b0f17] transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-xl bg-[#121212] border border-[#00c8b7]/40 text-[#00c8b7] font-bold text-sm hover:bg-[#00c8b7] hover:text-[#050505] transition-all cursor-pointer"
               >
                 ЗАПИСАТИСЬ ЗА 480 ГРН
               </button>
             </div>
 
             {/* CARD 2: EXTENDED OPTION (POPULAR) */}
-            <div className="glass-card p-6 rounded-3xl border-2 border-[#c33624] relative flex flex-col justify-between space-y-6 shadow-2xl glow-red">
-              <div className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-[#c33624] text-white text-[10px] font-bold uppercase tracking-wider">
+            <div className="glass-card p-6 rounded-3xl border-2 border-[#fe451d] relative flex flex-col justify-between space-y-6 shadow-2xl glow-coral">
+              <div className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-[#fe451d] text-white text-[10px] font-bold uppercase tracking-wider">
                 ПОПУЛЯРНИЙ ВИБІР
               </div>
 
               <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xl font-accent text-white">ДІАГНОСТИКА + СУПРОВІД</h3>
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#c33624]/20 text-[#ffdc82]">Включає діагностику</span>
+                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-[#fe451d]/20 text-[#00c8b7]">Включає діагностику</span>
                 </div>
 
                 <div className="space-y-1">
-                  <span className="text-xs text-emerald-400 font-bold">Оновлений комплексний формат</span>
-                  <p className="text-xs text-[#8e9bb0]">Повний аналіз + розбірка можливості супроводу</p>
+                  <span className="text-xs text-[#00c8b7] font-bold">Оновлений комплексний формат</span>
+                  <p className="text-xs text-[#a0a0a0]">Повний аналіз + розбірка можливості супроводу</p>
                 </div>
 
-                <ul className="space-y-2.5 text-xs text-[#e8ecf4]">
+                <ul className="space-y-2.5 text-xs text-[#f5f5f5]">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Повна 60-хвилинна діагностика</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Персональна стратегія на 30 днів</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#00c8b7] shrink-0" />
                     <span>Пріоритетне бронювання часу</span>
                   </li>
                 </ul>
@@ -812,7 +812,7 @@ export default function DiagnosticLanding() {
 
               <button
                 onClick={handleOpenModal}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-sm shadow-lg hover:opacity-90 transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#fe451d] to-[#c82901] text-white font-bold text-sm shadow-lg hover:opacity-90 transition-all cursor-pointer"
               >
                 ОБРАТИ СУПРОВІД
               </button>
@@ -827,23 +827,23 @@ export default function DiagnosticLanding() {
         <div className="space-y-8">
           <div className="text-center space-y-2">
             <h2 className="text-2xl sm:text-4xl font-accent text-white">Часті запитання (FAQ)</h2>
-            <p className="text-[#8e9bb0] text-xs sm:text-sm">Відповіді на найважливіші питання</p>
+            <p className="text-[#a0a0a0] text-xs sm:text-sm">Відповіді на найважливіші питання</p>
           </div>
 
           <div className="space-y-3.5">
             {faqItems.map((item, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
-                <div key={idx} className="glass-card rounded-2xl border border-[#ffdc82]/15 overflow-hidden">
+                <div key={idx} className="glass-card rounded-2xl border border-[#00c8b7]/15 overflow-hidden">
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-white text-sm sm:text-base hover:text-[#ffdc82] transition-colors"
+                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-white text-sm sm:text-base hover:text-[#00c8b7] transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-[#ffdc82] font-accent text-sm">Q{idx + 1}.</span>
+                      <span className="text-[#00c8b7] font-accent text-sm">Q{idx + 1}.</span>
                       <span>{item.q}</span>
                     </div>
-                    <ChevronDown className={`w-5 h-5 text-[#ffdc82] transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-5 h-5 text-[#00c8b7] transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}`} />
                   </button>
 
                   <AnimatePresence>
@@ -854,7 +854,7 @@ export default function DiagnosticLanding() {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#8e9bb0] border-t border-[#222c3d]/50 pt-3 leading-relaxed">
+                        <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#a0a0a0] border-t border-[#242424] pt-3 leading-relaxed">
                           {item.a}
                         </div>
                       </motion.div>
@@ -868,16 +868,16 @@ export default function DiagnosticLanding() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 text-center text-xs text-[#8e9bb0] border-t border-[#222c3d]">
+      <footer className="py-8 px-4 text-center text-xs text-[#a0a0a0] border-t border-[#242424]">
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
       </footer>
 
       {/* 12. STICKY MOBILE BOTTOM CTA BAR */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-[#0b0f17]/95 backdrop-blur-xl border-t border-[#ffdc82]/30 z-50 flex items-center justify-between gap-3 shadow-2xl">
+      <div className="fixed bottom-0 left-0 right-0 p-3 bg-[#050505]/95 backdrop-blur-xl border-t border-[#00c8b7]/30 z-50 flex items-center justify-between gap-3 shadow-2xl">
         <div className="flex flex-col">
-          <span className="text-[10px] text-[#8e9bb0] font-bold uppercase tracking-wider">Діагностика 60 хв</span>
+          <span className="text-[10px] text-[#a0a0a0] font-bold uppercase tracking-wider">Діагностика 60 хв</span>
           <div className="flex items-baseline gap-1.5 font-bold">
-            <span className="text-base text-[#ffdc82]">480 грн</span>
+            <span className="text-base text-[#00c8b7]">480 грн</span>
             <span className="line-through text-[10px] text-white/50">1190 грн</span>
           </div>
         </div>
@@ -887,9 +887,9 @@ export default function DiagnosticLanding() {
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           onClick={handleOpenModal}
-          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-xs sm:text-sm shadow-xl glow-red animate-pulse cursor-pointer flex items-center gap-2 border border-[#ffdc82]/40 shrink-0"
+          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#fe451d] to-[#c82901] text-white font-bold text-xs sm:text-sm shadow-xl glow-coral animate-pulse cursor-pointer flex items-center gap-2 border border-[#00c8b7]/40 shrink-0"
         >
-          <Sparkles className="w-4 h-4 text-[#ffdc82] animate-spin" />
+          <Sparkles className="w-4 h-4 text-[#00c8b7] animate-spin" />
           <span>Записатись на діагностику</span>
         </motion.button>
       </div>
@@ -903,11 +903,11 @@ export default function DiagnosticLanding() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="glass-card w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-[#ffdc82]/30 relative shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
+              className="glass-card w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-[#00c8b7]/30 relative shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
             >
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 p-2 text-[#8e9bb0] hover:text-white rounded-full bg-[#131924] border border-[#222c3d]"
+                className="absolute top-4 right-4 p-2 text-[#a0a0a0] hover:text-white rounded-full bg-[#121212] border border-[#242424]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -915,12 +915,12 @@ export default function DiagnosticLanding() {
               {!submitSuccess ? (
                 <div className="space-y-5">
                   <div className="space-y-1.5">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#c33624]/20 text-[#c33624] text-xs font-bold">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fe451d]/20 text-[#fe451d] text-xs font-bold">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>Запис на діагностику</span>
                     </div>
                     <h3 className="text-xl sm:text-2xl font-accent text-white">Заповніть контактні дані</h3>
-                    <p className="text-xs text-[#8e9bb0]">
+                    <p className="text-xs text-[#a0a0a0]">
                       Зв'яжемося з вами найближчим часом для узгодження дати та часу зустрічі.
                     </p>
                   </div>
@@ -934,56 +934,56 @@ export default function DiagnosticLanding() {
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-[#8e9bb0] mb-1">
+                      <label className="block text-xs font-bold text-[#a0a0a0] mb-1">
                         Ваше ім'я *
                       </label>
                       <div className="relative">
-                        <User className="absolute left-3.5 top-3.5 w-4 h-4 text-[#8e9bb0]" />
+                        <User className="absolute left-3.5 top-3.5 w-4 h-4 text-[#a0a0a0]" />
                         <input
                           type="text"
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Анастасія"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#131924] border border-[#222c3d] text-white text-sm focus:outline-none focus:border-[#ffdc82]"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#121212] border border-[#242424] text-white text-sm focus:outline-none focus:border-[#00c8b7]"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#8e9bb0] mb-1">
+                      <label className="block text-xs font-bold text-[#a0a0a0] mb-1">
                         Номер телефону * (підтримуються 075 Vodafone та 077 Київстар)
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-[#8e9bb0]" />
+                        <Phone className="absolute left-3.5 top-3.5 w-4 h-4 text-[#a0a0a0]" />
                         <input
                           type="tel"
                           required
                           value={formData.phone}
                           onChange={handlePhoneChange}
                           placeholder="+380971234567"
-                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#131924] border border-[#222c3d] text-white text-sm focus:outline-none focus:border-[#ffdc82]"
+                          className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#121212] border border-[#242424] text-white text-sm focus:outline-none focus:border-[#00c8b7]"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#8e9bb0] mb-1">
+                      <label className="block text-xs font-bold text-[#a0a0a0] mb-1">
                         Telegram нік або Інстаграм
                       </label>
                       <div className="relative">
-                        <MessageCircle className="absolute left-3.5 top-3.5 w-4 h-4 text-[#8e9bb0]" />
+                        <MessageCircle className="absolute left-3.5 top-3.5 w-4 h-4 text-[#a0a0a0]" />
                         <input
                           type="text"
                           value={formData.telegram}
                           onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
                           placeholder="@username"
-                          className="w-full pl-10 pr-36 py-3 rounded-xl bg-[#131924] border border-[#222c3d] text-white text-sm focus:outline-none focus:border-[#ffdc82]"
+                          className="w-full pl-10 pr-36 py-3 rounded-xl bg-[#121212] border border-[#242424] text-white text-sm focus:outline-none focus:border-[#00c8b7]"
                         />
                         <button
                           type="button"
                           onClick={handleNoTelegramClick}
-                          className="absolute right-2 top-2 bottom-2 px-2.5 bg-[#222c3d]/60 hover:bg-[#222c3d] text-[11px] text-[#ffdc82] rounded-lg transition-colors font-medium flex items-center gap-1 border border-[#ffdc82]/20"
+                          className="absolute right-2 top-2 bottom-2 px-2.5 bg-[#242424]/60 hover:bg-[#242424] text-[11px] text-[#00c8b7] rounded-lg transition-colors font-medium flex items-center gap-1 border border-[#00c8b7]/20"
                         >
                           В мене немає нікнейму
                         </button>
@@ -991,7 +991,7 @@ export default function DiagnosticLanding() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-[#8e9bb0] mb-1">
+                      <label className="block text-xs font-bold text-[#a0a0a0] mb-1">
                         Що найбільше турбує зараз? (необов'язково)
                       </label>
                       <textarea
@@ -999,19 +999,19 @@ export default function DiagnosticLanding() {
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                         placeholder="Наприклад: постійні зриви на солодке вечорами..."
-                        className="w-full p-3 rounded-xl bg-[#131924] border border-[#222c3d] text-white text-sm focus:outline-none focus:border-[#ffdc82]"
+                        className="w-full p-3 rounded-xl bg-[#121212] border border-[#242424] text-white text-sm focus:outline-none focus:border-[#00c8b7]"
                       />
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#131924] border border-[#ffdc82]/20 flex items-center justify-between text-xs">
-                      <span className="text-[#8e9bb0]">Вартість зустрічі:</span>
-                      <span className="font-bold text-[#ffdc82] text-sm">480 грн</span>
+                    <div className="p-3.5 rounded-xl bg-[#121212] border border-[#00c8b7]/20 flex items-center justify-between text-xs">
+                      <span className="text-[#a0a0a0]">Вартість зустрічі:</span>
+                      <span className="font-bold text-[#00c8b7] text-sm">480 грн</span>
                     </div>
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-sm sm:text-base shadow-lg glow-red flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                      className="w-full py-4 rounded-xl bg-gradient-to-r from-[#fe451d] to-[#c82901] text-white font-bold text-sm sm:text-base shadow-lg glow-coral flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
                     >
                       {isSubmitting ? (
                         <span>Обробка заявки...</span>
@@ -1026,16 +1026,16 @@ export default function DiagnosticLanding() {
                 </div>
               ) : (
                 <div className="py-8 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-2xl">
+                  <div className="w-16 h-16 rounded-full bg-[#00c8b7]/20 text-[#00c8b7] flex items-center justify-center mx-auto text-2xl">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
                   <h3 className="text-2xl font-accent text-white">Дякуємо за заявку!</h3>
-                  <p className="text-sm text-[#8e9bb0] max-w-sm mx-auto">
+                  <p className="text-sm text-[#a0a0a0] max-w-sm mx-auto">
                     Ваша заявка успішно прийнята. Анастасія або асистент зв'яжеться з вами найближчим часом.
                   </p>
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="px-6 py-3 rounded-xl bg-[#131924] border border-[#ffdc82]/30 text-[#ffdc82] font-bold text-sm"
+                    className="px-6 py-3 rounded-xl bg-[#121212] border border-[#00c8b7]/30 text-[#00c8b7] font-bold text-sm"
                   >
                     Закрити
                   </button>

@@ -10,15 +10,16 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          yellow: "#ffdc82",
-          yellowHover: "#f5cd68",
-          red: "#c33624",
-          redHover: "#a92b1b",
-          dark: "#0b0f17",
-          card: "#131924",
-          cardBorder: "#222c3d",
-          muted: "#8e9bb0",
-          text: "#e8ecf4"
+          teal: "#00c8b7",
+          tealBright: "#01dac7",
+          tealGlow: "rgba(0, 200, 183, 0.3)",
+          coral: "#fe451d",
+          coralDark: "#c82901",
+          dark: "#050505",
+          card: "#121212",
+          cardBorder: "#242424",
+          muted: "#a0a0a0",
+          text: "#f5f5f5"
         }
       },
       fontFamily: {
