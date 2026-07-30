@@ -10,16 +10,14 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          teal: "#00c8b7",
-          tealBright: "#01dac7",
-          tealGlow: "rgba(0, 200, 183, 0.3)",
-          coral: "#fe451d",
-          coralDark: "#c82901",
-          dark: "#050505",
-          card: "#121212",
-          cardBorder: "#242424",
-          muted: "#a0a0a0",
-          text: "#f5f5f5"
+          primary: "#0284c7",
+          primaryDark: "#0369a1",
+          accent: "#059669",
+          light: "#f8fafc",
+          card: "#ffffff",
+          cardBorder: "#e2e8f0",
+          muted: "#64748b",
+          text: "#0f172a"
         }
       },
       fontFamily: {
