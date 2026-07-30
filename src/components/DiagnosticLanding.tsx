@@ -21,7 +21,8 @@ import {
   Check,
   ShieldCheck,
   Brain,
-  HeartPulse
+  HeartPulse,
+  ZoomIn
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -51,6 +52,8 @@ export default function DiagnosticLanding() {
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeCaseImage, setActiveCaseImage] = useState<string | null>(null);
+
   const [formData, setFormData] = useState<LeadFormData>({
     name: "",
     phone: "+380",
@@ -61,9 +64,9 @@ export default function DiagnosticLanding() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Lock body scroll when modal is open
+  // Lock body scroll when modal or lightbox is open
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen || activeCaseImage) {
       document.body.classList.add("modal-open");
     } else {
       document.body.classList.remove("modal-open");
@@ -71,7 +74,7 @@ export default function DiagnosticLanding() {
     return () => {
       document.body.classList.remove("modal-open");
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, activeCaseImage]);
 
   // Auto-detect visitor country & dial code via Geo IP API
   useEffect(() => {
@@ -234,27 +237,41 @@ export default function DiagnosticLanding() {
     { step: "Крок 05", title: "Персональні рекомендації", desc: "Маєте чіткий покроковий план дій" },
   ];
 
-  const resultsData = [
-    {
-      id: 0,
-      name: "Олена, 34 роки",
-      achievement: "-12 кг без зривів та заборон",
-      desc: "Прийшла після 5 повторних дієт. Сформували новий раціон та позбулися вечірнього заїдання стресу.",
-      stats: ["-12 кг ваги", "Без тяги до солодкого", "Впевненість у тілі"],
-    },
+  const realCaseGalleries = [
     {
       id: 1,
-      name: "Марія, 29 років",
-      achievement: "-8 кг та спокій з їжею",
-      desc: "Раніше кожен тиждень починався з понеділка. Навчилися харчуватися без драм та підрахунку калорій.",
-      stats: ["-8 кг ваги", "Легкість після їди", "Відновлення сну"],
+      title: "Ярославна, 34 роки",
+      badge: "-12 кг • Талія -5 см",
+      desc: "-12 кг; -5 см в талії; -4 см в стегнах; +об'ємна попа; +рельєфний прес.",
+      image: "/images/cases/case_5.webp",
     },
     {
       id: 2,
-      name: "Вікторія, 41 рік",
-      achievement: "-15 кг та комплексне відновлення",
-      desc: "Мала проблеми зі спиною та енергією. Поєднали медичний підхід, дихання та збалансоване харчування.",
-      stats: ["-15 кг ваги", "Свобода від обмежень", "Гардероб на 2 розміри менший"],
+      title: "Наталі",
+      badge: "Результат за 3 місяці",
+      desc: "Трансформація постави, тонусу та вирівнювання пропорцій без виснажливих дієт.",
+      image: "/images/cases/case_2.webp",
+    },
+    {
+      id: 3,
+      title: "Передньо-задній фокус",
+      badge: "Силует та тонус",
+      desc: "Вирівнювання постави, зменшення об'ємів та стабілізація раціону.",
+      image: "/images/cases/case_1.webp",
+    },
+    {
+      id: 4,
+      title: "Профільна трансформація",
+      badge: "-2 розміри одягу",
+      desc: "Комплексна робота з набряклістю, жировим прошарком та лімфовідтоком.",
+      image: "/images/cases/case_3.webp",
+    },
+    {
+      id: 5,
+      title: "Відгук із Telegram",
+      badge: "Живі враження",
+      desc: "«Боже яка велика різниця!! Я в шоці... Дуже дякую за цей досвід і за ці зміни!»",
+      image: "/images/cases/case_tg_review.webp",
     },
   ];
 
@@ -542,17 +559,21 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 8. SYSTEM DIAGRAM + CLEAN RESULTS CARDS */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="why-works">
-        <div className="max-w-5xl mx-auto space-y-10">
+      {/* 8. SYSTEM DIAGRAM + REAL CASE PHOTO GALLERY */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
+        <div className="max-w-6xl mx-auto space-y-10">
           
           <div className="text-center space-y-3">
             <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Комплексна методологія</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-slate-900">
-              ЧОМУ ЦЯ СИСТЕМА <span className="text-[#0284c7]">ПРАЦЮЄ</span>
+              РЕАЛЬНІ КЕЙСИ ТА <span className="text-[#0284c7]">РЕЗУЛЬТАТИ</span>
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto">
+              Фотографії та відгуки підопічних Анастасії Сич під час персонального нутриціологічного супроводу:
+            </p>
           </div>
 
+          {/* 4 METHODOLOGY PILLARS */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div className="glass-card p-5 rounded-2xl border border-slate-200 space-y-2 bg-slate-50/50">
               <Award className="w-6 h-6 text-[#0284c7] mx-auto" />
@@ -576,35 +597,44 @@ export default function DiagnosticLanding() {
             </div>
           </div>
 
-          {/* CLEAN RESULTS CARDS */}
-          <div className="pt-6 space-y-6" id="reviews">
-            <div className="text-center space-y-1">
-              <h3 className="text-xl sm:text-2xl font-accent text-slate-900">РЕЗУЛЬТАТИ КЛІЄНТІВ</h3>
-              <p className="text-xs text-slate-500">Історії трансформацій за медичною методологією:</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {resultsData.map((res) => (
-                <div key={res.id} className="glass-card p-6 rounded-3xl border border-slate-200 space-y-4 flex flex-col justify-between bg-white shadow-sm hover:shadow-md transition-shadow">
-                  <div className="space-y-3">
-                    <div className="inline-block px-3 py-1 rounded-full bg-sky-50 text-[#0284c7] text-xs font-bold border border-sky-100">
-                      {res.achievement}
+          {/* REAL CASE PHOTO GALLERY GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+            {realCaseGalleries.map((cs) => (
+              <div
+                key={cs.id}
+                onClick={() => setActiveCaseImage(cs.image)}
+                className="glass-card rounded-3xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+              >
+                <div className="relative w-full h-80 bg-slate-100 overflow-hidden">
+                  <Image
+                    src={cs.image}
+                    alt={cs.title}
+                    fill
+                    unoptimized
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/30 transition-colors duration-300 flex items-center justify-center">
+                    <div className="p-3 rounded-full bg-white/90 text-slate-800 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 text-xs font-bold">
+                      <ZoomIn className="w-4 h-4 text-[#0284c7]" />
+                      <span>Збільшити фото</span>
                     </div>
-                    <h3 className="text-lg font-bold text-slate-900">{res.name}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">{res.desc}</p>
                   </div>
-
-                  <div className="pt-4 border-t border-slate-100 space-y-1.5">
-                    {res.stats.map((st, sIdx) => (
-                      <div key={sIdx} className="flex items-center gap-2 text-xs font-medium text-[#0284c7]">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>{st}</span>
-                      </div>
-                    ))}
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[#0284c7] font-bold text-xs shadow-md border border-sky-100">
+                    {cs.badge}
                   </div>
                 </div>
-              ))}
-            </div>
+
+                <div className="p-5 space-y-2 bg-white">
+                  <h3 className="text-lg font-bold text-slate-900">{cs.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{cs.desc}</p>
+                  <div className="pt-2 flex items-center justify-between text-xs text-[#0284c7] font-semibold">
+                    <span>Натисніть для перегляду кейсу</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
@@ -827,7 +857,36 @@ export default function DiagnosticLanding() {
         </motion.button>
       </div>
 
-      {/* LEAD REGISTRATION MODAL (CENTRALIZED DEAD CENTER IN VIEWPORT + BACKDROP CLICK TO CLOSE) */}
+      {/* CASE IMAGE LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {activeCaseImage && (
+          <div
+            onClick={() => setActiveCaseImage(null)}
+            className="fixed inset-0 z-[999999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+          >
+            <button
+              onClick={() => setActiveCaseImage(null)}
+              className="absolute top-4 right-4 p-3 text-white bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl max-h-[88vh] w-full h-full flex items-center justify-center"
+            >
+              <Image
+                src={activeCaseImage}
+                alt="Перегляд кейсу"
+                fill
+                unoptimized
+                className="object-contain rounded-2xl"
+              />
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* LEAD REGISTRATION MODAL */}
       <AnimatePresence>
         {isModalOpen && (
           <div
