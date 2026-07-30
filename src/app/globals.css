@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Yeseva+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-yeseva: 'Yeseva One', serif;
+  --font-carlito: 'Carlito', sans-serif;
+  --brand-yellow: #ffdc82;
+  --brand-red: #c33624;
+}
+
+body {
+  background-color: #0b0f17;
+  color: #e8ecf4;
+  font-family: var(--font-carlito), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+h1, h2, h3, .font-accent {
+  font-family: var(--font-yeseva), serif;
+  letter-spacing: -0.01em;
+}
+
+/* GPU Hardware Acceleration for 120 FPS smooth motion */
+.gpu-layer {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: rgba(19, 25, 36, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 220, 130, 0.12);
+}
+
+.glass-card-interactive {
+  background: rgba(19, 25, 36, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 220, 130, 0.12);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-card-interactive:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .glass-card-interactive:hover {
+    border-color: rgba(255, 220, 130, 0.35);
+    box-shadow: 0 12px 30px -10px rgba(255, 220, 130, 0.18);
+    transform: translateY(-2px);
+  }
+}
+
+.glow-yellow {
+  box-shadow: 0 0 40px -5px rgba(255, 220, 130, 0.4);
+}
+
+.glow-red {
+  box-shadow: 0 0 40px -5px rgba(195, 54, 36, 0.4);
+}
+
+/* SVG Line Motion Glow */
+@keyframes svgGlow {
+  0%, 100% { opacity: 0.4; stroke-dashoffset: 0; }
+  50% { opacity: 0.9; stroke-dashoffset: 20; }
+}
+
+.svg-glow-line {
+  stroke-dasharray: 10 5;
+  animation: svgGlow 4s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0f17;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222c3d;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffdc82;
+}
