@@ -4,10 +4,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { motion as m } from "framer-motion";
 import {
   CheckCircle2,
-  Clock,
   Video,
   Sparkles,
   ChevronDown,
@@ -34,7 +32,6 @@ import {
   validateTelegramHandle
 } from "@/lib/validation";
 
-// Types
 interface LeadFormData {
   name: string;
   phone: string;
@@ -185,36 +182,24 @@ export default function DiagnosticLanding() {
     }
   };
 
-  // Dynamic Content mapping for Offers 1, 2, 3
+  // Dynamic Offer Content mapping per offerVariant (1, 2, 3)
   const getOfferContent = () => {
     if (offerVariant === "2") {
       return {
-        badge: "ОФЕР #2 • ЗРИВИ ТА ПЕРЕЇДАННЯ",
-        title: "Постійні зриви на солодке та переїдання?",
-        subtitle: "Втомилися починати щопонеділка та відчувати провину за кожен з'їдений шматочок?",
-        p1: "Запрошую вас на діагностику, де ми знайдемо першопричину харчових зривів та навчимося харчуватися без драм і жорстких заборон.",
-        p2: "Розберемо, чому саме у вашому випадку самообмеження призводять до ще більших зривів, і що заважає сформувати здорові звички.",
-        highlight: "Знайдемо, як повернути контроль над харчуванням та легкість у тілі без постійної боротьби із собою."
+        title: "Дивишся в дзеркало і тобі не подобається відображення?",
+        subtitle: "Розберемо, чому саме у вашому випадку дієти і марафони не дали довготривалого результату, і що заважає повернутись до тіла, у якому ви почуватиметеся впевнено."
       };
     }
     if (offerVariant === "3") {
       return {
-        badge: "ОФЕР #3 • ВПЕВНЕНІСТЬ ТА ВІДНОВЛЕННЯ ТІЛА",
-        title: "Втратили впевненість у собі та власному тілі?",
-        subtitle: "Не хочете дивитися у дзеркало чи купувати одяг більшого розміру після чергової невдалої спроби?",
-        p1: "Запрошую вас на діагностику, де ми побудуємо комплексний покроковий шлях до повернення вашої форми та впевненості.",
-        p2: "Розберемо, що заважає утримувати результат тривалий час і як зробити здоровий спосіб життя вашою природною частиною.",
-        highlight: "Створимо план, при якому результат залишиться з вами назавжди, а не зникне після завершення програми."
+        title: "Марафон закінчився, мотивація зникла, а старі звички повернулися?",
+        subtitle: "На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав після завершення програми."
       };
     }
     // Offer 1 (Default)
     return {
-      badge: "ОФЕР #1 • РЕЗУЛЬТАТ ПІСЛЯ ДІЄТИ",
       title: "Після закінчення дієти здається, що тепер можна нарешті наїстися?",
-      subtitle: "Дивишся в дзеркало і тобі не подобається відображення? Марафон закінчився, мотивація зникла, а старі звички повернулися?",
-      p1: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон.",
-      p2: "Розберемо, чому саме у вашому випадку дієти і марафони не дали довготривалого результату, і що заважає повернутись до тіла, у якому ви почуватиметеся впевнено.",
-      highlight: "На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав після завершення програми."
+      subtitle: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон."
     };
   };
 
@@ -350,116 +335,118 @@ export default function DiagnosticLanding() {
         </button>
       </header>
 
-      {/* 3. HERO OFFER SECTION WITH BACKGROUND EXPERT PHOTO (SPLITSCOMBO TYPE) */}
-      <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center pt-8 pb-16 px-4 sm:px-6 overflow-hidden">
+      {/* 3. HERO OFFER SECTION WITH PROMINENT EXPERT PHOTO */}
+      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-20 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
         
-        {/* HERO BACKGROUND IMAGE OF ANASTASIA (splitscombo hero__model) */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/anastasia_hero_blue.webp"
-            alt="Анастасія Сич"
-            fill
-            priority
-            className="object-cover object-top sm:object-right filter brightness-90 contrast-105"
-            sizes="100vw"
-          />
-          {/* Dark gradient overlay layers to ensure ultra-legible text & splitscombo feel */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f17] via-[#0b0f17]/90 to-[#0b0f17]/40 sm:to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-[#0b0f17]/70 z-10" />
-        </div>
+        {/* Glow Effects */}
+        <div className="absolute top-10 right-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#ffdc82]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-40 left-0 w-72 sm:w-96 h-72 sm:h-96 bg-[#c33624]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto w-full relative z-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+          
+          {/* Hero Left Content */}
+          <div className="lg:col-span-7 space-y-5 text-left">
             
-            {/* Hero Left Content Overlay */}
-            <div className="lg:col-span-8 space-y-5 text-left">
+            {/* Start Date Pill */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#131924] border border-[#ffdc82]/30 text-white text-xs sm:text-sm font-medium">
+              <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ</span>
+              <span className="text-[#8e9bb0]">|</span>
+              <div className="flex items-center gap-1.5 text-white/90">
+                <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
+                <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
+              </div>
+            </div>
+
+            {/* DYNAMIC TITLE */}
+            <h1 className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight">
+              {currentOffer.title}
+            </h1>
+
+            {/* DYNAMIC SUBTITLE / DESCRIPTION */}
+            <p className="text-[#8e9bb0] text-base sm:text-xl leading-relaxed">
+              {currentOffer.subtitle}
+            </p>
+
+            {/* SPLITSCOMBO OFFER PRICING & BUTTON BOX (hero__offer-box) */}
+            <div className="glass-card p-5 sm:p-6 rounded-3xl border border-[#ffdc82]/30 space-y-4 relative overflow-hidden shadow-2xl">
               
-              {/* Offer Variant Badge & Start Date Pill */}
-              <div className="flex flex-wrap items-center gap-2.5">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs font-medium backdrop-blur-md shadow-lg">
-                  <span className="font-bold text-[#ffdc82]">{currentOffer.badge}</span>
-                  <span className="text-[#8e9bb0]">|</span>
-                  <div className="flex items-center gap-1.5 text-white/90">
-                    <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
-                    <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
-                  </div>
+              {/* Spinning Discount Stamp (-60% OFF) */}
+              <div className="absolute -top-3 -right-3 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#ffdc82] animate-spin-slow opacity-70" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#c33624] text-white flex flex-col items-center justify-center text-center shadow-lg transform rotate-12 border border-[#ffdc82]/40">
+                  <span className="text-xs sm:text-sm font-extrabold font-accent leading-none">-60%</span>
+                  <span className="text-[9px] font-bold text-[#ffdc82] uppercase">OFF</span>
                 </div>
               </div>
 
-              {/* DYNAMIC TITLE */}
-              <m.h1
-                key={currentOffer.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight drop-shadow-md"
+              {/* Price Badges Container */}
+              <div className="flex items-center gap-4">
+                <div className="price-box-current px-5 py-3 rounded-2xl flex flex-col items-center justify-center">
+                  <span className="text-2xl sm:text-3xl font-extrabold text-[#ffdc82] font-accent">480 грн</span>
+                </div>
+                <div className="price-box-old px-4 py-2.5 rounded-2xl flex flex-col items-center justify-center">
+                  <span className="text-xs text-[#8e9bb0] uppercase font-semibold">було</span>
+                  <span className="text-lg font-bold text-white/50">1190 грн</span>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={handleOpenModal}
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/30"
               >
-                {currentOffer.title}
-              </m.h1>
+                <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
+                <ArrowRight className="w-5 h-5" />
+              </motion.button>
 
-              {/* DYNAMIC SUBTITLE & PARAGRAPHS */}
-              <div className="space-y-3 text-[#e8ecf4] text-sm sm:text-base leading-relaxed bg-[#0b0f17]/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#ffdc82]/20 shadow-xl max-w-2xl">
-                <p className="text-white font-semibold text-base sm:text-lg border-b border-[#222c3d] pb-2">
-                  {currentOffer.subtitle}
-                </p>
-                <p className="text-[#8e9bb0]">{currentOffer.p1}</p>
-                <p className="text-[#8e9bb0]">{currentOffer.p2}</p>
-                <p className="text-[#ffdc82] font-bold pt-1">{currentOffer.highlight}</p>
-              </div>
-
-              {/* SPLITSCOMBO OFFER PRICING & BUTTON BOX (hero__offer-box) */}
-              <div className="glass-card p-5 sm:p-6 rounded-3xl border-2 border-[#ffdc82]/40 space-y-4 relative overflow-hidden shadow-2xl max-w-xl">
-                
-                {/* Spinning Discount Stamp (-60% OFF) */}
-                <div className="absolute -top-3 -right-3 w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center pointer-events-none z-20">
-                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-[#ffdc82] animate-spin-slow opacity-70" />
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#c33624] text-white flex flex-col items-center justify-center text-center shadow-2xl transform rotate-12 border border-[#ffdc82]">
-                    <span className="text-xs sm:text-sm font-extrabold font-accent leading-none">-60%</span>
-                    <span className="text-[9px] font-bold text-[#ffdc82] uppercase">OFF</span>
-                  </div>
+              {/* Trust badges footer */}
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#222c3d] text-center text-[11px] text-[#8e9bb0]">
+                <div className="flex items-center justify-center gap-1">
+                  <Video className="w-3.5 h-3.5 text-[#ffdc82]" />
+                  <span>Zoom 60 хв</span>
                 </div>
-
-                {/* Price Badges Container */}
-                <div className="flex items-center gap-4">
-                  <div className="price-box-current px-5 py-3 rounded-2xl flex flex-col items-center justify-center">
-                    <span className="text-2xl sm:text-3xl font-extrabold text-[#ffdc82] font-accent">480 грн</span>
-                  </div>
-                  <div className="price-box-old px-4 py-2.5 rounded-2xl flex flex-col items-center justify-center">
-                    <span className="text-xs text-[#8e9bb0] uppercase font-semibold">було</span>
-                    <span className="text-lg font-bold text-white/50">1190 грн</span>
-                  </div>
+                <div className="flex items-center justify-center gap-1">
+                  <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
+                  <span>Медичний фахівець</span>
                 </div>
-
-                {/* Action Button */}
-                <m.button
-                  whileTap={{ scale: 0.97 }}
-                  onClick={handleOpenModal}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
-                >
-                  <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-                  <ArrowRight className="w-5 h-5" />
-                </m.button>
-
-                {/* Trust badges footer */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#222c3d] text-center text-[11px] text-[#8e9bb0]">
-                  <div className="flex items-center justify-center gap-1">
-                    <Video className="w-3.5 h-3.5 text-[#ffdc82]" />
-                    <span>Zoom 60 хв</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-1">
-                    <Award className="w-3.5 h-3.5 text-[#ffdc82]" />
-                    <span>Медична освіта</span>
-                  </div>
-                  <div className="flex items-center justify-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>100% користь</span>
-                  </div>
+                <div className="flex items-center justify-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>100% користь</span>
                 </div>
-
               </div>
 
             </div>
 
           </div>
+
+          {/* Hero Right Photo Container (EXPERT STANDING PHOTO) */}
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="relative max-w-sm w-full">
+              <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-[#ffdc82] to-[#c33624] opacity-35 blur-xl pointer-events-none" />
+
+              <div className="relative glass-card p-3 rounded-3xl border border-[#ffdc82]/30 overflow-hidden shadow-2xl">
+                <div className="w-full h-[440px] sm:h-[480px] rounded-2xl relative overflow-hidden">
+                  <Image
+                    src="/images/anastasia_hero_blue.webp"
+                    alt="Анастасія Сич - Медичний нутриціолог"
+                    fill
+                    priority
+                    className="object-cover object-center filter brightness-105"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-80" />
+
+                  <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-[#0b0f17]/90 backdrop-blur-md border border-[#ffdc82]/30 text-left">
+                    <span className="text-sm font-bold text-white block font-accent">Анастасія Сич</span>
+                    <span className="text-xs text-[#ffdc82] font-medium block">Медичний нутриціолог & Реабілітолог</span>
+                    <span className="text-[10px] text-[#8e9bb0] block pt-0.5">8+ років досвіду • Вища медична освіта</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -572,13 +559,13 @@ export default function DiagnosticLanding() {
           </div>
 
           <div className="text-center pt-2">
-            <m.button
+            <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={handleOpenModal}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-xl glow-red"
             >
               Записатись на діагностику
-            </m.button>
+            </motion.button>
           </div>
         </div>
       </section>
@@ -589,7 +576,7 @@ export default function DiagnosticLanding() {
           <div className="text-center space-y-2">
             <span className="text-[#ffdc82] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
             <h2 className="text-2xl sm:text-4xl font-accent text-white leading-tight">
-              Як проходит діагностична програма
+              Як проходить діагностична програма
             </h2>
           </div>
 
@@ -918,7 +905,7 @@ export default function DiagnosticLanding() {
 
                   <AnimatePresence>
                     {isOpen && (
-                      <m.div
+                      <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -927,7 +914,7 @@ export default function DiagnosticLanding() {
                         <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#8e9bb0] border-t border-[#222c3d]/50 pt-3 leading-relaxed">
                           {item.a}
                         </div>
-                      </m.div>
+                      </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
@@ -959,7 +946,7 @@ export default function DiagnosticLanding() {
           </div>
         </div>
 
-        <m.button
+        <motion.button
           whileTap={{ scale: 0.95 }}
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
@@ -968,14 +955,14 @@ export default function DiagnosticLanding() {
         >
           <Sparkles className="w-4 h-4 text-[#ffdc82] animate-spin" />
           <span>Записатись за 480 грн</span>
-        </m.button>
+        </motion.button>
       </div>
 
       {/* LEAD REGISTRATION MODAL */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-            <m.div
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -1118,7 +1105,7 @@ export default function DiagnosticLanding() {
                   </button>
                 </div>
               )}
-            </m.div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
