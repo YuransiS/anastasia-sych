@@ -29,7 +29,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#0b0f17] text-[#e8ecf4] antialiased selection:bg-[#ffdc82] selection:text-[#0b0f17]">
+      <body className="bg-[#f8fafc] text-[#0f172a] antialiased selection:bg-[#0284c7] selection:text-white">
         <FacebookPixel />
         {children}
       </body>
