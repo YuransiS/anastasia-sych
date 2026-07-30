@@ -61,6 +61,18 @@ export default function DiagnosticLanding() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isModalOpen]);
+
   // Auto-detect visitor country & dial code via Geo IP API
   useEffect(() => {
     fetch("/api/geo")
@@ -270,7 +282,7 @@ export default function DiagnosticLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] selection:bg-[#0284c7] selection:text-white pb-36 sm:pb-24 gpu-layer">
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] selection:bg-[#0284c7] selection:text-white pb-32 sm:pb-24">
 
       {/* 1. FAST TICKER (8s SPEED, BLUE ACCENT BANNER) */}
       <div className="bg-[#0284c7] text-white py-2 overflow-hidden border-b border-[#0369a1] shadow-md sticky top-0 z-40">
@@ -293,8 +305,8 @@ export default function DiagnosticLanding() {
         </div>
       </div>
 
-      {/* 2. HERO SECTION WITH BADGE AT VERY TOP & PROMINENT OFFER TITLE */}
-      <section className="relative min-h-[85vh] flex flex-col justify-between pt-3 pb-10 px-4 sm:px-6 overflow-hidden">
+      {/* 2. RESTRUCTURED HERO SECTION (BOTTOM-UP LAYOUT INSIDE VIEWPORT) */}
+      <section className="relative min-h-[88vh] flex flex-col justify-between pt-3 pb-8 px-4 sm:px-6 overflow-hidden">
         
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
@@ -311,79 +323,70 @@ export default function DiagnosticLanding() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-[#f8fafc]/90 to-transparent sm:bg-gradient-to-r sm:from-[#f8fafc] sm:via-[#f8fafc]/85 sm:to-transparent z-10" />
         </div>
 
-        <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col justify-between h-full space-y-6 pt-1">
+        {/* TOP BADGE IN HEADER POSITION */}
+        <div className="relative z-20 max-w-4xl mx-auto w-full">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200 text-slate-800 text-xs font-medium backdrop-blur-md shadow-sm">
+            <span className="font-bold text-[#0284c7]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
+            <span className="text-slate-300">|</span>
+            <div className="flex items-center gap-1.5 text-slate-700">
+              <Calendar className="w-3.5 h-3.5 text-[#0284c7]" />
+              <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
+            </div>
+          </div>
+        </div>
+
+        {/* HERO CONTENT BUILT FROM BOTTOM UP */}
+        <div className="max-w-4xl mx-auto w-full relative z-20 mt-auto space-y-4 max-w-xl">
           
-          {/* ITEM 1: VERY TOP BADGE IN HEADER AREA */}
-          <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200 text-slate-800 text-xs font-medium backdrop-blur-md shadow-sm">
-              <span className="font-bold text-[#0284c7]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
-              <span className="text-slate-300">|</span>
-              <div className="flex items-center gap-1.5 text-slate-700">
-                <Calendar className="w-3.5 h-3.5 text-[#0284c7]" />
-                <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
-              </div>
-            </div>
+          {/* MAIN OFFER HEADLINE */}
+          <h1 className="text-3xl sm:text-5xl font-accent leading-tight font-extrabold text-slate-900 tracking-tight drop-shadow-sm">
+            {currentOffer.title}
+          </h1>
+
+          {/* SUBTITLE */}
+          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+            {currentOffer.subtitle}
+          </p>
+
+          {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
+          <div className="flex items-center gap-3 font-bold pt-1">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#0284c7] font-accent">
+              480 грн
+            </span>
+            <span className="text-base sm:text-lg line-through text-slate-400">
+              1190 грн
+            </span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-extrabold uppercase shadow-sm">
+              -60% знижка
+            </span>
           </div>
 
-          {/* ITEM 2 & 3: PROMINENT OFFER HEADLINE & SMALLER SUBTITLE */}
-          <div className="space-y-3 pt-4 sm:pt-8">
-            
-            {/* MAIN OFFER HEADLINE (LARGER FONT text-3xl sm:text-5xl) */}
-            <h1 className="text-3xl sm:text-5xl font-accent leading-tight font-extrabold text-slate-900 tracking-tight max-w-3xl drop-shadow-sm">
-              {currentOffer.title}
-            </h1>
+          {/* ACTION CTA BUTTON WITH PULSING BLUE GLOW */}
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            onClick={handleOpenModal}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-base sm:text-lg shadow-xl glow-primary animate-pulse flex items-center justify-center gap-3 cursor-pointer border border-[#0284c7]/30"
+          >
+            <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
+            <ArrowRight className="w-5 h-5 text-sky-200" />
+          </motion.button>
 
-            {/* SUBTITLE (SMALLER FONT text-xs sm:text-sm) */}
-            <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-2xl font-normal">
-              {currentOffer.subtitle}
-            </p>
-
-          </div>
-
-          {/* ITEM 4, 5, 6: PRICING ROW, CTA BUTTON, TRUST BADGES */}
-          <div className="space-y-3 pt-2 max-w-xl">
-            
-            {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
-            <div className="flex items-center gap-3 font-bold">
-              <span className="text-3xl sm:text-4xl font-extrabold text-[#0284c7] font-accent">
-                480 грн
-              </span>
-              <span className="text-base sm:text-lg line-through text-slate-400">
-                1190 грн
-              </span>
-              <span className="text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-extrabold uppercase shadow-sm">
-                -60% знижка
-              </span>
+          {/* TRUST BADGES DIRECTLY UNDERNEATH THE BUTTON */}
+          <div className="flex items-center gap-4 text-center text-xs text-slate-600 pt-0.5">
+            <div className="flex items-center gap-1.5">
+              <Video className="w-4 h-4 text-[#0284c7]" />
+              <span>Zoom 60 хв</span>
             </div>
-
-            {/* ACTION CTA BUTTON WITH PULSING BLUE GLOW */}
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              animate={{ scale: [1, 1.02, 1] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              onClick={handleOpenModal}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-base sm:text-lg shadow-xl glow-primary animate-pulse flex items-center justify-center gap-3 cursor-pointer border border-[#0284c7]/30"
-            >
-              <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-              <ArrowRight className="w-5 h-5 text-sky-200" />
-            </motion.button>
-
-            {/* TRUST BADGES DIRECTLY UNDERNEATH THE BUTTON */}
-            <div className="flex items-center gap-4 text-center text-xs text-slate-600 pt-1">
-              <div className="flex items-center gap-1.5">
-                <Video className="w-4 h-4 text-[#0284c7]" />
-                <span>Zoom 60 хв</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Award className="w-4 h-4 text-[#0284c7]" />
-                <span>Медична освіта</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#059669]" />
-                <span>100% користь</span>
-              </div>
+            <div className="flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-[#0284c7]" />
+              <span>Медична освіта</span>
             </div>
-
+            <div className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-[#059669]" />
+              <span>100% користь</span>
+            </div>
           </div>
 
         </div>
@@ -802,9 +805,9 @@ export default function DiagnosticLanding() {
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
       </footer>
 
-      {/* 12. STICKY MOBILE BOTTOM CTA BAR (PERMANENTLY VISIBLE, SHIFTED CLOSER TO BUTTON) */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 z-50 flex items-center justify-between gap-2.5 shadow-2xl">
-        <div className="flex flex-col">
+      {/* 12. PERMANENT STICKY MOBILE BOTTOM CTA BAR */}
+      <div className="fixed bottom-0 left-0 right-0 z-[9990] p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] flex items-center justify-between gap-2.5">
+        <div className="flex flex-col shrink-0">
           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Діагностика 60 хв</span>
           <div className="flex items-baseline gap-1.5 font-bold">
             <span className="text-base text-[#0284c7]">480 грн</span>
@@ -817,22 +820,26 @@ export default function DiagnosticLanding() {
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           onClick={handleOpenModal}
-          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-xs sm:text-sm shadow-xl glow-primary animate-pulse cursor-pointer flex items-center gap-2 border border-[#0284c7]/40 shrink-0"
+          className="px-4 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-xs sm:text-sm shadow-xl glow-primary animate-pulse cursor-pointer flex items-center gap-2 border border-[#0284c7]/40 shrink-0"
         >
           <Sparkles className="w-4 h-4 text-sky-200" />
           <span>Записатись на діагностику</span>
         </motion.button>
       </div>
 
-      {/* LEAD REGISTRATION MODAL (CENTRALIZED DEAD CENTER IN VIEWPORT) */}
+      {/* LEAD REGISTRATION MODAL (CENTRALIZED DEAD CENTER IN VIEWPORT + BACKDROP CLICK TO CLOSE) */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-[100] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div
+            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 z-[99999] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 my-auto text-slate-900 max-h-[90vh] overflow-y-auto"
             >
               <button

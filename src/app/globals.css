@@ -21,16 +21,13 @@ body {
   touch-action: manipulation;
 }
 
+body.modal-open {
+  overflow: hidden !important;
+}
+
 h1, h2, h3, .font-accent {
   font-family: var(--font-yeseva), serif;
   letter-spacing: -0.01em;
-}
-
-/* GPU Hardware Acceleration */
-.gpu-layer {
-  transform: translateZ(0);
-  will-change: transform, opacity;
-  backface-visibility: hidden;
 }
 
 /* ----------------------------------------------------
