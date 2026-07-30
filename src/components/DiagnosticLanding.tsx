@@ -17,13 +17,13 @@ import {
   User,
   MessageCircle,
   Award,
-  HeartPulse,
-  Brain,
   ArrowRight,
   Camera,
   Sliders,
   Check,
   ShieldCheck,
+  Brain,
+  HeartPulse
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -75,20 +75,6 @@ export default function DiagnosticLanding() {
     1: "after",
     2: "after",
   });
-
-  // Countdown timer state for sticky bar
-  const [timeLeft, setTimeLeft] = useState({ minutes: 29, seconds: 55 });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { minutes: prev.minutes - 1, seconds: 59 };
-        return { minutes: 29, seconds: 55 };
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Handle modal open
   const handleOpenModal = () => {
@@ -287,10 +273,10 @@ export default function DiagnosticLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-32 sm:pb-24 gpu-layer">
+    <div className="min-h-screen bg-[#0b0f17] text-[#e8ecf4] selection:bg-[#ffdc82] selection:text-[#0b0f17] pb-36 sm:pb-24 gpu-layer">
 
-      {/* 1. FAST TICKER (8s SPEED, NO HEADER) */}
-      <div className="bg-[#c33624] text-white py-2.5 overflow-hidden border-b border-[#ffdc82]/30 shadow-md sticky top-0 z-40">
+      {/* 1. FAST TICKER (8s SPEED) */}
+      <div className="bg-[#c33624] text-white py-2 overflow-hidden border-b border-[#ffdc82]/30 shadow-md sticky top-0 z-40">
         <div className="animate-marquee font-bold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
           <span>🔥 Персональна діагностика 60 хвилин</span>
           <span>✦</span>
@@ -310,10 +296,10 @@ export default function DiagnosticLanding() {
         </div>
       </div>
 
-      {/* 2. HERO SECTION WITH BACKGROUND EXPERT PHOTO (MOBILE & DESKTOP BACKGROUND) */}
-      <section className="relative min-h-[90vh] sm:min-h-[85vh] flex items-end sm:items-center pt-8 pb-16 px-4 sm:px-6 overflow-hidden">
+      {/* 2. RESTRUCTURED HERO SECTION */}
+      <section className="relative min-h-[92vh] sm:min-h-[85vh] flex flex-col justify-between pt-4 pb-12 px-4 sm:px-6 overflow-hidden">
         
-        {/* FULL EXPERT BACKGROUND PHOTO ON MOBILE & DESKTOP */}
+        {/* HERO BACKGROUND PHOTO (SHIFTED UPWARDS TO CROP TOP 25% EMPTY WALL SPACE) */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/anastasia_hero_blue.webp"
@@ -321,40 +307,47 @@ export default function DiagnosticLanding() {
             fill
             priority
             unoptimized
-            className="object-cover object-top sm:object-right opacity-90 filter brightness-105 contrast-105"
+            className="object-cover object-[center_35%] filter brightness-100 contrast-105"
             sizes="100vw"
           />
-          {/* Gradient overlays for crystal clear text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/90 to-transparent sm:bg-gradient-to-r sm:from-[#0b0f17] sm:via-[#0b0f17]/85 sm:to-transparent z-10" />
+          {/* Subtle gradient vignette for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/85 to-transparent sm:bg-gradient-to-r sm:from-[#0b0f17] sm:via-[#0b0f17]/80 sm:to-transparent z-10" />
         </div>
 
-        <div className="max-w-4xl mx-auto w-full relative z-20 space-y-6 pt-12 sm:pt-6">
+        <div className="max-w-4xl mx-auto w-full relative z-20 flex flex-col justify-between h-full space-y-6 pt-2">
           
-          {/* Start Date Pill */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs sm:text-sm font-medium backdrop-blur-md shadow-lg">
-            <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
-            <span className="text-[#8e9bb0]">|</span>
-            <div className="flex items-center gap-1.5 text-white/90">
-              <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
-              <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
+          {/* ITEM 1: VERY TOP BADGE */}
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0b0f17]/90 border border-[#ffdc82]/40 text-white text-xs font-medium backdrop-blur-md shadow-lg">
+              <span className="font-bold text-[#ffdc82]">1-НА-1 ЗУСТРІЧ В ZOOM</span>
+              <span className="text-[#8e9bb0]">|</span>
+              <div className="flex items-center gap-1.5 text-white/90">
+                <Calendar className="w-3.5 h-3.5 text-[#ffdc82]" />
+                <span>СТАРТ: <b>СЬОГОДНІ / ЗАВТРА</b></span>
+              </div>
             </div>
           </div>
 
-          {/* DYNAMIC TITLE */}
-          <h1 className="text-3xl sm:text-5xl font-accent leading-tight text-white tracking-tight drop-shadow-lg">
-            {currentOffer.title}
-          </h1>
-
-          {/* DYNAMIC SUBTITLE / DESCRIPTION */}
-          <p className="text-[#e8ecf4] text-base sm:text-xl leading-relaxed max-w-2xl bg-[#0b0f17]/80 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-[#ffdc82]/20 shadow-xl">
-            {currentOffer.subtitle}
-          </p>
-
-          {/* STREAMLINED INLINE PRICING & ACTION BUTTON (1 ROW ABOVE BUTTON) */}
-          <div className="space-y-3 pt-2 max-w-xl">
+          {/* ITEM 2 & 3: TITLE AND SUBTITLE SHIFTED DOWNWARDS, NO CONTAINER BOX */}
+          <div className="space-y-3 pt-12 sm:pt-24">
             
-            {/* 1 INLINE ROW PRICING (No big container box) */}
-            <div className="flex items-center gap-3 justify-start font-bold">
+            {/* MAIN HEADLINE */}
+            <h1 className="text-2.5xl sm:text-4xl font-accent leading-tight text-white tracking-tight drop-shadow-lg max-w-3xl">
+              {currentOffer.title}
+            </h1>
+
+            {/* SUBTITLE (Smaller font text-sm/text-base, NO container box/border) */}
+            <p className="text-[#8e9bb0] text-sm sm:text-base leading-relaxed max-w-2xl font-normal drop-shadow">
+              {currentOffer.subtitle}
+            </p>
+
+          </div>
+
+          {/* ITEM 4, 5, 6: PRICING ROW, CTA BUTTON, TRUST BADGES (STACKED DOWNWARDS) */}
+          <div className="space-y-3 pt-4 max-w-xl">
+            
+            {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
+            <div className="flex items-center gap-3 font-bold">
               <span className="text-3xl sm:text-4xl font-extrabold text-[#ffdc82] font-accent drop-shadow">
                 480 грн
               </span>
@@ -366,17 +359,19 @@ export default function DiagnosticLanding() {
               </span>
             </div>
 
-            {/* ACTION CTA BUTTON */}
+            {/* ACTION CTA BUTTON WITH PULSING GLOW EFFECT */}
             <motion.button
               whileTap={{ scale: 0.97 }}
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-4 sm:py-4.5 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-xl shadow-2xl glow-red flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
+              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-base sm:text-lg shadow-2xl glow-red animate-pulse flex items-center justify-center gap-3 cursor-pointer border border-[#ffdc82]/40"
             >
               <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-              <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 text-[#ffdc82]" />
+              <ArrowRight className="w-5 h-5 text-[#ffdc82]" />
             </motion.button>
 
-            {/* Trust Badges Bar */}
+            {/* TRUST BADGES DIRECTLY UNDERNEATH THE BUTTON */}
             <div className="flex items-center gap-4 text-center text-xs text-[#8e9bb0] pt-1">
               <div className="flex items-center gap-1.5">
                 <Video className="w-4 h-4 text-[#ffdc82]" />
@@ -877,15 +872,13 @@ export default function DiagnosticLanding() {
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
       </footer>
 
-      {/* 12. ALWAYS STICKY BOTTOM MOBILE BAR WITH PULSING ACTION BUTTON */}
+      {/* 12. STICKY MOBILE BOTTOM CTA BAR */}
       <div className="fixed bottom-0 left-0 right-0 p-3 bg-[#0b0f17]/95 backdrop-blur-xl border-t border-[#ffdc82]/30 z-50 flex items-center justify-between gap-3 shadow-2xl">
-        <div className="flex items-center gap-3">
-          <div className="flex flex-col">
-            <span className="text-[10px] text-[#8e9bb0] font-bold uppercase tracking-wider">Діагностика 60 хв</span>
-            <div className="flex items-baseline gap-1.5 font-bold">
-              <span className="text-base text-[#ffdc82]">480 грн</span>
-              <span className="line-through text-[10px] text-white/50">1190 грн</span>
-            </div>
+        <div className="flex flex-col">
+          <span className="text-[10px] text-[#8e9bb0] font-bold uppercase tracking-wider">Діагностика 60 хв</span>
+          <div className="flex items-baseline gap-1.5 font-bold">
+            <span className="text-base text-[#ffdc82]">480 грн</span>
+            <span className="line-through text-[10px] text-white/50">1190 грн</span>
           </div>
         </div>
 
@@ -894,7 +887,7 @@ export default function DiagnosticLanding() {
           animate={{ scale: [1, 1.04, 1] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           onClick={handleOpenModal}
-          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-xs sm:text-sm shadow-xl glow-red cursor-pointer flex items-center gap-2 border border-[#ffdc82]/40 shrink-0"
+          className="px-5 sm:px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#c33624] to-[#a92b1b] text-white font-bold text-xs sm:text-sm shadow-xl glow-red animate-pulse cursor-pointer flex items-center gap-2 border border-[#ffdc82]/40 shrink-0"
         >
           <Sparkles className="w-4 h-4 text-[#ffdc82] animate-spin" />
           <span>Записатись на діагностику</span>
