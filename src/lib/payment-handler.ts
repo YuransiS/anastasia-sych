@@ -64,6 +64,7 @@ export async function processPaymentStatusUpdate(payload: {
   const offerVariant = existingLead.offer_variant || "1";
   const offerLabel = getOfferLabel(offerVariant);
   const amountText = paidAmount === 1 ? "1 UAH (ТЕСТ)" : `${paidAmount} UAH`;
+  const userNotes = existingLead.raw_payload?.notes;
 
   let message = "";
   if (isApproved) {
@@ -89,11 +90,31 @@ export async function processPaymentStatusUpdate(payload: {
   message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
   message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
 
+  if (userNotes && String(userNotes).trim()) {
+    message += `💬 <b>Запит:</b> ${String(userNotes).trim()}\n`;
+  }
+
   if (isApproved) {
     message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
   } else {
     message += `❌ <b>Причина відмови:</b> ${reason || (reasonCode ? `Код: ${reasonCode}` : "Скасовано користувачем")}\n`;
     message += `⚠️ <b>Статус:</b> Не оплачено\n`;
+  }
+
+  const utmSource = existingLead.utm_source || existingLead.raw_payload?.utm_source;
+  const utmMedium = existingLead.utm_medium || existingLead.raw_payload?.utm_medium;
+  const utmCampaign = existingLead.utm_campaign || existingLead.raw_payload?.utm_campaign;
+  const utmContent = existingLead.utm_content || existingLead.raw_payload?.utm_content;
+  const utmTerm = existingLead.utm_term || existingLead.raw_payload?.utm_term;
+
+  const hasUtm = utmSource || utmMedium || utmCampaign || utmContent || utmTerm;
+  if (hasUtm) {
+    message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+    if (utmSource) message += `• <b>Source:</b> ${utmSource}\n`;
+    if (utmMedium) message += `• <b>Medium:</b> ${utmMedium}\n`;
+    if (utmCampaign) message += `• <b>Campaign:</b> ${utmCampaign}\n`;
+    if (utmContent) message += `• <b>Content:</b> ${utmContent}\n`;
+    if (utmTerm) message += `• <b>Term:</b> ${utmTerm}\n`;
   }
 
   if (tgMessageId) {
