@@ -331,11 +331,11 @@ export default function DiagnosticLanding() {
             fill
             priority
             unoptimized
-            className="object-cover object-[center_35%] filter brightness-105 contrast-105"
+            className="object-cover object-[center_25%] filter brightness-102 contrast-[1.04]"
             sizes="100vw"
           />
-          {/* Light gradient overlay blending smoothly into light background */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-[#f8fafc]/90 to-transparent sm:bg-gradient-to-r sm:from-[#f8fafc] sm:via-[#f8fafc]/85 sm:to-transparent z-10" />
+          {/* Light gradient overlay starts below mid-screen so upper image is 100% crisp and vivid */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-[#f8fafc]/80 via-35% to-transparent to-55% sm:bg-gradient-to-r sm:from-[#f8fafc] sm:via-[#f8fafc]/85 sm:to-transparent z-10" />
         </div>
 
         {/* TOP BADGE IN HEADER POSITION */}
