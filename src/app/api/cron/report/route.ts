@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "";
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
 const REPORT_THREAD_ID = process.env.TELEGRAM_REPORT_THREAD_ID
   ? parseInt(process.env.TELEGRAM_REPORT_THREAD_ID, 10)
-  : undefined;
+  : 908;
 
 function getTimeRangeForOffsetDays(startOffset: number, endOffset: number) {
   const now = new Date();
@@ -79,15 +79,33 @@ async function generateReportText(
 
   const rows = leads || [];
   const totalLeads = rows.length;
-  const totalRevenue = totalLeads * 480;
 
-  // Offer breakdown counts
-  const offerCounts: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
+  // Paid vs Unpaid counts & revenue
+  let paidCount = 0;
+  let unpaidCount = 0;
+  let totalRevenue = 0;
+
+  // Offer breakdown: total and paid
+  const offerTotal: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
+  const offerPaid: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
+  const offerRevenue: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
   const utmCounts: Record<string, number> = {};
 
   rows.forEach((row) => {
     const offerKey = String(row.offer_variant || "1");
-    offerCounts[offerKey] = (offerCounts[offerKey] || 0) + 1;
+    offerTotal[offerKey] = (offerTotal[offerKey] || 0) + 1;
+
+    const isPaid = row.status === "Оплачено";
+    const amount = Number(row.amount || 480);
+
+    if (isPaid) {
+      paidCount += 1;
+      totalRevenue += amount;
+      offerPaid[offerKey] = (offerPaid[offerKey] || 0) + 1;
+      offerRevenue[offerKey] = (offerRevenue[offerKey] || 0) + amount;
+    } else {
+      unpaidCount += 1;
+    }
 
     const src = row.utm_source || "direct";
     const camp = row.utm_campaign || "none";
@@ -95,10 +113,11 @@ async function generateReportText(
     utmCounts[key] = (utmCounts[key] || 0) + 1;
   });
 
+  const conversionRate = totalLeads > 0 ? ((paidCount / totalLeads) * 100).toFixed(1) : "0.0";
   const titleEmoji = isWeekly ? "📈" : "📊";
   const reportType = isWeekly ? "Тижневий" : "Щоденний";
 
-  let reportText = `${titleEmoji} <b>${reportType} звіт: Анастасія Сич [Діагностика]</b>\n`;
+  let reportText = `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич [Діагностика]</b>\n`;
   reportText += `📅 <b>Період:</b> ${label}\n\n`;
 
   if (totalLeads === 0) {
@@ -106,22 +125,25 @@ async function generateReportText(
     return reportText;
   }
 
-  reportText += `📋 <b>Загальна статистика:</b>\n`;
+  reportText += `💰 <b>ФІНАНСИ ТА ПРОДАЖІ:</b>\n`;
+  reportText += `• <b>Загальний доход:</b> <code>${totalRevenue} UAH</code>\n`;
+  reportText += `• <b>Скільки купило (Оплачено):</b> <code>${paidCount} шт.</code>\n`;
+  reportText += `• <b>Скільки не купило:</b> <code>${unpaidCount} шт.</code>\n`;
   reportText += `• <b>Всього заявок:</b> <code>${totalLeads} шт.</code>\n`;
-  reportText += `• <b>Потенційна виручка:</b> <code>${totalRevenue} UAH</code>\n\n`;
+  reportText += `• <b>Конверсія в оплату:</b> <code>${conversionRate}%</code>\n\n`;
 
-  reportText += `🎯 <b>Розподіл за варіантами оферів:</b>\n`;
-  reportText += `• <b>Офер #1 (Після дієти):</b> <code>${offerCounts["1"] || 0} шт.</code>\n`;
-  reportText += `• <b>Офер #2 (Сриви та солодке):</b> <code>${offerCounts["2"] || 0} шт.</code>\n`;
-  reportText += `• <b>Офер #3 (Впевненість у тілі):</b> <code>${offerCounts["3"] || 0} шт.</code>\n\n`;
+  reportText += `🎯 <b>ПРОДАЖІ ЗА ВАРІАНТАМИ ОФЕРІВ:</b>\n`;
+  reportText += `• <b>Офер #1 (Після дієти):</b> Купило: <code>${offerPaid["1"] || 0}</code> з <code>${offerTotal["1"] || 0}</code> (${offerRevenue["1"] || 0} UAH)\n`;
+  reportText += `• <b>Офер #2 (Дзеркало / Не подобається):</b> Купило: <code>${offerPaid["2"] || 0}</code> з <code>${offerTotal["2"] || 0}</code> (${offerRevenue["2"] || 0} UAH)\n`;
+  reportText += `• <b>Офер #3 (Марафон закінчився):</b> Купило: <code>${offerPaid["3"] || 0}</code> з <code>${offerTotal["3"] || 0}</code> (${offerRevenue["3"] || 0} UAH)\n\n`;
 
   const topUtm = Object.entries(utmCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5)
-    .map(([key, count]) => `• <code>${key}</code>: ${count} шт.`)
+    .map(([key, count]) => `• <code>${key}</code>: ${count} заявок`)
     .join("\n") || "• Немає даних";
 
-  reportText += `🔍 <b>Top UTM Джерела:</b>\n${topUtm}`;
+  reportText += `🔍 <b>ТОП UTM-ДЖЕРЕЛА ТРАФІКУ:</b>\n${topUtm}`;
 
   return reportText.trim();
 }

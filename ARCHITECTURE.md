@@ -3,9 +3,10 @@
 ## 1. Project Status & Tech Stack
 - **Framework:** Next.js 15 (App Router, TypeScript)
 - **Database & Backend:** Supabase (PostgreSQL) with Row Level Security (RLS) enabled
+- **Payment Processing:** WayForPay Gateway (HMAC-MD5 signatures, webhook verification, 0 email transmission)
 - **Styling & UI:** Tailwind CSS, Framer Motion, Lucide Icons
 - **Fonts:** Yeseva One (Accent headings), Carlito (Body & UI)
-- **Colors:** `#ffdc82` (Yellow accent), `#c33624` (Red / Terracotta accent), Slate / Zinc dark-mode minimalism
+- **Colors:** `#0284c7` (Primary Sky/Blue), `#0369a1` (Dark Sky), Slate / Zinc minimalism
 
 ---
 
@@ -14,32 +15,45 @@
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase public anonymous key
 - `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (bypasses RLS for secure server-side API writes)
 - `NEXT_PUBLIC_FACEBOOK_PIXEL_ID` - Facebook Pixel ID for web event tracking
-- `TELEGRAM_LEADS_BOT_TOKEN` / `TELEGRAM_BOT_TOKEN` - Telegram bot API token for leads & reports
+- `TELEGRAM_LEADS_BOT_TOKEN` / `TELEGRAM_BOT_TOKEN` - Telegram bot API token for leads & payment alerts
 - `TELEGRAM_CHAT_ID` - Target Telegram Group/Channel ID
 - `TELEGRAM_THREAD_ID` - Thread ID for sales leads topic
 - `TELEGRAM_REPORT_THREAD_ID` - Thread ID for daily/weekly reports topic
 - `CRON_SECRET` - Authentication token for automated report cron jobs
 - `SENDPULSE_CLIENT_ID` - SendPulse API client ID
 - `SENDPULSE_CLIENT_SECRET` - SendPulse API client secret
+- `WAYFORPAY_MERCHANT_ACCOUNT` - WayForPay Merchant Account (`freelance_user_68f25563083b8`)
+- `WAYFORPAY_SECRET_KEY` - WayForPay HMAC Secret Key (`ba0f0779bda0299f07c5b7df630c95786ac06398`)
+- `WAYFORPAY_MERCHANT_PASSWORD` - WayForPay Merchant Password (`54ab149f47dc235036c91fba16807bc0`)
+- `WAYFORPAY_MERCHANT_DOMAIN_NAME` - Merchant domain name (`anastasia-sych.vercel.app`)
+- `NEXT_PUBLIC_TG_BOT_URL` - Telegram bot redirect link (`https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f`)
 
 ---
 
 ## 3. Routes & Page Map
 - **`/` (Root Page):** Clean, high-end 404 page ("Ви не туди потрапили") with zero external links.
 - **`/diagnostic` (Diagnostic Landing Page):**
-  - Interactive 11-block landing page for Anastasia Sych's 60-minute personal diagnostics (480 UAH instead of 1190 UAH).
+  - Interactive landing page for Anastasia Sych's 60-minute personal diagnostics (480 UAH instead of 1190 UAH).
   - Dynamic offer support via query parameter `?o=1` (Default), `?o=2`, `?o=3`.
-  - Integrates contact lead modal with phone formatting (`+380`), UTM parameter preservation, and Facebook Pixel telemetry.
-- **`/api/leads` (Ingestion API):**
-  - Saves lead into `anastasia_sych_leads` with RLS protection.
-  - Triggers Postgres function `fn_sync_lead_to_unified()` to replicate lead into `unified_customers` and `unified_orders`.
+  - Integrates contact lead modal with phone formatting (`+380`), UTM parameter preservation, and automatic WayForPay payment form submission.
+- **`/thank-you` (Thank You & Bot Redirect Page):**
+  - Displays payment confirmation & 3-second countdown.
+  - Auto-redirects to `https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f`.
+  - Includes a fallback interactive button to manual open the Telegram bot.
+- **`/api/leads` (Ingestion & Order Creation API):**
+  - Saves lead into `anastasia_sych_leads` with `order_id`.
+  - Generates signed WayForPay payment payload (`merchantSignature`).
   - Sends real-time HTML lead alert to Telegram sales channel.
-  - Pushes contact to SendPulse CRM API.
-  - Synchronizes session metrics to Central Analytics Gateway (`bnw-prod.vercel.app`).
+  - Syncs contact to SendPulse CRM & Central Analytics Gateway.
+- **`/api/wayforpay/callback` (WayForPay Webhook API):**
+  - Validates HMAC-MD5 signature from WayForPay.
+  - Updates lead status in `anastasia_sych_leads` to `"Оплачено"`.
+  - Dispatches Telegram payment alert (`🎉 ОПЛАТА ОТРЕМАНО!`).
+  - Returns `accept` signature response to WayForPay.
+- **`/api/wayforpay/status` (Order Status API):**
+  - Server-side status lookup by `orderReference`.
 - **`/api/cron/report` (Telegram Report Cron):**
   - Runs daily at 09:00 Kyiv time via Vercel Cron (`vercel.json`).
-  - Summarizes total leads, conversion rates per offer (`o=1`, `o=2`, `o=3`), and top UTM sources.
-  - Sends structured HTML statistics to Telegram report thread.
 
 ---
 

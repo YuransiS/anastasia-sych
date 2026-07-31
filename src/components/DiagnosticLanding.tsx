@@ -136,6 +136,34 @@ export default function DiagnosticLanding() {
     setFormData({ ...formData, telegram: "В мене немає нікнейму" });
   };
 
+  const submitWayForPayForm = (wayforpayData: Record<string, any>) => {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://secure.wayforpay.com/pay";
+    form.acceptCharset = "utf-8";
+
+    Object.entries(wayforpayData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((val) => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = `${key}[]`;
+          input.value = String(val);
+          form.appendChild(input);
+        });
+      } else {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = String(value);
+        form.appendChild(input);
+      }
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  };
+
   // Form submission handler with validation
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,19 +211,24 @@ export default function DiagnosticLanding() {
       const data = await response.json();
 
       if (response.ok && data.status === "success") {
-        setSubmitSuccess(true);
         trackPixelEvent("Lead", {
           offer_variant: offerVariant,
           value: 480,
           currency: "UAH",
         });
+
+        if (data.wayforpayData) {
+          submitWayForPayForm(data.wayforpayData);
+        } else {
+          setSubmitSuccess(true);
+        }
       } else {
         setErrorMessage(data.message || "Помилка при збереженні заявки. Спробуйте ще раз.");
+        setIsSubmitting(false);
       }
     } catch (err) {
       console.error("Form submit error:", err);
       setErrorMessage("Виникла мережева помилка. Будь ласка, перевірте з'єднання.");
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -487,7 +520,7 @@ export default function DiagnosticLanding() {
 
           <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
             <Image
-              src="/images/anastasia_yoga_white.webp"
+              src="/images/expert_flying.webp"
               alt="Анастасія Сич на йога-килимку"
               fill
               loading="lazy"
@@ -965,11 +998,11 @@ export default function DiagnosticLanding() {
                       className="w-full py-4 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-sm sm:text-base shadow-lg glow-primary flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer uppercase tracking-wide"
                     >
                       {isSubmitting ? (
-                        <span>Обробка заявки...</span>
+                        <span>Перехід до оплати...</span>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          <span>Підтвердити запис</span>
+                          <span>Перейти до оплати (480 грн)</span>
                         </>
                       )}
                     </button>
