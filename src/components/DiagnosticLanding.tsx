@@ -20,8 +20,6 @@ import {
   ArrowRight,
   Check,
   ShieldCheck,
-  Brain,
-  HeartPulse,
   ZoomIn
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
@@ -308,7 +306,7 @@ export default function DiagnosticLanding() {
           <span className="text-[#bae6fd]">✦</span>
           <span>Знижка -60% діє сьогодні</span>
           <span className="text-[#bae6fd]">✦</span>
-          <span>Анастасія Сич • Медичний підхід</span>
+          <span>Анастасія Сич</span>
           <span className="text-[#bae6fd]">✦</span>
           <span>Запис 1-на-1 в Zoom</span>
           <span className="text-[#bae6fd]">✦</span>
@@ -316,20 +314,20 @@ export default function DiagnosticLanding() {
           <span className="text-[#bae6fd]">✦</span>
           <span>Знижка -60% діє сьогодні</span>
           <span className="text-[#bae6fd]">✦</span>
-          <span>Анастасія Сич • Медичний підхід</span>
+          <span>Анастасія Сич</span>
           <span className="text-[#bae6fd]">✦</span>
           <span>Запис 1-на-1 в Zoom</span>
         </div>
       </div>
 
-      {/* 2. RESTRUCTURED HERO SECTION (BOTTOM-UP LAYOUT INSIDE VIEWPORT) */}
+      {/* 2. RESTRUCTURED HERO SECTION */}
       <section className="relative min-h-[88vh] flex flex-col justify-between pt-3 pb-8 px-4 sm:px-6 overflow-hidden">
         
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/anastasia_hero_blue.webp"
-            alt="Анастасія Сич - Медичний нутриціолог"
+            alt="Анастасія Сич"
             fill
             priority
             unoptimized
@@ -559,46 +557,18 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 8. SYSTEM DIAGRAM + REAL CASE PHOTO GALLERY */}
+      {/* 8. REAL CASE PHOTO GALLERY (CLEAN HEADER WITHOUT CIRCLED EXTRA TEXT) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
-        <div className="max-w-6xl mx-auto space-y-10">
+        <div className="max-w-6xl mx-auto space-y-8">
           
-          <div className="text-center space-y-3">
-            <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Комплексна методологія</span>
+          <div className="text-center space-y-2">
             <h2 className="text-2xl sm:text-4xl font-accent text-slate-900">
               РЕАЛЬНІ КЕЙСИ ТА <span className="text-[#0284c7]">РЕЗУЛЬТАТИ</span>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto">
-              Фотографії та відгуки підопічних Анастасії Сич під час персонального нутриціологічного супроводу:
-            </p>
-          </div>
-
-          {/* 4 METHODOLOGY PILLARS */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="glass-card p-5 rounded-2xl border border-slate-200 space-y-2 bg-slate-50/50">
-              <Award className="w-6 h-6 text-[#0284c7] mx-auto" />
-              <div className="font-bold text-slate-900 text-sm">Вища медична освіта</div>
-              <p className="text-[11px] text-slate-500">Аналіз аналізів та гормонального тла</p>
-            </div>
-            <div className="glass-card p-5 rounded-2xl border border-slate-200 space-y-2 bg-slate-50/50">
-              <Brain className="w-6 h-6 text-[#0284c7] mx-auto" />
-              <div className="font-bold text-slate-900 text-sm">Аналіз причин зривів</div>
-              <p className="text-[11px] text-slate-500">Прибираємо психосоматику переїдання</p>
-            </div>
-            <div className="glass-card p-5 rounded-2xl border border-slate-200 space-y-2 bg-slate-50/50">
-              <HeartPulse className="w-6 h-6 text-[#0284c7] mx-auto" />
-              <div className="font-bold text-slate-900 text-sm">Реабілітація & Дихання</div>
-              <p className="text-[11px] text-slate-500">Зняття тривожності та напруги</p>
-            </div>
-            <div className="glass-card p-5 rounded-2xl border border-slate-200 space-y-2 bg-slate-50/50">
-              <ShieldCheck className="w-6 h-6 text-[#059669] mx-auto" />
-              <div className="font-bold text-slate-900 text-sm">Стійкі звички</div>
-              <p className="text-[11px] text-slate-500">Результат залишається назавжди</p>
-            </div>
           </div>
 
           {/* REAL CASE PHOTO GALLERY GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
             {realCaseGalleries.map((cs) => (
               <div
                 key={cs.id}
@@ -640,7 +610,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 9. AUTHOR SECTION WITH ELEGANT BLACK DRESS HD PHOTO */}
+      {/* 9. AUTHOR SECTION */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-slate-200 space-y-8 bg-white">
           <div className="max-w-3xl space-y-3 text-left">
@@ -648,13 +618,13 @@ export default function DiagnosticLanding() {
             <h2 className="text-2xl sm:text-4xl font-accent text-slate-900 leading-tight">
               Привіт! Я — Анастасія Сич
             </h2>
-            <p className="text-slate-500 text-sm">Медичний нутриціолог та фахівець реабілітації з понад 8-річним досвідом</p>
+            <p className="text-slate-500 text-sm">Фахівець з відновлення харчування та реабілітації з понад 8-річним досвідом</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed">
               <p className="font-semibold text-slate-900">
-                Я маю вищу медичну освіту та допомагаю жінкам змінювати не лише тіло, а й ставлення до харчування та себе.
+                Я допомагаю жінкам змінювати не лише тіло, а й ставлення до харчування та себе.
               </p>
 
               <p className="text-slate-600">
@@ -685,102 +655,9 @@ export default function DiagnosticLanding() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-slate-200 text-center shadow-md">
                   <span className="text-xs font-bold text-slate-900">Анастасія Сич</span>
-                  <p className="text-[10px] text-[#0284c7] font-semibold">Медичний нутриціолог</p>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 10. ACCESS OPTIONS PRICING CARDS */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200">
-        <div className="max-w-4xl mx-auto space-y-8 text-center">
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-accent text-slate-900">ОБЕРІТЬ ВАШ ФОРМАТ</h2>
-            <p className="text-slate-500 text-xs sm:text-sm">Зарезервуйте ваше місце на найближчі дати</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-            
-            {/* CARD 1: BASE DIAGNOSTIC */}
-            <div className="glass-card p-6 rounded-3xl border border-slate-200 flex flex-col justify-between space-y-6 bg-white">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-accent text-slate-900">ПЕРСОНАЛЬНА ДІАГНОСТИКА</h3>
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-sky-50 text-[#0284c7] font-semibold border border-sky-100">60 хвилин</span>
-                </div>
-
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-accent font-extrabold text-[#0284c7]">480 грн</span>
-                  <span className="text-sm line-through text-slate-400">1190 грн</span>
-                </div>
-
-                <ul className="space-y-2.5 text-xs text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0284c7] shrink-0" />
-                    <span>Персональна зустріч 1-на-1 в Zoom</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0284c7] shrink-0" />
-                    <span>Аналіз причин зривів та переїдання</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#0284c7] shrink-0" />
-                    <span>Покроковий план дій</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={handleOpenModal}
-                className="w-full py-3.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 font-bold text-sm hover:bg-[#0284c7] hover:text-white transition-all cursor-pointer"
-              >
-                ЗАПИСАТИСЬ ЗА 480 ГРН
-              </button>
-            </div>
-
-            {/* CARD 2: EXTENDED OPTION (POPULAR) */}
-            <div className="glass-card p-6 rounded-3xl border-2 border-[#0284c7] relative flex flex-col justify-between space-y-6 shadow-xl glow-primary bg-white">
-              <div className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-[#0284c7] text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                ПОПУЛЯРНИЙ ВИБІР
-              </div>
-
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-accent text-slate-900">ДІАГНОСТИКА + СУПРОВІД</h3>
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-sky-100 text-[#0284c7] font-semibold">Включає діагностику</span>
-                </div>
-
-                <div className="space-y-1">
-                  <span className="text-xs text-[#059669] font-bold">Оновлений комплексний формат</span>
-                  <p className="text-xs text-slate-500">Повний аналіз + розбірка можливості супроводу</p>
-                </div>
-
-                <ul className="space-y-2.5 text-xs text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                    <span>Повна 60-хвилинна діагностика</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                    <span>Персональна стратегія на 30 днів</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                    <span>Пріоритетне бронювання часу</span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={handleOpenModal}
-                className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-sm shadow-md hover:opacity-90 transition-all cursor-pointer"
-              >
-                ОБРАТИ СУПРОВІД
-              </button>
-            </div>
-
           </div>
         </div>
       </section>
@@ -832,7 +709,7 @@ export default function DiagnosticLanding() {
 
       {/* Footer */}
       <footer className="py-8 px-4 text-center text-xs text-slate-500 border-t border-slate-200 bg-white">
-        <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та нутриціологічний супровід.</p>
+        <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та супровід.</p>
       </footer>
 
       {/* 12. PERMANENT STICKY MOBILE BOTTOM CTA BAR */}
