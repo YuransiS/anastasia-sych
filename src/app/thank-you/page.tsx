@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Sparkles, Send, ArrowRight } from "lucide-react";
+import { trackPixelEvent } from "@/components/FacebookPixel";
 
 const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f";
 
@@ -12,6 +13,16 @@ function ThankYouContent() {
   const orderReference = searchParams.get("orderReference") || "";
 
   const [countdown, setCountdown] = useState(3);
+
+  // Track Facebook Pixel Purchase event on Thank You page
+  useEffect(() => {
+    trackPixelEvent("Purchase", {
+      value: 480,
+      currency: "UAH",
+      content_name: "Анастасія Сич - Персональна діагностика",
+      order_id: orderReference,
+    });
+  }, [orderReference]);
 
   // Check order status from database to prevent failed payment user from seeing thank-you page
   useEffect(() => {
