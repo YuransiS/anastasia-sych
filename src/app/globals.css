@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-yeseva: 'Yeseva One', serif;
-  --font-carlito: 'Carlito', sans-serif;
+  --font-montserrat: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-inter: 'Inter', 'Montserrat', system-ui, -apple-system, sans-serif;
   --brand-primary: #0284c7;
   --brand-accent: #059669;
 }
@@ -14,7 +14,7 @@
 body {
   background-color: #f8fafc;
   color: #0f172a;
-  font-family: var(--font-carlito), sans-serif;
+  font-family: var(--font-montserrat);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,8 +26,9 @@ body.modal-open {
 }
 
 h1, h2, h3, .font-accent {
-  font-family: var(--font-yeseva), serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-montserrat);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 /* ----------------------------------------------------
