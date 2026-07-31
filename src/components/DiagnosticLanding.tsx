@@ -81,7 +81,6 @@ export default function DiagnosticLanding() {
 
   // Carousel state & ref
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [currentCaseIndex, setCurrentCaseIndex] = useState(0);
 
   const scrollCarousel = (direction: "left" | "right") => {
     if (carouselRef.current) {
@@ -253,7 +252,7 @@ export default function DiagnosticLanding() {
     { step: "Крок 05", title: "Персональні рекомендації", desc: "Маєте чіткий покроковий план дій" },
   ];
 
-  // All 5 Real Client Cases for Horizontal Carousel
+  // 4 Real Client Transformation Cases (Telegram Chat Review Removed)
   const realCaseGalleries = [
     {
       id: 1,
@@ -282,13 +281,6 @@ export default function DiagnosticLanding() {
       badge: "-2 розміри одягу",
       desc: "Комплексна робота з набряклістю, жировим прошарком та лімфовідтоком.",
       image: "/images/cases/case_3.webp",
-    },
-    {
-      id: 5,
-      title: "Відгук із Telegram",
-      badge: "Живі враження",
-      desc: "«Боже яка велика різниця!! Я в шоці... Дуже дякую за цей досвід і за ці зміни!»",
-      image: "/images/cases/case_tg_review.webp",
     },
   ];
 
@@ -348,8 +340,8 @@ export default function DiagnosticLanding() {
         )}
       </AnimatePresence>
 
-      {/* 2. EXACT ORIGINAL HERO SECTION (FULL HEIGHT BACKGROUND PHOTO WITH BOTTOM GRADIENT OVERLAY) */}
-      <section className="relative min-h-[90vh] flex flex-col justify-between pt-4 pb-8 px-4 sm:px-6 overflow-hidden">
+      {/* 2. EXACT ORIGINAL HERO SECTION (FULL HEIGHT BACKGROUND PHOTO, BOTTOM-ANCHORED CONTENT & 1-LINE FORMATTING) */}
+      <section className="relative min-h-[100dvh] sm:min-h-[92vh] flex flex-col justify-between pt-4 pb-6 px-4 sm:px-6 overflow-hidden">
         
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
@@ -377,8 +369,8 @@ export default function DiagnosticLanding() {
           </div>
         </div>
 
-        {/* HERO CONTENT BUILT FROM BOTTOM UP (PROPORTIONAL FONT SIZES) */}
-        <div className="max-w-4xl mx-auto w-full relative z-20 mt-auto space-y-3.5 max-w-xl">
+        {/* HERO CONTENT BUILT FROM BOTTOM UP (ANCHORED AT BOTTOM OF ACTIVE VIEWPORT) */}
+        <div className="max-w-4xl mx-auto w-full relative z-20 mt-auto space-y-3.5 max-w-xl pb-2">
           
           {/* MAIN OFFER HEADLINE */}
           <h1 className="text-xl sm:text-3xl font-extrabold leading-snug text-slate-900 tracking-tight drop-shadow-sm uppercase">
@@ -390,29 +382,29 @@ export default function DiagnosticLanding() {
             {currentOffer.subtitle}
           </p>
 
-          {/* 1-LINE PRICE ROW DIRECTLY ABOVE CTA BUTTON */}
-          <div className="flex items-center gap-3 font-extrabold pt-0.5">
-            <span className="text-2xl sm:text-3xl font-extrabold text-[#0284c7] font-accent">
+          {/* 1-LINE PRICE ROW STRICTLY IN ONE HORIZONTAL LINE */}
+          <div className="flex items-center gap-2.5 font-extrabold pt-0.5 whitespace-nowrap">
+            <span className="text-3xl sm:text-4xl font-extrabold text-[#0284c7] font-accent">
               480 грн
             </span>
-            <span className="text-sm sm:text-base line-through text-slate-400 font-bold">
+            <span className="text-sm sm:text-lg line-through text-slate-400 font-bold">
               1190 грн
             </span>
-            <span className="text-[11px] sm:text-xs px-2.5 py-0.5 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
+            <span className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
               -60% знижка
             </span>
           </div>
 
-          {/* ACTION CTA BUTTON */}
+          {/* ACTION CTA BUTTON IN ONE SINGLE HORIZONTAL LINE */}
           <motion.button
             whileTap={{ scale: 0.97 }}
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             onClick={handleOpenModal}
-            className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-sm sm:text-base shadow-xl glow-primary animate-pulse flex items-center justify-center gap-2 cursor-pointer border border-[#0284c7]/30 uppercase tracking-wide"
+            className="w-full py-3.5 sm:py-4 px-4 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-xs sm:text-base shadow-xl glow-primary animate-pulse flex items-center justify-center gap-2 cursor-pointer border border-[#0284c7]/30 uppercase tracking-wide whitespace-nowrap"
           >
             <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-            <ArrowRight className="w-5 h-5 text-sky-200" />
+            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 text-sky-200 shrink-0" />
           </motion.button>
 
           {/* TRUST BADGES DIRECTLY UNDERNEATH THE BUTTON */}
@@ -568,7 +560,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 8. REAL CASE PHOTO GALLERY (HORIZONTAL CAROUSEL / SLIDER) */}
+      {/* 8. REAL CASE PHOTO GALLERY (HORIZONTAL CAROUSEL WITH SWIPE AND CENTER SNAP) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
         <div className="max-w-5xl mx-auto space-y-6">
           
@@ -582,8 +574,8 @@ export default function DiagnosticLanding() {
               </p>
             </div>
 
-            {/* CAROUSEL NAVIGATION CONTROLS */}
-            <div className="flex items-center gap-2 shrink-0">
+            {/* DESKTOP-ONLY CAROUSEL NAVIGATION CONTROLS */}
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
               <button
                 onClick={() => scrollCarousel("left")}
                 className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
@@ -601,17 +593,17 @@ export default function DiagnosticLanding() {
             </div>
           </div>
 
-          {/* HORIZONTAL SCROLLABLE CAROUSEL CONTAINER */}
+          {/* HORIZONTAL SCROLLABLE CAROUSEL CONTAINER WITH CENTER SNAP ALIGNMENT */}
           <div
             ref={carouselRef}
-            className="flex items-stretch gap-5 overflow-x-auto snap-x snap-mandatory py-3 pb-6 scrollbar-none touch-pan-x"
+            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 scrollbar-none touch-pan-x"
             style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
           >
             {realCaseGalleries.map((cs) => (
               <div
                 key={cs.id}
                 onClick={() => setActiveCaseImage(cs.image)}
-                className="snap-center shrink-0 w-[280px] sm:w-[360px] glass-card rounded-3xl border border-slate-200 overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                className="snap-center shrink-0 w-[85vw] max-w-[340px] sm:w-[360px] glass-card rounded-3xl border border-slate-200 overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group"
               >
                 <div className="relative w-full h-80 sm:h-96 bg-slate-100 overflow-hidden">
                   <Image
@@ -620,7 +612,7 @@ export default function DiagnosticLanding() {
                     fill
                     loading="lazy"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 280px, 360px"
+                    sizes="(max-width: 768px) 340px, 360px"
                   />
                   <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/30 transition-colors duration-300 flex items-center justify-center">
                     <div className="p-3 rounded-full bg-white/95 text-slate-900 shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 text-xs font-bold">
@@ -648,7 +640,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 9. AUTHOR SECTION */}
+      {/* 9. AUTHOR SECTION (ANASTASIA PHOTO FIRST BEFORE TEXT) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-slate-200 space-y-8 bg-white shadow-md">
           <div className="max-w-3xl space-y-2 text-left">
@@ -660,7 +652,26 @@ export default function DiagnosticLanding() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
+            {/* PHOTO PLACED FIRST BEFORE TEXT */}
+            <div className="lg:col-span-5 order-1 flex justify-center">
+              <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-slate-200 relative shadow-lg">
+                <Image
+                  src="/images/anastasia_portrait_black.webp"
+                  alt="Анастасія Сич"
+                  fill
+                  loading="lazy"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 35vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+                <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-slate-200 text-center shadow-md">
+                  <span className="text-xs font-bold text-slate-900">Анастасія Сич</span>
+                </div>
+              </div>
+            </div>
+
+            {/* TEXT PLACED SECOND */}
+            <div className="lg:col-span-7 order-2 space-y-4 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
               <p className="font-bold text-slate-900">
                 Я допомагаю жінкам змінювати не лише тіло, а й ставлення до харчування та себе.
               </p>
@@ -677,23 +688,6 @@ export default function DiagnosticLanding() {
                   <li className="flex items-center gap-2">✓ збалансований раціон</li>
                   <li className="flex items-center gap-2">✓ роботу з психосоматикою</li>
                 </ul>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-slate-200 relative shadow-lg">
-                <Image
-                  src="/images/anastasia_portrait_black.webp"
-                  alt="Анастасія Сич"
-                  fill
-                  loading="lazy"
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 35vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
-                <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-white/90 backdrop-blur-md border border-slate-200 text-center shadow-md">
-                  <span className="text-xs font-bold text-slate-900">Анастасія Сич</span>
-                </div>
               </div>
             </div>
           </div>
@@ -789,19 +783,19 @@ export default function DiagnosticLanding() {
         <p>© 2026 Анастасія Сич. Всі права захищено. Персональна діагностика та супровід.</p>
       </footer>
 
-      {/* 13. STICKY MOBILE BOTTOM CTA BAR (APPEARS ONLY ON SCROLL DOWN TO PREVENT OVERLAP WITH HERO) */}
+      {/* 13. STICKY MOBILE BOTTOM CTA BAR (PERFECT FITTING ON ALL MOBILE SCREENS) */}
       <AnimatePresence>
         {showStickyUI && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 left-0 right-0 z-[9990] p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2.5"
+            className="fixed bottom-0 left-0 right-0 z-[9990] p-2.5 sm:p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2 overflow-hidden"
           >
             <div className="flex flex-col shrink-0">
-              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">Діагностика 60 хв</span>
-              <div className="flex items-baseline gap-1.5 font-extrabold">
-                <span className="text-base sm:text-lg text-[#0284c7]">480 грн</span>
+              <span className="text-[9px] sm:text-[10px] text-slate-600 font-bold uppercase tracking-wider">60 хв Zoom</span>
+              <div className="flex items-baseline gap-1 font-extrabold">
+                <span className="text-sm sm:text-lg text-[#0284c7]">480 грн</span>
                 <span className="line-through text-[10px] text-slate-400">1190 грн</span>
               </div>
             </div>
@@ -809,9 +803,9 @@ export default function DiagnosticLanding() {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={handleOpenModal}
-              className="px-4 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-xs sm:text-sm shadow-xl glow-primary cursor-pointer flex items-center gap-2 border border-[#0284c7]/40 shrink-0 uppercase tracking-wide"
+              className="px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-[11px] sm:text-sm shadow-lg glow-primary cursor-pointer flex items-center gap-1.5 border border-[#0284c7]/40 shrink-0 uppercase tracking-tight whitespace-nowrap"
             >
-              <Sparkles className="w-4 h-4 text-sky-200" />
+              <Sparkles className="w-3.5 h-3.5 text-sky-200 shrink-0" />
               <span>Записатись на діагностику</span>
             </motion.button>
           </motion.div>
