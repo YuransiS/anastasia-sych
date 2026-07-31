@@ -252,7 +252,7 @@ export default function DiagnosticLanding() {
     { step: "Крок 05", title: "Персональні рекомендації", desc: "Маєте чіткий покроковий план дій" },
   ];
 
-  // 4 Real Client Transformation Cases (Telegram Chat Review Removed)
+  // 4 Real Client Transformation Cases
   const realCaseGalleries = [
     {
       id: 1,
@@ -426,7 +426,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 3. BLOCK 2: PAIN POINTS LIST (STATIC NON-CLICKABLE BULLETS) */}
+      {/* 3. BLOCK 2: PAIN POINTS LIST (CLEAN NUMBERED PILL BADGES) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
@@ -441,8 +441,8 @@ export default function DiagnosticLanding() {
                 key={idx}
                 className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 flex items-start gap-3.5"
               >
-                <div className="p-1 rounded-full mt-0.5 shrink-0 text-[#0284c7]">
-                  <Sparkles className="w-5 h-5 text-[#0284c7]" />
+                <div className="px-2.5 py-1 rounded-lg bg-sky-100 text-[#0284c7] font-extrabold text-xs shrink-0 mt-0.5">
+                  0{idx + 1}
                 </div>
                 <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
               </div>
@@ -499,7 +499,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC (EXACT 6 ITEMS FROM TZ) */}
+      {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC (VERTICALLY CENTERED TEXT & ICON) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="program">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
@@ -509,8 +509,8 @@ export default function DiagnosticLanding() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             {diagnosticItems.map((item, idx) => (
-              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 flex items-start gap-3.5 bg-slate-50/70 shadow-sm">
-                <div className="p-2 rounded-xl bg-emerald-100 text-[#059669] shrink-0 mt-0.5">
+              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 flex items-center gap-3.5 bg-slate-50/70 shadow-sm min-h-[72px]">
+                <div className="p-2 rounded-xl bg-emerald-100 text-[#059669] shrink-0">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <span className="text-slate-900 font-bold text-sm sm:text-base leading-snug">{item}</span>
@@ -560,7 +560,7 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 8. REAL CASE PHOTO GALLERY (HORIZONTAL CAROUSEL WITH SWIPE AND CENTER SNAP) */}
+      {/* 8. REAL CASE PHOTO GALLERY (SWIPEABLE CAROUSEL, NO SCROLLBAR, EASY VERTICAL SCROLL) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
         <div className="max-w-5xl mx-auto space-y-6">
           
@@ -593,10 +593,10 @@ export default function DiagnosticLanding() {
             </div>
           </div>
 
-          {/* HORIZONTAL SCROLLABLE CAROUSEL CONTAINER WITH CENTER SNAP ALIGNMENT */}
+          {/* HORIZONTAL SCROLLABLE CAROUSEL CONTAINER WITH HIDDEN SCROLLBAR & VERTICAL TOUCH PANNING */}
           <div
             ref={carouselRef}
-            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 scrollbar-none touch-pan-x"
+            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 touch-pan-x touch-pan-y scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
           >
             {realCaseGalleries.map((cs) => (
@@ -739,15 +739,15 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 12. FINAL CONVERSION BLOCK */}
+      {/* 12. FINAL CONVERSION BLOCK (PERFECT 1-LINE PRICE & SINGLE LINE CTA) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto text-center" id="final-cta">
-        <div className="glass-card p-8 sm:p-12 rounded-3xl border border-sky-200 bg-gradient-to-b from-white via-white to-sky-50/70 space-y-6 shadow-xl relative overflow-hidden">
+        <div className="glass-card p-6 sm:p-12 rounded-3xl border border-sky-200 bg-gradient-to-b from-white via-white to-sky-50/70 space-y-6 shadow-xl relative overflow-hidden">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-100 text-[#0284c7] text-xs sm:text-sm font-bold border border-sky-200">
             <Sparkles className="w-4 h-4 text-[#0284c7]" />
             <span>Персональна зустріч 1-на-1 в Zoom</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight max-w-2xl mx-auto">
+          <h2 className="text-[22px] sm:text-3xl font-extrabold text-slate-900 leading-snug max-w-xl mx-auto uppercase">
             ГОТОВІ ЗМІНИТИ СВОЄ СТАВЛЕННЯ ДО ХАРЧУВАННЯ ТА ТІЛА?
           </h2>
 
@@ -755,10 +755,10 @@ export default function DiagnosticLanding() {
             Забронюйте персональну 60-хвилинну діагностику з Анастасією Сич зі знижкою -60% вже сьогодні.
           </p>
 
-          <div className="flex items-center justify-center gap-3.5 font-extrabold pt-2">
+          <div className="flex items-center justify-center gap-2.5 sm:gap-3 font-extrabold pt-2 whitespace-nowrap">
             <span className="text-3xl sm:text-4xl text-[#0284c7] font-accent">480 грн</span>
-            <span className="text-base sm:text-lg line-through text-slate-400 font-bold">1190 грн</span>
-            <span className="text-xs px-3 py-1 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
+            <span className="text-sm sm:text-base line-through text-slate-400 font-bold">1190 грн</span>
+            <span className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
               -60% знижка
             </span>
           </div>
@@ -769,10 +769,10 @@ export default function DiagnosticLanding() {
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-base sm:text-lg shadow-xl glow-primary cursor-pointer flex items-center justify-center gap-3 border border-[#0284c7]/30 uppercase tracking-wide"
+              className="w-full py-3.5 sm:py-4 px-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-xs sm:text-base shadow-xl glow-primary cursor-pointer flex items-center justify-center gap-2 border border-[#0284c7]/30 uppercase tracking-wide whitespace-nowrap"
             >
               <span>ЗАПИСАТИСЬ НА ДІАГНОСТИКУ</span>
-              <ArrowRight className="w-5 h-5 text-sky-200" />
+              <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 text-sky-200 shrink-0" />
             </motion.button>
           </div>
         </div>
