@@ -487,6 +487,7 @@ export default function DiagnosticLanding() {
               src="/images/anastasia_yoga_white.webp"
               alt="Анастасія Сич на йога-килимку"
               fill
+              loading="lazy"
               unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
@@ -580,6 +581,7 @@ export default function DiagnosticLanding() {
                     src={cs.image}
                     alt={cs.title}
                     fill
+                    loading="lazy"
                     unoptimized
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 100vw, 33vw"
@@ -648,6 +650,7 @@ export default function DiagnosticLanding() {
                   src="/images/anastasia_portrait_black.webp"
                   alt="Анастасія Сич"
                   fill
+                  loading="lazy"
                   unoptimized
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 35vw"
