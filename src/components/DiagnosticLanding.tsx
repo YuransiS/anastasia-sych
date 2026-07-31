@@ -330,7 +330,6 @@ export default function DiagnosticLanding() {
             alt="Анастасія Сич"
             fill
             priority
-            unoptimized
             className="object-cover object-[center_25%] filter brightness-102 contrast-[1.04]"
             sizes="100vw"
           />
@@ -488,7 +487,6 @@ export default function DiagnosticLanding() {
               alt="Анастасія Сич на йога-килимку"
               fill
               loading="lazy"
-              unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 40vw"
             />
@@ -582,7 +580,6 @@ export default function DiagnosticLanding() {
                     alt={cs.title}
                     fill
                     loading="lazy"
-                    unoptimized
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
@@ -651,7 +648,6 @@ export default function DiagnosticLanding() {
                   alt="Анастасія Сич"
                   fill
                   loading="lazy"
-                  unoptimized
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 35vw"
                 />
@@ -758,7 +754,6 @@ export default function DiagnosticLanding() {
                 src={activeCaseImage}
                 alt="Перегляд кейсу"
                 fill
-                unoptimized
                 className="object-contain rounded-2xl"
               />
             </div>
