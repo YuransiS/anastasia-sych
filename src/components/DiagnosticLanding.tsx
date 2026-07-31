@@ -216,7 +216,7 @@ export default function DiagnosticLanding() {
     }
     // Offer 1 (Default)
     return {
-      title: "Після закінчення дієти здається, що тепер можна нарешті наїстися?",
+      title: "Дієта закінчилась - нарешті можна наїстись?",
       subtitle: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон."
     };
   };
@@ -236,12 +236,12 @@ export default function DiagnosticLanding() {
 
   // Exact 6 items from TZ for "Що буде на діагностиці"
   const diagnosticItems = [
-    "Чому у вас виникають зриви.",
-    "Які звички заважають тримати результат.",
-    "З чим пов'язане переїдання.",
-    "Чому здорове харчування викликає тривогу чи паніку.",
-    "Що потрібно змінити вже зараз.",
-    "Який шлях буде найефективнішим у вашій ситуації.",
+    "Чому у вас виникають зриви?",
+    "Які звички заважають тримати результат?",
+    "З чим пов'язане переїдання?",
+    "Чому здорове харчування викликає тривогу чи паніку?",
+    "Що потрібно змінити вже зараз?",
+    "Який шлях буде найефективнішим у вашій ситуації?",
   ];
 
   const stepsItems = [
@@ -256,30 +256,30 @@ export default function DiagnosticLanding() {
   const realCaseGalleries = [
     {
       id: 1,
-      title: "Ярославна, 34 роки",
-      badge: "-12 кг • Талія -5 см",
-      desc: "-12 кг; -5 см в талії; -4 см в стегнах; +об'ємна попа; +рельєфний прес.",
+      title: "Ярославна, 34 р",
+      badge: "Результат за 3 міс",
+      desc: "-12 кг, -5 см в талії, -4 см в стегнах, +об'ємна попа, +рельєфний прес",
       image: "/images/cases/case_5.webp",
     },
     {
       id: 2,
-      title: "Наталі",
-      badge: "Результат за 3 місяці",
-      desc: "Трансформація постави, тонусу та вирівнювання пропорцій без виснажливих дієт.",
-      image: "/images/cases/case_2.webp",
+      title: "Наталі, 36 р",
+      badge: "Результат за 3 міс",
+      desc: "-5 кг, -4 см в талії, -3 см в стегнах",
+      image: "/images/cases/case_natali.png",
     },
     {
       id: 3,
-      title: "Передньо-задній фокус",
-      badge: "Силует та тонус",
-      desc: "Вирівнювання постави, зменшення об'ємів та стабілізація раціону.",
-      image: "/images/cases/case_1.webp",
+      title: "Ірина, 38 р, 2 дітей",
+      badge: "Результат за 2 місяці",
+      desc: "-4 кг, -10 см в талії, -5 см в стегнах, мінус целюліт",
+      image: "/images/cases/case_irina.jpg",
     },
     {
       id: 4,
-      title: "Профільна трансформація",
-      badge: "-2 розміри одягу",
-      desc: "Комплексна робота з набряклістю, жировим прошарком та лімфовідтоком.",
+      title: "Настя, 28 р",
+      badge: "Результат за 3 міс",
+      desc: "-8 кг, -6 см в талії і стегнах, мінус постійний голод",
       image: "/images/cases/case_3.webp",
     },
   ];
@@ -346,7 +346,7 @@ export default function DiagnosticLanding() {
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/anastasia_hero_blue.webp"
+            src="/images/hero.webp"
             alt="Анастасія Сич"
             fill
             priority
@@ -373,12 +373,12 @@ export default function DiagnosticLanding() {
         <div className="max-w-4xl mx-auto w-full relative z-20 mt-auto space-y-3.5 max-w-xl pb-2">
           
           {/* MAIN OFFER HEADLINE */}
-          <h1 className="text-xl sm:text-3xl font-extrabold leading-snug text-slate-900 tracking-tight drop-shadow-sm uppercase">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 tracking-tight drop-shadow-sm uppercase">
             {currentOffer.title}
           </h1>
 
           {/* SUBTITLE */}
-          <p className="text-slate-700 text-xs sm:text-sm leading-relaxed font-normal">
+          <p className="text-slate-800 text-sm sm:text-base leading-relaxed font-semibold">
             {currentOffer.subtitle}
           </p>
 
@@ -536,7 +536,7 @@ export default function DiagnosticLanding() {
           <div className="text-center space-y-2">
             <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Як проходить діагностична програма
+              Як проходить діагностична програма?
             </h2>
           </div>
 
@@ -544,15 +544,11 @@ export default function DiagnosticLanding() {
             {stepsItems.map((st, idx) => (
               <div key={idx} className="glass-card p-5 rounded-2xl border border-slate-200 space-y-3 relative flex flex-col justify-between bg-white shadow-sm">
                 <div className="space-y-2">
-                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0284c7] font-bold text-[10px]">
+                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0284c7] font-bold text-xs">
                     {st.step}
                   </div>
                   <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">{st.title}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed font-medium">{st.desc}</p>
-                </div>
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-[#0284c7] font-bold">
-                  <span>Крок #{idx + 1}</span>
-                  <Check className="w-3.5 h-3.5" />
                 </div>
               </div>
             ))}
@@ -656,7 +652,7 @@ export default function DiagnosticLanding() {
             <div className="lg:col-span-5 order-1 flex justify-center">
               <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-slate-200 relative shadow-lg">
                 <Image
-                  src="/images/anastasia_portrait_black.webp"
+                  src="/images/expert.webp"
                   alt="Анастасія Сич"
                   fill
                   loading="lazy"
@@ -672,21 +668,26 @@ export default function DiagnosticLanding() {
 
             {/* TEXT PLACED SECOND */}
             <div className="lg:col-span-7 order-2 space-y-4 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
-              <p className="font-bold text-slate-900">
-                Я допомагаю жінкам змінювати не лише тіло, а й ставлення до харчування та себе.
+              <p className="font-bold text-slate-900 text-base sm:text-lg">
+                Мене звати Анастасія Сич.
               </p>
 
               <p className="text-slate-700 font-medium">
-                Мій підхід сформувався завдяки власному досвіду відновлення після складного періоду та травми хребта. Саме тоді я переконалася, що результат неможливий без комплексної роботи із тілом та мисленням.
+                Я тренерка із 8-річним стажем та вищою медичною освітою. Це дозволяє мені не лише допомагати жінкам досягати бажаної форми, а й будувати тренування з урахуванням особливостей їхнього здоров’я.
               </p>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <p className="font-bold text-[#0284c7] text-xs uppercase tracking-wider">У своїй роботі я поєдную:</p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-slate-800 font-bold">
-                  <li className="flex items-center gap-2">✓ медичний підхід</li>
-                  <li className="flex items-center gap-2">✓ реабілітацію та дихання</li>
-                  <li className="flex items-center gap-2">✓ збалансований раціон</li>
-                  <li className="flex items-center gap-2">✓ роботу з психосоматикою</li>
+              <p className="text-slate-700 font-medium">
+                Мій підхід сформувався не лише завдяки медицині, а і власному досвіду. Після серйозної травми хребта та депресії в житті я пройшла шлях від реабілітації до повноцінного відновлення - ментального і фізичного. Саме тоді зрозуміла, що стійкий результат неможливий без комплексної роботи.
+              </p>
+
+              <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                <p className="font-bold text-[#0284c7] text-xs uppercase tracking-wider">Тому сьогодні у своїй роботі я поєдную:</p>
+                <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-bold">
+                  <li className="flex items-center gap-2">✓ медичний підхід;</li>
+                  <li className="flex items-center gap-2">✓ тренування;</li>
+                  <li className="flex items-center gap-2">✓ елементи реабілітації та дихальних практик;</li>
+                  <li className="flex items-center gap-2">✓ здорові харчові звички;</li>
+                  <li className="flex items-center gap-2">✓ роботу з мисленням і мотивацією.</li>
                 </ul>
               </div>
             </div>
