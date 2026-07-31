@@ -700,7 +700,7 @@ export default function DiagnosticLanding() {
             </div>
 
             {/* TEXT PLACED SECOND */}
-            <div className="lg:col-span-7 order-2 space-y-4 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
+            <div className="lg:col-span-7 order-2 space-y-5 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
               <p className="font-bold text-slate-900 text-base sm:text-lg">
                 Мене звати Анастасія Сич.
               </p>
@@ -713,14 +713,31 @@ export default function DiagnosticLanding() {
                 Мій підхід сформувався не лише завдяки медицині, а і власному досвіду. Після серйозної травми хребта та депресії в житті я пройшла шлях від реабілітації до повноцінного відновлення - ментального і фізичного. Саме тоді зрозуміла, що стійкий результат неможливий без комплексної роботи.
               </p>
 
-              <div className="p-4.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
-                <p className="font-bold text-[#0284c7] text-xs uppercase tracking-wider">Тому сьогодні у своїй роботі я поєдную:</p>
-                <ul className="space-y-1.5 text-xs sm:text-sm text-slate-800 font-bold">
-                  <li className="flex items-center gap-2">✓ медичний підхід;</li>
-                  <li className="flex items-center gap-2">✓ тренування;</li>
-                  <li className="flex items-center gap-2">✓ елементи реабілітації та дихальних практик;</li>
-                  <li className="flex items-center gap-2">✓ здорові харчові звички;</li>
-                  <li className="flex items-center gap-2">✓ роботу з мисленням і мотивацією.</li>
+              <div className="w-full mt-4 p-5 sm:p-6 rounded-2xl bg-[#f0f9ff] border border-sky-200 space-y-4 shadow-sm">
+                <h4 className="font-extrabold text-[#0284c7] text-xs sm:text-sm uppercase tracking-wider block">
+                  Тому сьогодні у своїй роботі я поєдную:
+                </h4>
+                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-800 font-bold">
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-[#bae6fd] text-[#0284c7] text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>
+                    <span>медичний підхід;</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-[#bae6fd] text-[#0284c7] text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>
+                    <span>тренування;</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-[#bae6fd] text-[#0284c7] text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>
+                    <span>елементи реабілітації та дихальних практик;</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-[#bae6fd] text-[#0284c7] text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>
+                    <span>здорові харчові звички;</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-[#bae6fd] text-[#0284c7] text-xs font-extrabold flex items-center justify-center shrink-0">✓</span>
+                    <span>роботу з мисленням і мотивацією.</span>
+                  </li>
                 </ul>
               </div>
             </div>
