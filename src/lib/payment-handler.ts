@@ -4,6 +4,13 @@ const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRA
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
 const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 
+export function getOfferLabel(variant?: string): string {
+  const v = String(variant || "1");
+  if (v === "2") return "Офер #2 (Дивишся в дзеркало і тобі не подобається відображення?)";
+  if (v === "3") return "Офер #3 (Марафон закінчився, мотивація зникла, а старі звички повернулися?)";
+  return "Офер #1 (Дієта закінчилась - нарешті можна наїстись?)";
+}
+
 export async function processPaymentStatusUpdate(payload: {
   orderReference: string;
   transactionStatus: string;
@@ -55,14 +62,14 @@ export async function processPaymentStatusUpdate(payload: {
   // 3. Edit Telegram message in thread 904
   const tgMessageId = existingLead.raw_payload?.tg_message_id;
   const offerVariant = existingLead.offer_variant || "1";
-  const offerTitle = `Офер #${offerVariant}`;
+  const offerLabel = getOfferLabel(offerVariant);
   const amountText = paidAmount === 1 ? "1 UAH (ТЕСТ)" : `${paidAmount} UAH`;
 
   let message = "";
   if (isApproved) {
-    message += `<b>🟢 КУПИВ! УСПІШНА ОПЛАТА</b>\n\n`;
+    message += `<b>🟢 Оплата успішна!</b>\n\n`;
   } else {
-    message += `<b>🔴 НЕ КУПИВ / ОПЛАТУ ВІДХИЛЕНО</b>\n\n`;
+    message += `<b>🔴 Оплату відхилено</b>\n\n`;
   }
 
   message += `👤 <b>Ім'я:</b> ${existingLead.name || "-"}\n`;
@@ -73,7 +80,12 @@ export async function processPaymentStatusUpdate(payload: {
     message += `📱 <b>Telegram:</b> ${tg}\n`;
   }
 
-  message += `🎯 <b>Офер з якого купив:</b> ${offerTitle} (Варіант #${offerVariant})\n`;
+  if (isApproved) {
+    message += `🎯 <b>Офер з якого купив:</b> ${offerLabel}\n`;
+  } else {
+    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+  }
+
   message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
   message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
 

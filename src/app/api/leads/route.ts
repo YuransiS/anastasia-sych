@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { createOrUpdateSendPulseContact } from "@/lib/sendpulse";
 import { generateWayForPayPurchaseData } from "@/lib/wayforpay";
+import { getOfferLabel } from "@/lib/payment-handler";
 
 function cleanPhone(phone: string): string {
   let cleaned = phone.replace(/\D/g, "");
@@ -38,20 +39,20 @@ async function sendTelegramLeadNotification(payload: {
       return null;
     }
 
-    const offerTitle = payload.offerVariant ? `Офер #${payload.offerVariant}` : "Офер #1";
-    const amountText = payload.amount === 1 ? "1 UAH (ТЕСТОВА ОПЛАТА)" : `${payload.amount || 480} UAH`;
+    const offerLabel = getOfferLabel(payload.offerVariant);
+    const amountText = payload.amount === 1 ? "1 UAH (ТЕСТ)" : `${payload.amount || 480} UAH`;
 
-    let message = `<b>🟡 ЗРЕЄСТРОВАНО ЗАЯВКУ (Очікує оплати)</b>\n\n`;
+    let message = `<b>🟡 Заявку зареєстровано (Очікує оплати)</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
 
     if (payload.telegram) {
       const tg = payload.telegram.startsWith("@") ? payload.telegram : `@${payload.telegram}`;
-      message += `📱 <b>Telegram / Соцмережі:</b> ${tg}\n`;
+      message += `📱 <b>Telegram:</b> ${tg}\n`;
     }
 
-    message += `🎯 <b>Офер:</b> ${offerTitle} (Варіант #${payload.offerVariant || "1"})\n`;
-    message += `💳 <b>Сума до сплати:</b> <code>${amountText}</code>\n`;
+    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
     if (payload.orderReference) {
       message += `🆔 <b>Order ID:</b> <code>${payload.orderReference}</code>\n`;
     }
