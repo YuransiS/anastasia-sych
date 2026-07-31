@@ -111,7 +111,7 @@ export default function DiagnosticLanding() {
           setFormData((prev) => ({ ...prev, phone: data.dialCode }));
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // FAQ open items state
@@ -342,11 +342,11 @@ export default function DiagnosticLanding() {
 
       {/* 2. EXACT ORIGINAL HERO SECTION (FULL HEIGHT BACKGROUND PHOTO, BOTTOM-ANCHORED CONTENT & 1-LINE FORMATTING) */}
       <section className="relative min-h-[100dvh] sm:min-h-[92vh] flex flex-col justify-between pt-4 pb-6 px-4 sm:px-6 overflow-hidden">
-        
+
         {/* HERO BACKGROUND PHOTO WITH LIGHT GRADIENT OVERLAY */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero.webp"
+            src="/images/anastasia_hero_blue.webp"
             alt="Анастасія Сич"
             fill
             priority
@@ -371,7 +371,7 @@ export default function DiagnosticLanding() {
 
         {/* HERO CONTENT BUILT FROM BOTTOM UP (ANCHORED AT BOTTOM OF ACTIVE VIEWPORT) */}
         <div className="max-w-4xl mx-auto w-full relative z-20 mt-auto space-y-3.5 max-w-xl pb-2">
-          
+
           {/* MAIN OFFER HEADLINE */}
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-slate-900 tracking-tight drop-shadow-sm uppercase">
             {currentOffer.title}
@@ -463,7 +463,7 @@ export default function DiagnosticLanding() {
       {/* 4. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH HD YOGA PHOTO */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
         <div className="glass-card p-6 sm:p-10 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden bg-white shadow-md">
-          
+
           <div className="md:col-span-7 space-y-5 text-left">
             <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
 
@@ -559,7 +559,7 @@ export default function DiagnosticLanding() {
       {/* 8. REAL CASE PHOTO GALLERY (SWIPEABLE CAROUSEL, NO SCROLLBAR, EASY VERTICAL SCROLL) */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
         <div className="max-w-5xl mx-auto space-y-6">
-          
+
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
@@ -652,7 +652,7 @@ export default function DiagnosticLanding() {
             <div className="lg:col-span-5 order-1 flex justify-center">
               <div className="w-full max-w-sm h-96 rounded-2xl overflow-hidden border border-slate-200 relative shadow-lg">
                 <Image
-                  src="/images/expert.webp"
+                  src="/images/anastasia_portrait_black.webp"
                   alt="Анастасія Сич"
                   fill
                   loading="lazy"
