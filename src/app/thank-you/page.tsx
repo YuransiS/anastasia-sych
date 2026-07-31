@@ -1,16 +1,31 @@
 "use client";
 
 import React, { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Sparkles, Send, ArrowRight } from "lucide-react";
 
 const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f";
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const orderReference = searchParams.get("orderReference") || "";
 
   const [countdown, setCountdown] = useState(3);
+
+  // Check order status from database to prevent failed payment user from seeing thank-you page
+  useEffect(() => {
+    if (orderReference) {
+      fetch(`/api/wayforpay/status?orderReference=${orderReference}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success" && data.order?.status === "Не оплачено") {
+            router.replace(`/payment-failed?orderReference=${orderReference}`);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [orderReference, router]);
 
   useEffect(() => {
     const timer = setInterval(() => {
