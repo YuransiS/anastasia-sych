@@ -81,12 +81,21 @@ export default function DiagnosticLanding() {
 
   // Carousel state & ref
   const carouselRef = useRef<HTMLDivElement>(null);
+  const reviewsCarouselRef = useRef<HTMLDivElement>(null);
 
   const scrollCarousel = (direction: "left" | "right") => {
     if (carouselRef.current) {
       const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 300;
       const scrollAmount = direction === "left" ? -cardWidth - 16 : cardWidth + 16;
       carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const scrollReviewsCarousel = (direction: "left" | "right") => {
+    if (reviewsCarouselRef.current) {
+      const cardWidth = reviewsCarouselRef.current.firstElementChild?.clientWidth || 250;
+      const scrollAmount = direction === "left" ? -cardWidth - 16 : cardWidth + 16;
+      reviewsCarouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
@@ -237,19 +246,19 @@ export default function DiagnosticLanding() {
   const getOfferContent = () => {
     if (offerVariant === "2") {
       return {
-        title: "Дивишся в дзеркало і тобі не подобається відображення?",
-        subtitle: "Розберемо, чому саме у вашому випадку дієти і марафони не дали довготривалого результату, і що заважає повернутись до тіла, у якому ви почуватиметеся впевнено."
+        title: "Чому ви знову набираєте вагу після схуднення?",
+        subtitle: "На діагностиці я знайду, де саме ваша система дає збій, і покажу, як побудувати результат, який залишиться з вами."
       };
     }
     if (offerVariant === "3") {
       return {
         title: "Марафон закінчився, мотивація зникла, а старі звички повернулися?",
-        subtitle: "На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав після завершення програми."
+        subtitle: "На діагностиці знайдемо, чому тимчасові рішення не працюють саме для вас. І що потрібно змінити, щоб результат залишався з вами, а не зникав после завершення програми."
       };
     }
     // Offer 1 (Default)
     return {
-      title: "Дієта закінчилась - нарешті можна наїстись?",
+      title: "Розберемо чому після закінчення марафону зникає мотивація, а разом з нею і результат",
       subtitle: "Запрошую вас на діагностику, де ми розберемо, чому здорове харчування стало для вас випробуванням, а не способом життя, і як змінити це без жорстких заборон."
     };
   };
@@ -269,12 +278,20 @@ export default function DiagnosticLanding() {
 
   // Exact 6 items from TZ for "Що буде на діагностиці"
   const diagnosticItems = [
-    "Чому у вас виникають зриви?",
-    "Які звички заважають тримати результат?",
-    "З чим пов'язане переїдання?",
-    "Чому здорове харчування викликає тривогу чи паніку?",
-    "Що потрібно змінити вже зараз?",
-    "Який шлях буде найефективнішим у вашій ситуації?",
+    "Розберу ваш раціон — що, коли і як ви їсте, покажу, де ви переїдаєте, недоїдаєте або несвідомо створюєте умови для набору ваги.",
+    "Проаналізую ваш режим дня та відновлення — визначу, що може впливати на вашу енергію, апетит і результати, та дам рекомендації, як це покращити.",
+    "Оціню вашу фізичну активність і поясню, чому тренування або навантаження, які ви зараз виконуєте, не дають бажаного результату.",
+    "Визначу оптимальний формат тренувань саме для вас — скільки разів на тиждень варто тренуватися, які навантаження будуть ефективними та на що варто зробити основний акцент.",
+    "Допоможу сформувати чітку та реалістичну ціль, щоб ви розуміли, якого результату прагнете і який шлях буде найефективнішим саме для вас.",
+    "Складу персональний план дій, щоб після діагностики ви чітко розуміли, що потрібно змінити вже зараз, аби перестати діяти навмання та почати бачити результат."
+  ];
+
+  const reviewImages = [
+    "/images/reviews/review_1.png",
+    "/images/reviews/review_2.png",
+    "/images/reviews/review_3.png",
+    "/images/reviews/review_4.png",
+    "/images/reviews/review_5.png",
   ];
 
   const stepsItems = [
@@ -459,138 +476,8 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
-      {/* 3. BLOCK 2: PAIN POINTS LIST (CLEAN NUMBERED PILL BADGES) */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Можливо, зараз ви впізнаєте себе хоча б в одному з цих пунктів:
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {problemItems.map((item, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 flex items-start gap-3.5"
-              >
-                <div className="px-2.5 py-1 rounded-lg bg-sky-100 text-[#0284c7] font-extrabold text-xs shrink-0 mt-0.5">
-                  0{idx + 1}
-                </div>
-                <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="glass-card p-5 sm:p-6 rounded-2xl border border-sky-200 text-center max-w-2xl mx-auto space-y-2 bg-sky-50/60 shadow-sm">
-            <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-sky-100 text-[#0284c7]">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <p className="text-slate-900 font-bold text-sm sm:text-base leading-relaxed">
-              Якщо хоча б <span className="text-[#0284c7] font-extrabold">2–3 пункти про вас</span> — причина може бути значно глибшою, ніж просто «немає сили волі».
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH HD YOGA PHOTO */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
-        <div className="glass-card p-6 sm:p-10 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden bg-white shadow-md">
-
-          <div className="md:col-span-7 space-y-5 text-left">
-            <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
-
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Чому дієти працюють лише тимчасово?
-            </h2>
-
-            <div className="space-y-3 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
-              <p className="font-bold text-[#0284c7] text-base sm:text-lg">
-                Ви не ліниві. Не слабохарактерні. І проблема не у відсутності мотивації.
-              </p>
-              <p className="text-slate-700 font-medium">
-                Проблема в тому, що більшість жінок намагаються змінити поведінку, не розібравшись із причиною, через яку вони постійно повертаються до старих звичок.
-              </p>
-            </div>
-
-            <div className="inline-block px-5 py-3 rounded-2xl bg-sky-50 border border-sky-200 text-[#0284c7] font-bold text-xs sm:text-sm">
-              Саме це ми знаходимо під час діагностики.
-            </div>
-          </div>
-
-          <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
-            <Image
-              src="/images/expert_flying.webp"
-              alt="Анастасія Сич на йога-килимку"
-              fill
-              loading="lazy"
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 40vw"
-            />
-          </div>
-
-        </div>
-      </section>
-
-      {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC (VERTICALLY CENTERED TEXT & ICON) */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="program">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Що буде на діагностиці</h2>
-            <p className="text-[#0284c7] font-bold text-base sm:text-lg">За 60 хвилин ми розберемо:</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {diagnosticItems.map((item, idx) => (
-              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 flex items-center gap-3.5 bg-slate-50/70 shadow-sm min-h-[72px]">
-                <div className="p-2 rounded-xl bg-emerald-100 text-[#059669] shrink-0">
-                  <CheckCircle2 className="w-5 h-5" />
-                </div>
-                <span className="text-slate-900 font-bold text-sm sm:text-base leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center pt-2">
-            <motion.button
-              whileTap={{ scale: 0.96 }}
-              onClick={handleOpenModal}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-base sm:text-lg shadow-xl glow-primary uppercase tracking-wide cursor-pointer"
-            >
-              Записатись на діагностику
-            </motion.button>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. STEP-BY-STEP PROGRAM GRID */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
-        <div className="space-y-8">
-          <div className="text-center space-y-2">
-            <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Як проходить діагностична програма?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {stepsItems.map((st, idx) => (
-              <div key={idx} className="glass-card p-5 rounded-2xl border border-slate-200 space-y-3 relative flex flex-col justify-between bg-white shadow-sm">
-                <div className="space-y-2">
-                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0284c7] font-bold text-xs">
-                    {st.step}
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">{st.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed font-medium">{st.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 8. REAL CASE PHOTO GALLERY (SWIPEABLE CAROUSEL, NO SCROLLBAR, EASY VERTICAL SCROLL) */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="reviews">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-b border-slate-200" id="reviews">
         <div className="max-w-5xl mx-auto space-y-6">
 
           <div className="flex items-center justify-between">
@@ -669,8 +556,158 @@ export default function DiagnosticLanding() {
         </div>
       </section>
 
+      {/* 5. BLOCK 4: WHAT WILL HAPPEN AT THE DIAGNOSTIC (VERTICALLY CENTERED TEXT & ICON) */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-slate-50 border-b border-slate-200" id="program">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Що ви отримаєте на діагностиці</h2>
+            <p className="text-[#0284c7] font-bold text-base sm:text-lg">За 60 хвилин ми розберемо:</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {diagnosticItems.map((item, idx) => (
+              <div key={idx} className="glass-card p-4 sm:p-5 rounded-2xl border border-slate-200 flex items-center gap-3.5 bg-white shadow-sm min-h-[72px]">
+                <div className="p-2 rounded-xl bg-emerald-100 text-[#059669] shrink-0">
+                  <Check className="w-5 h-5 text-[#059669]" />
+                </div>
+                <span className="text-slate-900 font-semibold text-sm sm:text-base leading-snug">{item}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 p-6 rounded-2xl bg-sky-50 border border-sky-200 text-slate-800 space-y-4 max-w-3xl mx-auto shadow-sm">
+            <p className="font-extrabold text-slate-900 text-sm sm:text-base leading-relaxed">
+              Після діагностики ви вийдете не з черговою дієтою чи списком заборон, а з чітким розумінням:
+            </p>
+            <ul className="space-y-2 text-xs sm:text-sm font-semibold text-slate-700">
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0284c7] font-extrabold text-base leading-none">•</span>
+                <span>чому попередні спроби не дали бажаного результату;</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0284c7] font-extrabold text-base leading-none">•</span>
+                <span>що саме зараз заважає вам змінити своє тіло;</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0284c7] font-extrabold text-base leading-none">•</span>
+                <span>які конкретні кроки допоможуть досягти результату без жорстких обмежень і постійних зривів.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="text-center pt-2">
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              onClick={handleOpenModal}
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-base sm:text-lg shadow-xl glow-primary uppercase tracking-wide cursor-pointer"
+            >
+              Записатись на діагностику
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. BLOCK 2: PAIN POINTS LIST (CLEAN NUMBERED PILL BADGES) */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-b border-slate-200">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+              Можливо, зараз ви впізнаєте себе хоча б в одному з цих пунктів:
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            {problemItems.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 flex items-start gap-3.5"
+              >
+                <div className="px-2.5 py-1 rounded-lg bg-sky-100 text-[#0284c7] font-extrabold text-xs shrink-0 mt-0.5">
+                  0{idx + 1}
+                </div>
+                <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="glass-card p-5 sm:p-6 rounded-2xl border border-sky-200 text-center max-w-2xl mx-auto space-y-2 bg-sky-50/60 shadow-sm">
+            <div className="inline-flex items-center justify-center p-2.5 rounded-full bg-sky-100 text-[#0284c7]">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <p className="text-slate-900 font-bold text-sm sm:text-base leading-relaxed">
+              Якщо хоча б <span className="text-[#0284c7] font-extrabold">2–3 пункти про вас</span> — причина може бути значно глибшою, ніж просто «немає сили волі».
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. BLOCK 3: CORE INSIGHT (WHY DIETS FAIL) WITH HD YOGA PHOTO */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto">
+        <div className="glass-card p-6 sm:p-10 rounded-3xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative overflow-hidden bg-white shadow-md">
+
+          <div className="md:col-span-7 space-y-5 text-left">
+            <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Головний інсайт</span>
+
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+              Чому дієти працюють лише тимчасово?
+            </h2>
+
+            <div className="space-y-3 text-sm sm:text-base text-slate-800 leading-relaxed font-medium">
+              <p className="font-bold text-[#0284c7] text-base sm:text-lg">
+                Ви не ліниві. Не слабохарактерні. І проблема не у відсутності мотивації.
+              </p>
+              <p className="text-slate-700 font-medium">
+                Проблема в тому, що більшість жінок намагаються змінити поведінку, не розібравшись із причиною, через яку вони постійно повертаються до старих звичок.
+              </p>
+            </div>
+
+            <div className="inline-block px-5 py-3 rounded-2xl bg-sky-50 border border-sky-200 text-[#0284c7] font-bold text-xs sm:text-sm">
+              Саме це ми знаходимо під час діагностики.
+            </div>
+          </div>
+
+          <div className="md:col-span-5 relative h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
+            <Image
+              src="/images/expert_flying.webp"
+              alt="Анастасія Сич на йога-килимку"
+              fill
+              loading="lazy"
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 40vw"
+            />
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. STEP-BY-STEP PROGRAM GRID */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-200">
+        <div className="space-y-8">
+          <div className="text-center space-y-2">
+            <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Процес взаємодії</span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+              Як проходить діагностична програма?
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {stepsItems.map((st, idx) => (
+              <div key={idx} className="glass-card p-5 rounded-2xl border border-slate-200 space-y-3 relative flex flex-col justify-between bg-white shadow-sm">
+                <div className="space-y-2">
+                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0284c7] font-bold text-xs">
+                    {st.step}
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">{st.title}</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium">{st.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 9. AUTHOR SECTION (ANASTASIA PHOTO FIRST BEFORE TEXT) */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto" id="author">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto border-t border-slate-200" id="author">
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-slate-200 space-y-8 bg-white shadow-md">
           <div className="max-w-3xl space-y-2 text-left">
             <span className="text-[#0284c7] text-xs font-bold uppercase tracking-widest">Про автора</span>
@@ -739,6 +776,131 @@ export default function DiagnosticLanding() {
                     <span>роботу з мисленням і мотивацією.</span>
                   </li>
                 </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: VJDGUKY UCHASNYTS Z DIAGNOSTYKY */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200" id="reviews-diagnostics">
+        <div className="max-w-5xl mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 uppercase">
+                Відгуки учасниць з діагностики
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                Свайпайте вбік або натисніть на відгук, щоб збільшити:
+              </p>
+            </div>
+
+            {/* Carousel controls */}
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => scrollReviewsCarousel("left")}
+                className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
+                aria-label="Попередній відгук"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scrollReviewsCarousel("right")}
+                className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
+                aria-label="Наступний відгук"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div
+            ref={reviewsCarouselRef}
+            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 touch-pan-x touch-pan-y scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+          >
+            {reviewImages.map((img, idx) => (
+              <div
+                key={idx}
+                onClick={() => setActiveCaseImage(img)}
+                className="snap-center shrink-0 w-[70vw] max-w-[280px] sm:w-[300px] rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer group relative"
+              >
+                <div className="relative w-full h-[400px] bg-slate-50">
+                  <Image
+                    src={img}
+                    alt={`Відгук ${idx + 1}`}
+                    fill
+                    loading="lazy"
+                    className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-300"
+                    sizes="(max-width: 768px) 280px, 300px"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300 flex items-center justify-center">
+                    <div className="p-2.5 rounded-full bg-white/95 text-slate-900 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 text-xs font-bold">
+                      <ZoomIn className="w-3.5 h-3.5 text-[#0284c7]" />
+                      <span>Збільшити</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: BONUS LESSON BLOCK */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto" id="bonus-lesson">
+        <div className="glass-card p-6 sm:p-10 rounded-3xl border-2 border-dashed border-sky-300 bg-gradient-to-br from-sky-50/70 via-white to-white shadow-lg space-y-6 relative overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-40 h-40 bg-sky-200/40 rounded-full blur-2xl pointer-events-none" />
+          
+          <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+            <div className="space-y-4 flex-1">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#059669] text-white text-xs font-extrabold shadow-sm uppercase tracking-wider">
+                🔥 БОНУС ПРИ ОПЛАТІ
+              </div>
+              
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                При оплаті діагностики прямо зараз отримуйте <span className="text-[#0284c7]">безкоштовно</span> урок <span className="underline decoration-[#0284c7] decoration-2 underline-offset-4">"Як спалити ЖИР до літа"</span>
+              </h2>
+              
+              <p className="text-slate-600 text-sm font-semibold">
+                Що в цьому уроці:
+              </p>
+              
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2.5 text-slate-800 text-sm sm:text-base font-bold">
+                  <span className="text-[#059669] shrink-0 mt-1">✅</span>
+                  <span>5 правил для здорового схуднення;</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-slate-800 text-sm sm:text-base font-bold">
+                  <span className="text-[#059669] shrink-0 mt-1">✅</span>
+                  <span>як правильно харчуватись для схуднення;</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-slate-800 text-sm sm:text-base font-bold">
+                  <span className="text-[#059669] shrink-0 mt-1">✅</span>
+                  <span>який режим навантажень обрати для схуднення;</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-slate-800 text-sm sm:text-base font-bold">
+                  <span className="text-[#059669] shrink-0 mt-1">✅</span>
+                  <span>чому важливо під час схуднення спалювати жир, а не мʼязи.</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="w-full md:w-72 shrink-0 flex flex-col items-center justify-center p-6 rounded-2xl bg-white border border-slate-200 shadow-md space-y-4">
+              <div className="relative w-full aspect-video rounded-xl bg-slate-900 flex items-center justify-center overflow-hidden group shadow-inner">
+                <div className="absolute inset-0 bg-cover bg-center opacity-70" style={{ backgroundImage: "url('/images/expert_flying.webp')" }} />
+                <div className="absolute inset-0 bg-slate-900/30 group-hover:bg-slate-900/50 transition-colors" />
+                <div className="relative z-10 w-12 h-12 rounded-full bg-white/90 text-[#0284c7] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Video className="w-5 h-5 ml-0.5 fill-current" />
+                </div>
+                <div className="absolute bottom-2 left-2 right-2 px-2 py-1 rounded bg-black/60 text-[10px] text-white font-bold text-center">
+                  УРОК: Як спалити ЖИР до літа
+                </div>
+              </div>
+              
+              <div className="text-center">
+                <span className="text-xs text-slate-400 font-bold line-through">Ціна окремо: 590 грн</span>
+                <div className="text-sm font-extrabold text-[#059669]">Для вас: БЕЗКОШТОВНО</div>
               </div>
             </div>
           </div>
