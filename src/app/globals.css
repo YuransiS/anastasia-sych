@@ -46,6 +46,22 @@ h1, h2, h3, .font-accent {
   will-change: transform;
 }
 
+@keyframes scrollReviews {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-reviews-marquee {
+  display: flex;
+  width: max-content;
+  animation: scrollReviews 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-reviews-marquee:hover {
+  animation-play-state: paused;
+}
+
 @keyframes spinBg {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

@@ -294,6 +294,8 @@ export default function DiagnosticLanding() {
     "/images/reviews/review_5.png",
   ];
 
+  const duplicatedReviews = [...reviewImages, ...reviewImages, ...reviewImages];
+
   const stepsItems = [
     { step: "Крок 01", title: "Залишаєте заявку", desc: "Заповнюєте коротку форму на цій сторінці" },
     { step: "Крок 02", title: "Обираємо зручний час", desc: "Узгоджуємо дату та час зустрічі в месенджері" },
@@ -783,56 +785,35 @@ export default function DiagnosticLanding() {
       </section>
 
       {/* NEW: VJDGUKY UCHASNYTS Z DIAGNOSTYKY */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200" id="reviews-diagnostics">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-t border-slate-200 overflow-hidden" id="reviews-diagnostics">
         <div className="max-w-5xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 uppercase">
-                Відгуки учасниць з діагностики
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                Свайпайте вбік або натисніть на відгук, щоб збільшити:
-              </p>
-            </div>
-
-            {/* Carousel controls */}
-            <div className="hidden sm:flex items-center gap-2 shrink-0">
-              <button
-                onClick={() => scrollReviewsCarousel("left")}
-                className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
-                aria-label="Попередній відгук"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => scrollReviewsCarousel("right")}
-                className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
-                aria-label="Наступний відгук"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 uppercase">
+              Відгуки учасниць з діагностики
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
+              Наведіть курсор, щоб зупинити, або натисніть на відгук, щоб збільшити:
+            </p>
           </div>
+        </div>
 
-          <div
-            ref={reviewsCarouselRef}
-            className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 touch-pan-x touch-pan-y scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
-          >
-            {reviewImages.map((img, idx) => (
+        <div className="w-full relative py-6 overflow-hidden mt-6">
+          {/* Subtle gradient overlays on the left and right edges for a premium "fading" effect */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+
+          <div className="flex gap-4 animate-reviews-marquee">
+            {duplicatedReviews.map((img, idx) => (
               <div
                 key={idx}
                 onClick={() => setActiveCaseImage(img)}
-                className="snap-center shrink-0 w-[70vw] max-w-[280px] sm:w-[300px] rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer group relative"
+                className="shrink-0 w-[70vw] max-w-[280px] sm:w-[300px] rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between cursor-pointer group relative"
               >
-                <div className="relative w-full h-[400px] bg-slate-50">
-                  <Image
+                <div className="relative w-full overflow-hidden bg-white">
+                  <img
                     src={img}
-                    alt={`Відгук ${idx + 1}`}
-                    fill
-                    loading="lazy"
-                    className="object-contain p-2 group-hover:scale-[1.02] transition-transform duration-300"
-                    sizes="(max-width: 768px) 280px, 300px"
+                    alt={`Відгук ${(idx % reviewImages.length) + 1}`}
+                    className="w-full h-auto object-contain p-1 group-hover:scale-[1.02] transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300 flex items-center justify-center">
                     <div className="p-2.5 rounded-full bg-white/95 text-slate-900 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 text-xs font-bold">
