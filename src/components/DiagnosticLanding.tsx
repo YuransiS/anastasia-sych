@@ -562,7 +562,7 @@ export default function DiagnosticLanding() {
       <section className="py-12 sm:py-16 px-4 sm:px-6 bg-slate-50 border-b border-slate-200" id="program">
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Що ви отримаєте на діагностиці</h2>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Що буде на діагностиці</h2>
             <p className="text-[#0284c7] font-bold text-base sm:text-lg">За 60 хвилин ми розберемо:</p>
           </div>
 
@@ -575,6 +575,44 @@ export default function DiagnosticLanding() {
                 <span className="text-slate-900 font-semibold text-sm sm:text-base leading-snug">{item}</span>
               </div>
             ))}
+          </div>
+
+          {/* BLOCK: ЩО ВИ ОТРИМАЄТЕ ПІСЛЯ ДІАГНОСТИКИ */}
+          <div className="mt-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-white via-sky-50/60 to-white border border-sky-200 text-slate-800 space-y-5 shadow-md">
+            <div className="text-center space-y-1">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                Що ви отримаєте після діагностики:
+              </h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-sky-100 shadow-sm flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-sky-100 text-[#0284c7] shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-[#0284c7]" />
+                </div>
+                <span className="text-slate-900 font-bold text-sm sm:text-base leading-snug">
+                  розбір вашого харчування
+                </span>
+              </div>
+
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-sky-100 shadow-sm flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-sky-100 text-[#0284c7] shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-[#0284c7]" />
+                </div>
+                <span className="text-slate-900 font-bold text-sm sm:text-base leading-snug">
+                  персональний конструктор тарілки
+                </span>
+              </div>
+
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-sky-100 shadow-sm flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-sky-100 text-[#0284c7] shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-[#0284c7]" />
+                </div>
+                <span className="text-slate-900 font-bold text-sm sm:text-base leading-snug">
+                  план тренувань на тиждень
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="mt-8 p-6 rounded-2xl bg-sky-50 border border-sky-200 text-slate-800 space-y-4 max-w-3xl mx-auto shadow-sm">
