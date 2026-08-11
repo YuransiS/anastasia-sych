@@ -6,7 +6,6 @@ import { CheckCircle2, Sparkles, Send, ArrowRight, Video } from "lucide-react";
 import { trackPixelEvent } from "@/components/FacebookPixel";
 
 const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f";
-const BONUS_VIDEO_URL = "https://youtu.be/U-YEdNq9ymw";
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
@@ -44,7 +43,7 @@ function ThankYouContent() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          window.location.href = BONUS_VIDEO_URL;
+          window.location.href = TG_BOT_URL;
           return 0;
         }
         return prev - 1;
@@ -85,36 +84,26 @@ function ThankYouContent() {
         <div className="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-slate-800 space-y-1.5">
           <div className="flex items-center justify-center gap-2 text-[#0284c7] font-bold text-xs sm:text-sm">
             <Sparkles className="w-4 h-4" />
-            <span>Перехід до уроку на YouTube через {countdown} сек...</span>
+            <span>Перехід до Telegram-бота через {countdown} сек...</span>
           </div>
           <p className="text-[11px] text-slate-500 font-medium">
-            Після цього перейдіть у Telegram-бот за кнопкою нижче, щоб обрати зручний час зустрічі.
+            У боті ви отримаєте бонусний урок та зможете обрати зручний час зустрічі.
           </p>
         </div>
 
         {/* PROMINENT MANUAL REDIRECT BUTTON */}
         <div className="pt-2 space-y-3 flex flex-col gap-2">
-          <a
-            href={BONUS_VIDEO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-extrabold text-sm sm:text-base shadow-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98] uppercase"
-          >
-            <Video className="w-5 h-5 text-emerald-100 shrink-0" />
-            <span>Дивитись урок на YouTube</span>
-            <ArrowRight className="w-4 h-4 text-emerald-100 shrink-0" />
-          </a>
-
           <button
             onClick={handleManualRedirect}
-            className="w-full py-3.5 px-5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 transition-transform active:scale-[0.98] uppercase"
+            className="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-sm sm:text-base shadow-xl flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98] uppercase"
           >
-            <Send className="w-4 h-4 text-slate-500 shrink-0" />
-            <span>Записатись у Telegram-бот</span>
+            <Send className="w-5 h-5 text-sky-200 shrink-0" />
+            <span>Перейти в Telegram-бот</span>
+            <ArrowRight className="w-4 h-4 text-sky-200 shrink-0" />
           </button>
           
           <p className="text-[11px] text-slate-400 font-medium">
-            Якщо вас не перенаправило автоматично, натисніть кнопку "Дивитись урок" вище.
+            Якщо вас не перенаправило автоматично, натисніть кнопку вище.
           </p>
         </div>
 
