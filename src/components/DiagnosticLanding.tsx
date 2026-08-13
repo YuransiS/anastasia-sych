@@ -212,7 +212,7 @@ export default function DiagnosticLanding() {
           utm_campaign: utmCampaign,
           utm_content: utmContent,
           utm_term: utmTerm,
-          page_path: "/diagnostic",
+          page_path: typeof window !== "undefined" ? window.location.pathname : "/diagnostic",
           page_url: typeof window !== "undefined" ? window.location.href : "/diagnostic",
         }),
       });

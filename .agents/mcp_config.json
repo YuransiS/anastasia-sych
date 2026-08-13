@@ -4,7 +4,8 @@
       "serverUrl": "https://mcp.sendpulse.com/mcp",
       "headers": {
         "X-SP-ID": "sp_id_de6e57d33976732dfd28cea7669460fb",
-        "X-SP-SECRET": "sp_sk_67e4d2251e6bfc25b3b72b5940ebef3d"
+        "X-SP-SECRET": "sp_sk_67e4d2251e6bfc25b3b72b5940ebef3d",
+        "Accept": "application/json, text/event-stream"
       }
     }
   }
