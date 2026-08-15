@@ -275,52 +275,37 @@ export default function MiniCourseLanding() {
     }
   };
 
-  // Block 4: 5 Lessons structured as YouTube Video Frames
-  const lessons = [
+  // Block 4: 5 Core Outcomes/Results the User Gets
+  const courseBenefits = [
     {
       number: "01",
-      tag: "УРОК 01 • ТЕОРІЯ + АНАЛІЗ",
-      duration: "18 хв",
       title: "Зрозумієте, що реально впливає на живіт і талію",
-      desc: "Без хаотичних порад з TikTok та Instagram. Розбір фізіології, гормонів та реальних факторів відкладення жиру в зоні талії.",
-      bgGradient: "from-sky-900 via-slate-900 to-slate-950",
-      accentColor: "#0284c7",
+      desc: "Без хаотичних порад з TikTok та Instagram. Ви дізнаєтесь справжні фізіологічні причини відкладення жиру та чому стандартні поради не давали бажаного ефекту.",
+      icon: "🎯",
     },
     {
       number: "02",
-      tag: "УРОК 02 • ПРАКТИКА ХАРЧУВАННЯ",
-      duration: "24 хв",
       title: "Розберете харчування",
-      desc: "Зрозумієте, що варто змінити в раціоні, щоб не жити в постійному обмеженні. Конструктор ситної тарілки без підрахунку кожної калорії.",
-      bgGradient: "from-teal-950 via-slate-900 to-slate-950",
-      accentColor: "#0d9488",
+      desc: "Зрозумієте, що варто змінити в раціоні, щоб не жити в постійному обмеженні. Складете персональну тарілку без підрахунку кожної калорії та почуття провини.",
+      icon: "🥗",
     },
     {
       number: "03",
-      tag: "УРОК 03 • ТРЕНУВАЛЬНИЙ КОМПЛЕКС",
-      duration: "22 хв",
       title: "Навчитеся тренуватися без виснаження",
-      desc: "Зрозумієте, яке навантаження потрібне саме для вашої цілі. Без годин кардіо та болісних стрибків — робота з поставою та глибокими м'язами.",
-      bgGradient: "from-indigo-950 via-slate-900 to-slate-950",
-      accentColor: "#6366f1",
+      desc: "Зрозумієте, яке навантаження потрібне для вашої цілі. Без годин виснажливого кардіо чи надмірних навантажень — лише те, що підтягує живіт і покращує поставу.",
+      icon: "⚡",
     },
     {
       number: "04",
-      tag: "УРОК 04 • АУДИТ ПОМИЛОК",
-      duration: "20 хв",
       title: "Побачите, де самі гальмуєте свій результат",
-      desc: "Харчування, режим сну, навантаження, відновлення та стрес — збираємо всю систему воєдино та усуваємо приховані гальма.",
-      bgGradient: "from-blue-950 via-slate-900 to-slate-950",
-      accentColor: "#3b82f6",
+      desc: "Харчування, режим сну, тренування, відновлення — побачите систему цілком та знайдете неочевидні помилки, які раніше зводили всі зусилля нанівець.",
+      icon: "🔍",
     },
     {
       number: "05",
-      tag: "УРОК 05 • ПОКРОКОВИЙ ПЛАН",
-      duration: "19 хв",
       title: "Отримаєте зрозумілий план дій",
-      desc: "Що робити зараз, щоб почати змінювати тіло вже цього тижня без чергового марафону «з понеділка» та вигорання.",
-      bgGradient: "from-emerald-950 via-slate-900 to-slate-950",
-      accentColor: "#059669",
+      desc: "Що робити зараз, щоб почати змінювати тіло без чергового марафону «з понеділка», страждань і повернення ваги назад.",
+      icon: "📋",
     },
   ];
 
@@ -639,74 +624,51 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          BLOCK 4: WHAT YOU GET IN MINI-COURSE (YOUTUBE VIDEO COVER STYLE FRAMES)
+          BLOCK 4: WHAT YOU GET IN MINI-COURSE (OUTCOMES & BENEFITS)
           ========================================================================= */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-10">
 
         <div className="text-center space-y-2 max-w-3xl mx-auto">
           <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-            Програма навчання
+            Результати навчання
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
             Що ви отримаєте на міні-курсі
           </h2>
           <p className="text-slate-600 text-sm sm:text-base font-semibold">
-            5 чітких відео-уроків із практичними завданнями та покроковими схемами дій:
+            Конкретні знання, інструменти та покрокова система, яка дає стабільний результат:
           </p>
         </div>
 
-        {/* 5 LESSONS AS YOUTUBE VIDEO COVER FRAMES */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {lessons.map((ls, idx) => (
+        {/* 5 BENEFIT / OUTCOME CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {courseBenefits.map((item, idx) => (
             <div
               key={idx}
-              className={`rounded-3xl bg-white border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group ${
+              className={`p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-md hover:shadow-xl hover:border-sky-300 transition-all duration-300 flex flex-col justify-between space-y-4 group ${
                 idx === 4 ? "md:col-span-2 lg:col-span-1" : ""
               }`}
             >
-              {/* YOUTUBE STYLE THUMBNAIL COVER */}
-              <div className={`relative h-44 bg-gradient-to-tr ${ls.bgGradient} p-4 flex flex-col justify-between text-white overflow-hidden`}>
-                <div className="flex items-center justify-between relative z-10">
-                  <span className="px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[11px] font-extrabold tracking-wider border border-white/10 uppercase">
-                    {ls.tag}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="inline-block px-3 py-1 rounded-xl bg-sky-100 text-[#0284c7] text-xs font-black tracking-wider">
+                    {item.number}
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-rose-600 text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                    <Clock className="w-3 h-3" /> {ls.duration}
-                  </span>
+                  <span className="text-2xl select-none">{item.icon}</span>
                 </div>
 
-                {/* PLAY BUTTON OVERLAY */}
-                <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                  <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-2xl group-hover:scale-110 group-hover:bg-[#0284c7] transition-all duration-300">
-                    <Play className="w-6 h-6 fill-white text-white translate-x-0.5" />
-                  </div>
-                </div>
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover:text-[#0284c7] transition-colors">
+                  {item.title}
+                </h3>
 
-                {/* LESSON NUMBER WATERMARK */}
-                <div className="text-5xl font-black text-white/10 absolute right-3 bottom-1 select-none font-mono">
-                  {ls.number}
-                </div>
-
-                <div className="relative z-10 text-xs font-bold text-sky-200 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> Теорія + Практика
-                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                  {item.desc}
+                </p>
               </div>
 
-              {/* CARD BODY */}
-              <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover:text-[#0284c7] transition-colors">
-                    {ls.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                    {ls.desc}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-xs font-bold text-[#0284c7]">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Входить у програму міні-курсу</span>
-                </div>
+              <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-xs font-bold text-[#059669]">
+                <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
+                <span>Отримуєте одразу після оплати</span>
               </div>
             </div>
           ))}
@@ -719,7 +681,7 @@ export default function MiniCourseLanding() {
             onClick={handleOpenModal}
             className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-base sm:text-lg shadow-xl glow-primary uppercase tracking-wide cursor-pointer inline-flex items-center justify-center gap-2.5"
           >
-            <span>Отримати всі 6 уроків за 399 грн</span>
+            <span>Отримати міні-курс за 399 грн</span>
             <ArrowRight className="w-5 h-5 text-sky-200" />
           </motion.button>
         </div>
