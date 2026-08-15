@@ -122,7 +122,10 @@ export async function POST(request: NextRequest) {
     // Check for test payment handle yuransis / @yuransis
     const cleanTg = telegram.replace("@", "").trim().toLowerCase();
     const isTestPayment = cleanTg === "yuransis";
-    const amount = isTestPayment ? 1 : 480;
+
+    const isMiniCourse = pagePath === "/mini-course" || offerVariant === "mini-course" || body.amount === 399;
+    const defaultAmount = isMiniCourse ? 399 : 480;
+    const amount = isTestPayment ? 1 : (body.amount ? Number(body.amount) : defaultAmount);
 
     const orderReference = `AS_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
 
@@ -230,12 +233,14 @@ export async function POST(request: NextRequest) {
     const protocol = request.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
     const baseUrl = `${protocol}://${host}`;
 
+    const productName = isTestPayment
+      ? (isMiniCourse ? "Тестовий міні-курс (1 грн)" : "Тестова діагностика (1 грн)")
+      : (isMiniCourse ? "Міні-курс: Плаский живіт та струнка талія (Анастасія Сич)" : "Персональна діагностика (Анастасія Сич)");
+
     const wayforpayData = generateWayForPayPurchaseData({
       orderReference,
       amount,
-      productName: isTestPayment
-        ? "Тестова діагностика (1 грн)"
-        : "Персональна діагностика (Анастасія Сич)",
+      productName,
       clientName: name,
       clientPhone: cleanedPhone || rawPhone,
       domainName: host.split(":")[0],

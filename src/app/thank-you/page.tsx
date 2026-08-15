@@ -11,18 +11,8 @@ function ThankYouContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const orderReference = searchParams.get("orderReference") || "";
-
+  const [orderData, setOrderData] = useState<any>(null);
   const [countdown, setCountdown] = useState(3);
-
-  // Track Facebook Pixel Purchase event on Thank You page
-  useEffect(() => {
-    trackPixelEvent("Purchase", {
-      value: 480,
-      currency: "UAH",
-      content_name: "Анастасія Сич - Персональна діагностика",
-      order_id: orderReference,
-    });
-  }, [orderReference]);
 
   // Check order status from database to prevent failed payment user from seeing thank-you page
   useEffect(() => {
@@ -30,13 +20,36 @@ function ThankYouContent() {
       fetch(`/api/wayforpay/status?orderReference=${orderReference}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.status === "success" && data.order?.status === "Не оплачено") {
-            router.replace(`/payment-failed?orderReference=${orderReference}`);
+          if (data.status === "success" && data.order) {
+            setOrderData(data.order);
+            if (data.order.status === "Не оплачено") {
+              router.replace(`/payment-failed?orderReference=${orderReference}`);
+            }
           }
         })
         .catch(() => {});
     }
   }, [orderReference, router]);
+
+  const isMiniCourse =
+    orderData?.page_path === "/mini-course" ||
+    orderData?.offer_variant === "mini-course" ||
+    orderData?.amount === 399;
+
+  // Track Facebook Pixel Purchase event on Thank You page
+  useEffect(() => {
+    const value = orderData?.amount || (isMiniCourse ? 399 : 480);
+    const contentName = isMiniCourse
+      ? "Анастасія Сич - Міні-курс «Плаский живіт та струнка талія»"
+      : "Анастасія Сич - Персональна діагностика";
+
+    trackPixelEvent("Purchase", {
+      value,
+      currency: "UAH",
+      content_name: contentName,
+      order_id: orderReference,
+    });
+  }, [orderReference, orderData, isMiniCourse]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -76,7 +89,15 @@ function ThankYouContent() {
             Дякуємо за оплату!
           </h1>
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-semibold">
-            Ви успішно забронювали персональну 60-хвилинну діагностику з Анастасією Сич та отримали безкоштовний урок "Як спалити ЖИР до літа".
+            {isMiniCourse ? (
+              <>
+                Ваша оплата за міні-курс <span className="text-[#0284c7] font-bold">«Плаский живіт та струнка талія»</span> успішно схвалена! Бонусний урок <span className="text-[#0284c7] font-bold">«Як спалити ЖИР»</span> вже чекає на вас у боті.
+              </>
+            ) : (
+              <>
+                Ви успішно забронювали персональну 60-хвилинну діагностику з Анастасією Сич та отримали безкоштовний урок "Як спалити ЖИР".
+              </>
+            )}
           </p>
         </div>
 
@@ -87,7 +108,9 @@ function ThankYouContent() {
             <span>Перехід до Telegram-бота через {countdown} сек...</span>
           </div>
           <p className="text-[11px] text-slate-500 font-medium">
-            У боті ви отримаєте бонусний урок та зможете обрати зручний час зустрічі.
+            {isMiniCourse
+              ? "У боті ви одразу отримаєте доступ до уроку та інформацію про старт 24.08."
+              : "У боті ви отримаєте бонусний урок та зможете обрати зручний час зустрічі."}
           </p>
         </div>
 

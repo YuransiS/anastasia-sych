@@ -32,6 +32,10 @@
 
 ## 3. Routes & Page Map
 - **`/` (Root Page):** Clean, high-end 404 page ("Ви не туди потрапили") with zero external links.
+- **`/mini-course` (Mini-Course Landing Page):**
+  - High-converting landing page for Anastasia Sych's 6-lesson mini-course «Плаский живіт та струнка талія» (399 UAH instead of 2999 UAH, -87% discount).
+  - Features 12 structured blocks, circular cycle infographics, YouTube-style lesson cards, Anastasia's sports attire imagery, transformation case carousel, FAQ, and free bonus lesson "Як спалити ЖИР".
+  - Integrates contact lead modal with auto-save, phone formatting (`+380`), Telegram validation, and automatic WayForPay payment generation.
 - **`/diagnostic` (Diagnostic Landing Page):**
   - Interactive landing page for Anastasia Sych's 60-minute personal diagnostics (480 UAH instead of 1190 UAH).
   - Dynamic offer support via query parameter `?o=1` (Default), `?o=2`, `?o=3`.

@@ -6,6 +6,9 @@ const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 
 export function getOfferLabel(variant?: string): string {
   const v = String(variant || "1");
+  if (v === "mini-course" || v === "minicourse" || v === "mc") {
+    return "Міні-курс: «Плаский живіт та струнка талія» (399 грн)";
+  }
   if (v === "2") return "Офер #2 (Дивишся в дзеркало і тобі не подобається відображення?)";
   if (v === "3") return "Офер #3 (Марафон закінчився, мотивація зникла, а старі звички повернулися?)";
   return "Офер #1 (Дієта закінчилась - нарешті можна наїстись?)";
@@ -23,7 +26,6 @@ export async function processPaymentStatusUpdate(payload: {
 
   const isApproved = transactionStatus === "Approved";
   const newStatus = isApproved ? "Оплачено" : "Не оплачено";
-  const paidAmount = amount ? Number(amount) : 480;
 
   // 1. Fetch lead from Supabase
   const { data: existingLead, error: selectErr } = await supabaseAdmin
@@ -36,6 +38,8 @@ export async function processPaymentStatusUpdate(payload: {
     console.error("[Payment Handler] Lead not found for orderReference:", orderReference, selectErr);
     return null;
   }
+
+  const paidAmount = amount ? Number(amount) : (existingLead.amount ? Number(existingLead.amount) : 399);
 
   // 2. Update status in Supabase
   const { data: updatedLead, error: updateErr } = await supabaseAdmin
