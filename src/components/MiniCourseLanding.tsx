@@ -405,27 +405,21 @@ export default function MiniCourseLanding() {
             />
           </div>
 
-          {/* LAYER 2: SOLID TEXT (BEHIND HERO.PNG CUTOUT) */}
-          <div className="absolute inset-0 z-10 flex flex-col items-center text-center pt-5 pointer-events-none select-none">
+          {/* LAYER 2: SOLID TEXT (BEHIND HERO.PNG CUTOUT - SMALLER, HIGHER & READABLE) */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center text-center pt-3.5 sm:pt-4 pointer-events-none select-none px-3">
             
             {/* DATE BADGE */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/40 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm mb-1.5">
               <Calendar className="w-3.5 h-3.5" />
               <span>START: 24 AUGUST</span>
             </div>
 
-            {/* SOLID HEADLINES */}
-            <div className="font-outfit uppercase space-y-0 tracking-tight">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
-                ОТРИМАЙ
+            {/* SOLID HEADLINES - CLEAN & HIGH-READABILITY */}
+            <div className="font-outfit uppercase space-y-0.5 tracking-tight w-full max-w-sm">
+              <div className="text-3xl sm:text-4xl font-extrabold text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
               </div>
-              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
-                ПЛАСКИЙ
-              </div>
-              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
-                ЖИВІТ
-              </div>
-              <div className="font-outfit text-3xl sm:text-4xl md:text-5xl font-normal text-[#E11D48] tracking-widest leading-none pt-2 drop-shadow-md">
+              <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#F43F5E] tracking-wider leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 ТА СТРУНКУ ТАЛІЮ
               </div>
             </div>
@@ -449,9 +443,10 @@ export default function MiniCourseLanding() {
           {/* LAYER 4: BOTTOM UI ELEMENTS (IN FRONT OF FOREGROUND CUTOUT) */}
           <div className="relative z-30 flex flex-col items-center text-center space-y-2.5 mt-auto pt-64">
 
-            {/* 6 LESSONS PILL (RIGHT ABOVE PRICE BUTTONS) */}
-            <div className="inline-flex items-center gap-1 text-[11px] text-slate-200 font-bold uppercase tracking-wider bg-black/60 border border-white/20 px-3.5 py-1 rounded-full backdrop-blur-md shadow-sm">
-              6 уроків • теорія + практика
+            {/* 6 LESSONS PILL (BOLD & IN FRONT OF EVERYTHING) */}
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider bg-black/85 border border-white/25 text-white px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-[#F43F5E] animate-pulse" />
+              <span>6 УРОКІВ • ТЕОРІЯ + ПРАКТИКА</span>
             </div>
 
             {/* DUAL PRICING COMPARISON ROW */}
