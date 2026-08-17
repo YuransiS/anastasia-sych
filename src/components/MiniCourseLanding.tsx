@@ -5,31 +5,21 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  CheckCircle2,
-  Sparkles,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ShieldAlert,
   Calendar,
-  Send,
   X,
   Phone,
   User,
   MessageCircle,
-  Award,
   ArrowRight,
-  Check,
   ShieldCheck,
   ZoomIn,
-  RotateCw,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
   Gift,
-  Flame,
-  Clock,
-  HeartPulse,
-  GraduationCap,
-  Shield,
-  Star
+  Star,
+  ShieldAlert,
+  Shield
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -55,7 +45,7 @@ export default function MiniCourseLanding() {
   const utmContent = searchParams.get("utm_content") || "";
   const utmTerm = searchParams.get("utm_term") || "";
 
-  // Modal State
+  // Modal & Lightbox State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCaseImage, setActiveCaseImage] = useState<string | null>(null);
 
@@ -130,15 +120,14 @@ export default function MiniCourseLanding() {
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Carousel ref
+  // Carousel ref for case studies
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scrollCarousel = (direction: "left" | "right") => {
     if (carouselRef.current) {
-      const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 300;
+      const cardWidth = carouselRef.current.firstElementChild?.clientWidth || 280;
       const scrollAmount = direction === "left" ? -cardWidth - 16 : cardWidth + 16;
       carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
@@ -174,7 +163,6 @@ export default function MiniCourseLanding() {
   // Handle modal open
   const handleOpenModal = () => {
     setIsModalOpen(true);
-    setSubmitSuccess(false);
     setErrorMessage("");
     trackPixelEvent("InitiateCheckout", {
       offer_variant: "mini-course",
@@ -280,7 +268,9 @@ export default function MiniCourseLanding() {
         if (data.wayforpayData) {
           submitWayForPayForm(data.wayforpayData);
         } else {
-          setSubmitSuccess(true);
+          setIsSubmitting(false);
+          alert("Дякуємо! Ваша заявка прийнята.");
+          setIsModalOpen(false);
         }
       } else {
         setErrorMessage(data.message || "Помилка при збереженні заявки. Спробуйте ще раз.");
@@ -293,123 +283,94 @@ export default function MiniCourseLanding() {
     }
   };
 
-  // Section: What You Get (Pure Benefit/Outcome list matching lifetime-splits.com .s9 structure)
+  // Section: What You Get (Clean & Short)
   const whatYouGetItems = [
     {
-      num: "01",
-      heading: "Зрозумієте, що реально впливає на живіт і талію",
-      desc: "Без хаотичних порад з TikTok та Instagram. Дізнаєтесь справжні фізіологічні причини відкладення жиру та як їх усунути.",
+      heading: "Справжні причини жирових відкладень",
+      desc: "Дізнаєтесь, що реально впливає на живіт і талію без міфів із соцмереж.",
       icon: "🎯",
     },
     {
-      num: "02",
-      heading: "Розберете систему харчування",
-      desc: "Зрозумієте, що змінити в раціоні, щоб не жити в постійному обмеженні. Складете ситну тарілку без підрахунку калорій.",
+      heading: "Система харчування без заборон",
+      desc: "Як скласти ситний раціон без підрахунку калорій, зважування та голоду.",
       icon: "🥗",
     },
     {
-      num: "03",
-      heading: "Навчитеся тренуватися без виснаження",
-      desc: "Зрозумієте, яке навантаження потрібне для вашої цілі. Без годин кардіо — робота з поставою та глибокими м'язами живота.",
+      heading: "Тренування без виснаження",
+      desc: "Адекватне навантаження для талії, постави та глибоких м'язів живота.",
       icon: "⚡",
     },
     {
-      num: "04",
-      heading: "Побачите, де самі гальмуєте свій результат",
-      desc: "Харчування, режим, тренування, відновлення — побачите всю систему цілком та приберете неочевидні помилки.",
+      heading: "Аудит особистих гальм",
+      desc: "Побачите, чому вага поверталась (сон, стрес, режим, відновлення).",
       icon: "🔍",
     },
     {
-      num: "05",
-      heading: "Отримаєте зрозумілий план дій",
-      desc: "Що робити зараз, щоб почати змінювати тіло без чергового марафону «з понеділка», зривів та повернення ваги.",
+      heading: "Покроковий план на кожен день",
+      desc: "Чіткий алгоритм дій без зривів і чергових починань «з понеділка».",
       icon: "📋",
     },
   ];
 
-  // Section: 4 Steps
-  const steps = [
-    {
-      step: "КРОК 1",
-      title: "Розбираємо основу",
-      desc: "Харчування, активність, режим та звички, які реально впливають на результат.",
-    },
-    {
-      step: "КРОК 2",
-      title: "Прибираємо те, що заважає",
-      desc: "Без списку з 50 заборон, жорстких рамок і сумного життя на одній курячій грудці.",
-    },
-    {
-      step: "КРОК 3",
-      title: "Додаємо те, що працює",
-      desc: "Зрозуміле збалансоване харчування та адекватне фізичне навантаження.",
-    },
-    {
-      step: "КРОК 4",
-      title: "Закріплюємо",
-      desc: "Щоб ви не повернулися до старого режиму та зривів після першого ж тижня.",
-    },
-  ];
-
-  // Real transformation cases
+  // Case Studies
   const realCaseGalleries = [
     {
       id: 1,
       title: "Ярославна, 34 р",
       badge: "Результат за 3 міс",
-      desc: "-12 кг, -5 см в талії, -4 см в стегнах, +об'ємна попа, +рельєфний прес",
+      desc: "-12 кг, -5 см в талії, рельєфний прес",
       image: "/images/cases/case_5.webp",
     },
     {
       id: 2,
       title: "Наталі, 36 р",
       badge: "Результат за 3 міс",
-      desc: "-5 кг, -4 см в талії, -3 см в стегнах, гарний тонус шкіри",
+      desc: "-5 кг, -4 см в талії, підтягнуте тіло",
       image: "/images/cases/case_natali.png",
     },
     {
       id: 3,
-      title: "Ірина, 38 р, 2 дітей",
-      badge: "Результат за 2 місяці",
-      desc: "-4 кг, -10 см в талії, -5 см в стегнах, мінус целюліт",
+      title: "Ірина, 38 р",
+      badge: "Результат за 2 міс",
+      desc: "-4 кг, -10 см в талії, мінус набряки",
       image: "/images/cases/case_irina.jpg",
     },
     {
       id: 4,
       title: "Настя, 28 р",
       badge: "Результат за 3 міс",
-      desc: "-8 кг, -6 см в талії і стегнах, мінус постійний голод",
+      desc: "-8 кг, -6 см в талії, без зривів",
       image: "/images/cases/case_3.webp",
     },
   ];
 
-  // FAQ Items matching .s7 accordion
+  // FAQ Items (Concise)
   const faqItems = [
     {
-      q: "А якщо я ніколи не займалась спортом?",
-      a: "Міні-курс розрахований на звичайний ритм життя та будь-який рівень підготовки, а не на професійних спортсменок. Всі рекомендації та вправи максимально фізіологічні, безпечні та адаптовані під щоденну рутину.",
+      q: "Чи підійде для початківців?",
+      a: "Так. Всі вправи та рекомендації адаптовані для звичайного ритму життя без спортивного минулого.",
     },
     {
       q: "Чи потрібно сидіти на дієті?",
-      a: "Ні. Завдання курсу — показати, як вибудувати смачне та повноцінне харчування без постійних жорстких обмежень, щоб ви могли насолоджуватися їжею та стабільно бачити зменшення талії.",
+      a: "Ні. Курс вчить вибудовувати повноцінне смачне харчування без голодування та підрахунку калорій.",
     },
     {
-      q: "А якщо я вже багато чого пробувала?",
-      a: "Саме тому важливо не починати ще одну дієту чи марафон навмання, а зрозуміти, чому попередні підходи не дали стабільного результату. Ми розберемо справжні фізіологічні та психологічні механізми.",
+      q: "Як довго зберігається доступ?",
+      a: "Доступ назавжди. Всі матеріали залишаються у вашому особистому Telegram-боті.",
     },
     {
-      q: "Чи допоможе, якщо у мене вага постійно повертається назад?",
-      a: "Задача цього курсу — не ввести вас у короткотривалі екстремальні обмеження, а вибудувати зрозумілу систему, яка органічно стане частиною вашого життя на довгі роки.",
+      q: "Як я отримаю доступ після оплати?",
+      a: "Одразу після оплати ви отримаєте посилання на Telegram-бот із усіма уроками та бонусами.",
     },
   ];
 
   return (
     <div className="min-h-screen bg-[#070607] text-[#FFFFFF] font-source selection:bg-[#DB0B3E] selection:text-white pb-28 sm:pb-24 overflow-x-hidden">
 
-      {/* TOP RED ANNOUNCEMENT BANNER */}
-      <div className="bg-gradient-to-r from-[#BA022F] to-[#D00839] text-white py-2 overflow-hidden shadow-lg sticky top-0 z-40 border-b border-[#F01147]/30">
+      {/* TOP RED TICKER BANNER */}
+      <div className="bg-gradient-to-r from-[#BA022F] to-[#D00839] text-white py-1.5 overflow-hidden shadow-lg sticky top-0 z-40 border-b border-[#F01147]/30">
         <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
-          <span>🔥 СТАРТ МІНІ-КУРСУ 24.08</span>
+          <span>🔥 СТАРТ 24.08</span>
           <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
           <span className="text-white/60">✦</span>
@@ -417,7 +378,7 @@ export default function MiniCourseLanding() {
           <span className="text-white/60">✦</span>
           <span>ДОСТУП НАЗАВЖДИ</span>
           <span className="text-white/60">✦</span>
-          <span>🔥 СТАРТ МІНІ-КУРСУ 24.08</span>
+          <span>🔥 СТАРТ 24.08</span>
           <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
           <span className="text-white/60">✦</span>
@@ -425,157 +386,151 @@ export default function MiniCourseLanding() {
       </div>
 
       {/* =========================================================================
-          SECTION 1: HERO (MATCHING LIFETIME-SPLITS.COM .s1 SECTION)
+          HERO SECTION (.s1: PHOTO IN BACKGROUND, HEADINGS & OFFER OVERLAID DIRECTLY ON PHOTO)
           ========================================================================= */}
-      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 max-w-4xl mx-auto flex flex-col items-center text-center">
-
-        {/* AMBIENT GLOW CIRCLE */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[340px] h-[340px] bg-[#3E1322] rounded-full blur-[90px] opacity-75 pointer-events-none -z-0" />
-
-        {/* DATE PILL BADGE */}
-        <div className="relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs sm:text-sm font-semibold tracking-wider uppercase backdrop-blur-md shadow-md mb-4">
-          <Calendar className="w-4 h-4 text-[#EB94A9]" />
-          <span>START: 24 AUGUST</span>
-        </div>
-
-        {/* HUGE CONDENSED HEADLINES */}
-        <div className="relative z-10 space-y-1">
-          <h1 className="font-league text-5xl sm:text-7xl md:text-8xl font-normal text-[#FFF3F6] uppercase tracking-wide leading-[0.95] drop-shadow-md">
-            ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
-          </h1>
-          <div className="font-league text-3xl sm:text-5xl md:text-6xl font-normal text-[#F01147] uppercase tracking-wide leading-tight">
-            ТА СТРУНКУ ТАЛІЮ
-          </div>
-        </div>
-
-        {/* HERO ATHLETIC FIGURE OF ANASTASIA */}
-        <div className="relative z-10 w-full max-w-md my-4 sm:my-6">
-          <div className="relative h-[380px] sm:h-[440px] w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-b from-transparent via-[#140D10]/40 to-[#070607]">
+      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-4 pb-8 sm:py-8 flex flex-col items-center">
+        
+        {/* CONTAINER CARD WITH PHOTO AS HERO BACKGROUND */}
+        <div className="relative w-full rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[640px] sm:min-h-[680px] flex flex-col justify-between p-4 sm:p-5">
+          
+          {/* PHOTO OF ANASTASIA AS HERO CANVAS */}
+          <div className="absolute inset-0 z-0">
             <Image
               src="/images/anastasia_hero_blue.webp"
               alt="Анастасія Сич"
               fill
               priority
-              className="object-cover object-[center_18%] filter brightness-105 contrast-[1.05]"
-              sizes="(max-width: 768px) 100vw, 440px"
+              className="object-cover object-[center_15%] filter brightness-95 contrast-105"
+              sizes="(max-width: 768px) 100vw, 480px"
             />
-            {/* Bottom smooth dark gradient fade */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070607] via-[#070607]/20 to-transparent" />
+            {/* Top dark gradient for heading readability */}
+            <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-black/90 via-black/50 to-transparent" />
+            {/* Bottom heavy dark gradient for offer & CTA overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-black via-black/85 to-transparent" />
+          </div>
 
-            {/* TRAINER BADGE OVERLAY */}
-            <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-white/10 flex items-center justify-between text-left">
-              <div>
-                <div className="text-white font-extrabold text-xs sm:text-sm">Анастасія Сич</div>
-                <div className="text-[11px] text-[#EB94A9] font-medium">8 років досвіду • Вища медична освіта</div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] flex items-center justify-center shrink-0">
-                <Award className="w-4 h-4" />
+          {/* TOP GROUP: DATE BADGE & CONDENSED HEADLINES */}
+          <div className="relative z-10 flex flex-col items-center text-center space-y-2 pt-1">
+            
+            {/* DATE BADGE */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>START: 24 AUGUST</span>
+            </div>
+
+            {/* HEADLINE */}
+            <div className="space-y-0.5">
+              <h1 className="font-league text-5xl sm:text-6xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-lg">
+                ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
+              </h1>
+              <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-md">
+                ТА СТРУНКУ ТАЛІЮ
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* DUAL PRICING COMPARISON ROW (EXACT REFERENCE .s1-pricing-row) */}
-        <div className="relative z-10 w-full max-w-md grid grid-cols-2 gap-2.5 sm:gap-3 my-2">
-          
-          {/* ACTIVE RED BOX (PAY ONCE) */}
-          <div
-            onClick={handleOpenModal}
-            className="cursor-pointer p-4 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-xl border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
-          >
-            <span className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
-              Сплатіть 1 раз
-            </span>
-            <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1">
-              399 грн
-            </span>
+            <div className="text-[11px] text-slate-300 font-bold uppercase tracking-wider bg-black/40 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+              6 уроків • теорія + практика
+            </div>
           </div>
 
-          {/* GRAY BOX (DON'T PAY REGULAR) */}
-          <div
-            onClick={handleOpenModal}
-            className="cursor-pointer p-4 rounded-2xl bg-white/[0.08] text-slate-400 flex flex-col justify-center items-center border border-white/10 hover:scale-[1.02] transition-transform"
-          >
-            <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wide">
-              Звичайна ціна
-            </span>
-            <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1 line-through decoration-slate-500 decoration-2 text-slate-400">
-              2999 грн
-            </span>
+          {/* BOTTOM GROUP OVERLAID DIRECTLY ON PHOTO: OFFER, PRICING & CTA */}
+          <div className="relative z-10 flex flex-col items-center text-center space-y-3 pt-24">
+
+            {/* DUAL PRICING COMPARISON ROW */}
+            <div className="w-full grid grid-cols-2 gap-2">
+              
+              {/* ACTIVE RED BOX */}
+              <div
+                onClick={handleOpenModal}
+                className="cursor-pointer p-3 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+              >
+                <span className="text-[11px] font-bold text-white/90 uppercase tracking-wide">
+                  Сплатіть 1 раз
+                </span>
+                <span className="font-league text-4xl font-normal leading-none mt-0.5">
+                  399 грн
+                </span>
+              </div>
+
+              {/* STRIKETHROUGH REGULAR PRICE BOX */}
+              <div
+                onClick={handleOpenModal}
+                className="cursor-pointer p-3 rounded-2xl bg-white/10 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
+              >
+                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
+                  Звичайна ціна
+                </span>
+                <span className="font-league text-4xl font-normal leading-none mt-0.5 line-through decoration-slate-400 text-slate-400">
+                  2999 грн
+                </span>
+              </div>
+
+            </div>
+
+            {/* PUNCHY OFFER SUMMARY */}
+            <div className="text-xs text-[#EB94A9] font-bold leading-tight drop-shadow">
+              <span className="text-white">Перший результат за 7 днів</span> • Без дієт та виснаження
+            </div>
+
+            {/* BIG HIGH-IMPACT RED CTA BUTTON */}
+            <motion.button
+              whileTap={{ scale: 0.98 }}
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+              onClick={handleOpenModal}
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
+            >
+              <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
+              <ArrowRight className="w-5 h-5 text-white shrink-0" />
+            </motion.button>
+
+            {/* TRUST BADGE ROW */}
+            <div className="flex items-center justify-center gap-3 text-[11px] font-semibold text-white/80 pt-1">
+              <span className="flex items-center gap-1">
+                <Star className="w-3 h-3 fill-[#F01147] text-[#F01147]" /> 4.9/5
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" /> Доступ назавжди
+              </span>
+              <span className="text-white/30">•</span>
+              <span className="flex items-center gap-1">
+                <Gift className="w-3 h-3 text-[#F01147]" /> + Подарунок
+              </span>
+            </div>
+
           </div>
 
-        </div>
-
-        {/* VALUE SUMMARY COPY */}
-        <p className="relative z-10 text-xs sm:text-sm text-[#EB94A9] font-semibold max-w-md my-3 leading-relaxed">
-          <span className="text-white font-bold">Міні-курс для жінок</span>, які хочуть змінити своє тіло без постійних дієт, зривів та виснаження.
-        </p>
-
-        {/* BIG HIGH-IMPACT RED CTA BUTTON (.s1-cta-btn) */}
-        <div className="relative z-10 w-full max-w-md pt-1">
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            animate={{ scale: [1, 1.02, 1] }}
-            transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-            onClick={handleOpenModal}
-            className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl sm:text-3xl tracking-wider uppercase shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
-          >
-            <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
-            <ArrowRight className="w-6 h-6 text-white shrink-0" />
-          </motion.button>
-        </div>
-
-        {/* TRUST BADGE ROW */}
-        <div className="relative z-10 flex items-center justify-center gap-4 text-xs font-semibold text-white/80 pt-4">
-          <span className="flex items-center gap-1">
-            <Star className="w-3.5 h-3.5 fill-[#F01147] text-[#F01147]" /> 4.9/5 рейтинг
-          </span>
-          <span className="text-white/30">•</span>
-          <span className="flex items-center gap-1">
-            <ShieldCheck className="w-4 h-4 text-[#059669]" /> Доступ назавжди
-          </span>
-          <span className="text-white/30">•</span>
-          <span className="flex items-center gap-1">
-            <Gift className="w-3.5 h-3.5 text-[#F01147]" /> + Бонусний урок
-          </span>
         </div>
 
       </section>
 
       {/* =========================================================================
-          SECTION 2: WHAT YOU GET AFTER PAYMENT (MATCHING .s9 SECTION)
+          SECTION 2: WHAT YOU GET (.s9: CLEAN & CRISP)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
 
-        {/* SECTION HEADER */}
         <div className="text-center space-y-1">
-          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
+          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none">
             <span className="text-[#F01147]">ЩО ВИ ОТРИМАЄТЕ</span>{" "}
             <span className="text-white">ПІСЛЯ ОПЛАТИ</span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 font-semibold">
-            Повна покрокова система для гарантованого результату:
-          </p>
         </div>
 
-        {/* LIST OF OUTCOMES (.s9-list style) */}
-        <div className="space-y-3.5 max-w-3xl mx-auto">
+        <div className="space-y-2.5">
           {whatYouGetItems.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 sm:p-5 rounded-2xl bg-[#120E10] border border-white/10 flex items-start gap-4 hover:border-[#F01147]/50 transition-colors shadow-lg"
+              className="p-3.5 rounded-2xl bg-[#120E10] border border-white/10 flex items-center gap-3.5 shadow-md"
             >
-              {/* CRIMSON ICON WRAPPER */}
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F01147]/20 to-[#B0002B]/30 border border-[#F01147]/40 flex items-center justify-center text-xl shrink-0 mt-0.5 shadow-sm">
-                <span>{item.icon}</span>
+              <div className="w-10 h-10 rounded-xl bg-[#F01147]/20 border border-[#F01147]/40 flex items-center justify-center text-lg shrink-0">
+                {item.icon}
               </div>
-
-              {/* ITEM TEXT */}
-              <div className="space-y-1">
-                <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+              <div className="space-y-0.5">
+                <h3 className="text-sm font-bold text-white leading-snug">
                   {item.heading}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">
+                <p className="text-xs text-slate-400 font-medium leading-tight">
                   {item.desc}
                 </p>
               </div>
@@ -586,89 +541,76 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 3: EVERYTHING YOU GET TODAY + EXTRAS (.s25 SECTION STYLE)
+          SECTION 3: EVERYTHING YOU GET TODAY + BONUS (.s25)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
 
-        <div className="text-center space-y-3">
-          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide leading-none">
-            ВСЕ, ЩО ВИ ОТРИМУЄТЕ<br />
-            <span className="text-[#F01147]">СЬОГОДНІ</span>
+        <div className="text-center space-y-2">
+          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none">
+            ВСЕ, ЩО ВИ ОТРИМУЄТЕ <span className="text-[#F01147]">СЬОГОДНІ</span>
           </h2>
 
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/50 text-white text-xs sm:text-sm font-bold shadow-md">
-            <Gift className="w-4 h-4 text-white" />
-            <span>Тільки сьогодні додаємо безкоштовний бонус</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/50 text-white text-xs font-bold shadow-md">
+            <Gift className="w-3.5 h-3.5 text-white" />
+            <span>Безкоштовний бонус до замовлення</span>
           </div>
-
-          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
-            Замість купівлі окремо пізніше, ви отримуєте цей урок <strong>БЕЗКОШТОВНО</strong> при замовленні <strong>МІНІ-КУРСУ СЬОГОДНІ</strong>
-          </p>
         </div>
 
-        {/* 3 EXTRA CARDS (.s25-card style) */}
-        <div className="space-y-4 max-w-3xl mx-auto">
+        {/* 3 CRISP CARDS */}
+        <div className="space-y-2.5">
           
-          {/* CARD 1: BONUS LESSON */}
-          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1A0E13] via-[#120E10] to-[#0A0708] border border-[#F01147]/40 shadow-xl space-y-3 relative overflow-hidden">
-            <div className="inline-block px-3 py-1 rounded-full bg-[#F01147]/20 border border-[#F01147]/50 text-[#EB94A9] text-xs font-bold uppercase tracking-wider">
-              🎁 Подарунок до замовлення
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1A0E13] to-[#120E10] border border-[#F01147]/40 shadow-lg space-y-1">
+            <div className="text-[10px] text-[#EB94A9] font-bold uppercase tracking-wider">
+              🎁 БОНУСНИЙ УРОК
             </div>
-            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
-              БОНУСНИЙ УРОК «ЯК СПАЛИТИ ЖИР»
+            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
+              «ЯК СПАЛИТИ ЖИР»
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
-              5 правил здорового схуднення, режим навантажень та харчування, щоб позбутися саме жирової тканини, а не втрачати м'язи.
+            <p className="text-xs text-slate-300 font-medium">
+              5 правил здорового схуднення, щоб прибрати жир, а не м'язи.
             </p>
           </div>
 
-          {/* CARD 2: PLATE CONSTRUCTOR */}
-          <div className="p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-3">
-            <div className="inline-block px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold uppercase tracking-wider">
-              🥗 Практичний інструмент
+          <div className="p-4 rounded-2xl bg-[#120E10] border border-white/10 shadow-md space-y-1">
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+              🥗 ПРАКТИЧНИЙ ШАБЛОН
             </div>
-            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
-              КОНСТРУКТОР ЗБАЛАНСОВАНОЇ ТАРІЛКИ
+            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
+              КОНСТРУКТОР ТАРІЛКИ
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
-              Зрозуміла схема щоденного раціону без необхідності зважувати їжу чи рахувати кожну калорію.
+            <p className="text-xs text-slate-400 font-medium">
+              Ситний раціон без зважування їжі та підрахунку калорій.
             </p>
           </div>
 
-          {/* CARD 3: TELEGRAM BOT */}
-          <div className="p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-3">
-            <div className="inline-block px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold uppercase tracking-wider">
-              📱 Зручний доступ
+          <div className="p-4 rounded-2xl bg-[#120E10] border border-white/10 shadow-md space-y-1">
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+              📱 ЗРУЧНИЙ ФОРМАТ
             </div>
-            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
-              TELEGRAM-БОТ З МИТТЄВИМ ДОСТУПОМ
+            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
+              TELEGRAM-БОТ
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
-              Всі 6 уроків та бонусний матеріал завжди під рукою у вашому месенджері назавжди.
+            <p className="text-xs text-slate-400 font-medium">
+              Миттєвий доступ до всіх 6 уроків з будь-якого пристрою назавжди.
             </p>
           </div>
 
         </div>
 
-        {/* TOTAL SUMMARY BOX (.s25-total-box) */}
+        {/* TOTAL SUMMARY BOX */}
         <div
           onClick={handleOpenModal}
-          className="cursor-pointer max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/60 shadow-2xl flex flex-col items-center text-center gap-4 hover:brightness-105 transition-all"
+          className="cursor-pointer p-5 rounded-3xl bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/60 shadow-xl flex flex-col items-center text-center gap-3 hover:brightness-105 transition-all"
         >
-          <h3 className="font-league text-2xl sm:text-4xl text-white uppercase tracking-wide leading-tight">
-            6 УРОКІВ ТА БОНУСНИЙ МАТЕРІАЛ.<br />
-            ОДИН ПЛАТІЖ. ДОСТУП НАЗАВЖДИ.
+          <h3 className="font-league text-2xl text-white uppercase tracking-wide leading-tight">
+            6 УРОКІВ + БОНУСИ. ОДИН ПЛАТІЖ. ДОСТУП НАЗАВЖДИ.
           </h3>
-          <p className="text-xs sm:text-sm text-white/90 font-medium">
-            Без щомісячних підписок. Без прихованих платежів. Без дедлайнів.
-          </p>
 
-          {/* WHITE PRICE PILL (.s25-price-pill) */}
-          <div className="w-full max-w-md bg-white rounded-full py-3 px-6 sm:px-8 flex items-center justify-between shadow-xl">
-            <div className="text-left text-[#730924] font-bold text-xs sm:text-sm uppercase leading-tight font-source">
+          <div className="w-full bg-white rounded-full py-2.5 px-6 flex items-center justify-between shadow-lg">
+            <div className="text-left text-[#730924] font-bold text-xs uppercase leading-tight font-source">
               Отримати все<br />сьогодні за
             </div>
-            <div className="font-league text-4xl sm:text-5xl font-normal text-[#730924] leading-none">
+            <div className="font-league text-4xl font-normal text-[#730924] leading-none">
               399 грн
             </div>
           </div>
@@ -677,220 +619,48 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 4: GUARANTEE (.s3 SECTION STYLE)
+          SECTION 4: GUARANTEE (.s3)
           ========================================================================= */}
-      <section className="py-10 px-4 sm:px-6 max-w-3xl mx-auto">
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#120E10] border border-[#EB94A9]/30 shadow-xl flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F01147]/20 to-[#B0002B]/30 border border-[#F01147]/40 flex items-center justify-center shrink-0">
-            <Shield className="w-8 h-8 text-[#EB94A9]" />
+      <section className="py-6 px-4 max-w-[480px] mx-auto">
+        <div className="p-4 rounded-2xl bg-[#120E10] border border-[#EB94A9]/30 shadow-lg flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-[#F01147]/20 border border-[#F01147]/40 flex items-center justify-center shrink-0">
+            <Shield className="w-6 h-6 text-[#EB94A9]" />
           </div>
-          <div className="space-y-1">
-            <div className="font-league text-2xl text-white uppercase tracking-wide">
-              100% ПЕРЕВІРЕНА СИСТЕМА
+          <div className="space-y-0.5">
+            <div className="font-league text-xl text-white uppercase tracking-wide">
+              100% МЕДИЧНИЙ ПІДХІД
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
-              Програма базується на медичному підході до здоров'я та фізіології жіночого тіла від дипломованого фахівця з 8-річним практичним досвідом.
+            <p className="text-xs text-slate-300 font-medium leading-tight">
+              Система від фітнес-тренерки з вищою медичною освітою та 8 роками досвіду.
             </p>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 5: PAIN POINTS & VICIOUS CYCLE (.s2 / .s5 STYLE)
+          SECTION 5: CLIENT TRANSFORMATIONS (.s6)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
-
-        <div className="text-center space-y-2">
-          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
-            ЧОМУ ДІЄТИ <span className="text-[#F01147]">НЕ ПРАЦЮЮТЬ?</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 font-semibold max-w-xl mx-auto">
-            Ви наче все робите правильно, але живіт і талія не змінюються?
-          </p>
-        </div>
-
-        {/* PREVIOUS FAILED ATTEMPTS */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
-          {[
-            "менше їсти",
-            "прибирати солодке",
-            "сідати на дієту",
-            "більше тренуватися",
-            "починати «з понеділка»",
-            "триматися і зриватися",
-          ].map((attempt, idx) => (
-            <div
-              key={idx}
-              className="p-3.5 rounded-2xl bg-[#120E10] border border-white/10 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-300"
-            >
-              <div className="w-5 h-5 rounded-full bg-rose-900/50 text-rose-400 flex items-center justify-center text-[10px] shrink-0 font-bold">
-                ✕
-              </div>
-              <span>{attempt}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* CIRCULAR INFOGRAPHIC CYCLE */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#0D0B0C] border border-[#F01147]/30 shadow-xl space-y-5 max-w-3xl mx-auto">
-          <div className="text-center space-y-1">
-            <span className="text-[#F01147] font-bold text-xs uppercase tracking-widest">
-              Замкнене коло
-            </span>
-            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase">
-              Кругообіг, який виснажує організм:
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5 items-center">
-            {[
-              { step: "1", title: "ОБМЕЖЕННЯ", desc: "Суворий дефіцит" },
-              { step: "2", title: "ГОЛОД", desc: "Організм вимагає сил" },
-              { step: "3", title: "ПЕРЕЇДАННЯ", desc: "Втрата контролю" },
-              { step: "4", title: "ЗРИВ", desc: "Почуття провини" },
-              { step: "5", title: "СПОЧАТКУ", desc: "Спроба з понеділка" },
-            ].map((item, idx, arr) => (
-              <React.Fragment key={idx}>
-                <div className="p-3.5 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 text-center space-y-0.5">
-                  <div className="text-[10px] text-[#EB94A9] font-bold uppercase">0{item.step}</div>
-                  <div className="font-league text-lg text-white tracking-wide">{item.title}</div>
-                  <div className="text-[10px] text-slate-400">{item.desc}</div>
-                </div>
-                {idx < arr.length - 1 && (
-                  <div className="hidden sm:flex justify-center text-[#F01147]">
-                    <ArrowRight className="w-4 h-4 animate-pulse" />
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-white/[0.04] border border-white/10 text-center text-xs text-slate-300 font-medium flex items-center justify-center gap-2">
-            <RotateCw className="w-4 h-4 text-[#F01147] animate-spin-slow shrink-0" />
-            <span>Проблема не в силі волі — проблема у невідповідному підході.</span>
-          </div>
-        </div>
-
-      </section>
-
-      {/* =========================================================================
-          SECTION 6: 4 STEPS TO SUSTAINABLE RESULTS (.st7 STYLE)
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
-
-        <div className="text-center space-y-1">
-          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
-            4 КРОКИ ДО <span className="text-[#F01147]">РЕЗУЛЬТАТУ</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 font-semibold">
-            Покроковий план трансформації без крайнощів:
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
-          {steps.map((st, idx) => (
-            <div
-              key={idx}
-              className="p-5 sm:p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-2 hover:border-[#F01147]/50 transition-colors"
-            >
-              <span className="inline-block px-3 py-0.5 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#EB94A9] text-xs font-bold uppercase">
-                {st.step}
-              </span>
-              <h3 className="font-league text-2xl text-white uppercase tracking-wide">
-                {st.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
-                {st.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-
-      </section>
-
-      {/* =========================================================================
-          SECTION 7: ABOUT ANASTASIA SYCH
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10" id="about">
-
-        <div className="text-center space-y-1">
-          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
-            ПРО АВТОРА <span className="text-[#F01147]">КУРСУ</span>
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-3xl mx-auto">
-          
-          <div className="md:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-xs h-[360px] rounded-3xl overflow-hidden border border-white/10 shadow-xl bg-slate-900">
-              <Image
-                src="/images/anastasia_portrait_black.webp"
-                alt="Анастасія Сич"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 320px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
-                <div className="text-white font-bold text-xs">Анастасія Сич</div>
-                <div className="text-[10px] text-[#EB94A9]">8 років досвіду • Медична освіта</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:col-span-7 space-y-4 text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
-            <h3 className="font-league text-3xl text-white uppercase tracking-wide leading-tight">
-              Я — Анастасія, фітнес-тренерка з вищою медичною освітою
-            </h3>
-
-            <p>
-              Я працюю з жінками не тільки над тілом, а й над тим, щоб харчування та тренування стали частиною нормального комфортного життя.
-            </p>
-
-            <p>
-              Без жорстких заборон, постійних дієт та виснажливого підходу «терпіть ще трохи».
-            </p>
-
-            <div className="p-4 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 space-y-1">
-              <p className="font-bold text-white text-xs sm:text-sm">
-                Моя задача — допомогти вам зрозуміти систему, яка залишиться з вами назавжди.
-              </p>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
-
-      {/* =========================================================================
-          SECTION 8: CLIENT TRANSFORMATION WINS (.s6 STYLE)
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10" id="cases">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10" id="cases">
 
         <div className="flex items-center justify-between">
-          <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[#EB94A9] text-xs font-bold uppercase tracking-wider mb-2">
-              Before / After
-            </div>
-            <h2 className="font-league text-4xl sm:text-6xl font-normal text-white uppercase tracking-wide">
-              РЕЗУЛЬТАТИ <span className="text-[#F01147]">КЛІЄНТОК</span>
-            </h2>
-          </div>
+          <h2 className="font-league text-3xl font-normal text-white uppercase tracking-wide">
+            РЕЗУЛЬТАТИ <span className="text-[#F01147]">КЛІЄНТОК</span>
+          </h2>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => scrollCarousel("left")}
-              className="p-3 rounded-full bg-[#120E10] hover:bg-[#F01147]/20 text-white transition-colors border border-white/10"
-              aria-label="Попередній кейс"
+              className="p-2 rounded-full bg-[#120E10] text-white border border-white/10"
+              aria-label="Попередній"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scrollCarousel("right")}
-              className="p-3 rounded-full bg-[#120E10] hover:bg-[#F01147]/20 text-white transition-colors border border-white/10"
-              aria-label="Наступний кейс"
+              className="p-2 rounded-full bg-[#120E10] text-white border border-white/10"
+              aria-label="Наступний"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -898,34 +668,34 @@ export default function MiniCourseLanding() {
         {/* SWIPER CAROUSEL */}
         <div
           ref={carouselRef}
-          className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex items-stretch gap-3 overflow-x-auto snap-x snap-mandatory py-1 pb-3 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
         >
           {realCaseGalleries.map((cs) => (
             <div
               key={cs.id}
               onClick={() => setActiveCaseImage(cs.image)}
-              className="min-w-[260px] sm:min-w-[300px] max-w-[320px] snap-start rounded-3xl bg-[#120E10] border border-white/10 overflow-hidden shadow-xl hover:border-[#F01147]/50 transition-all cursor-pointer flex flex-col justify-between group"
+              className="min-w-[220px] max-w-[240px] snap-start rounded-2xl bg-[#120E10] border border-white/10 overflow-hidden shadow-lg hover:border-[#F01147]/50 transition-all cursor-pointer flex flex-col justify-between group"
             >
-              <div className="relative h-64 w-full bg-black overflow-hidden">
+              <div className="relative h-48 w-full bg-black overflow-hidden">
                 <Image
                   src={cs.image}
                   alt={cs.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 80vw, 300px"
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="240px"
                 />
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#F01147] text-white text-[11px] font-bold uppercase shadow-md">
+                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#F01147] text-white text-[10px] font-bold uppercase">
                   {cs.badge}
                 </div>
-                <div className="absolute bottom-3 right-3 p-2 rounded-full bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ZoomIn className="w-4 h-4 text-[#EB94A9]" />
+                <div className="absolute bottom-2 right-2 p-1.5 rounded-full bg-black/80 text-white">
+                  <ZoomIn className="w-3.5 h-3.5 text-[#EB94A9]" />
                 </div>
               </div>
 
-              <div className="p-4 space-y-1">
-                <div className="font-bold text-white text-sm">{cs.title}</div>
-                <p className="text-xs text-slate-400 font-medium leading-relaxed">
+              <div className="p-3 space-y-0.5">
+                <div className="font-bold text-white text-xs">{cs.title}</div>
+                <p className="text-[11px] text-slate-400 font-medium leading-tight">
                   {cs.desc}
                 </p>
               </div>
@@ -936,36 +706,36 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 9: FAQ ACCORDION (MATCHING .s7 FAQ SECTION)
+          SECTION 6: FAQ ACCORDION (.s7)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-3xl mx-auto space-y-8 border-t border-white/10" id="faq">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10" id="faq">
 
-        <div className="text-center space-y-1">
-          <h2 className="font-league text-5xl sm:text-7xl font-normal text-white uppercase tracking-wide">
+        <div className="text-center">
+          <h2 className="font-league text-4xl font-normal text-white uppercase tracking-wide">
             FAQ
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {faqItems.map((item, idx) => {
             const isOpen = openFaqIndex === idx;
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-white/10 bg-[#120E10] overflow-hidden shadow-md transition-all"
+                className="rounded-2xl border border-white/10 bg-[#120E10] overflow-hidden shadow-md"
               >
                 <button
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 font-bold text-sm sm:text-base text-white hover:text-[#EB94A9] transition-colors"
+                  className="w-full p-3.5 text-left flex items-center justify-between gap-3 font-bold text-xs sm:text-sm text-white"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] font-bold text-xs flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] font-bold text-[10px] flex items-center justify-center shrink-0">
                       Q
                     </span>
                     <span>{item.q}</span>
                   </div>
                   <ChevronDown
-                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 shrink-0 ${
+                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
                       isOpen ? "rotate-180 text-[#F01147]" : ""
                     }`}
                   />
@@ -977,21 +747,11 @@ export default function MiniCourseLanding() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.15 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 pt-1 border-t border-white/5">
-                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs sm:text-sm text-slate-300 leading-relaxed">
-                          <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-[#F01147]/40">
-                            <Image
-                              src="/images/anastasia_hero_blue.webp"
-                              alt="Анастасія"
-                              fill
-                              className="object-cover object-top"
-                            />
-                          </div>
-                          <div className="flex-1">{item.a}</div>
-                        </div>
+                      <div className="px-3.5 pb-3.5 pt-1 text-xs text-slate-300 font-medium leading-relaxed border-t border-white/5">
+                        {item.a}
                       </div>
                     </motion.div>
                   )}
@@ -1004,41 +764,33 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 10: FINAL SUMMARY CTA
+          SECTION 7: FINAL CTA
           ========================================================================= */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 max-w-3xl mx-auto text-center space-y-6 border-t border-white/10">
+      <section className="py-8 px-4 max-w-[480px] mx-auto text-center space-y-4 border-t border-white/10">
 
-        <h2 className="font-league text-5xl sm:text-7xl font-normal text-white uppercase tracking-wide leading-none">
+        <h2 className="font-league text-4xl sm:text-5xl font-normal text-white uppercase tracking-wide leading-none">
           ОТРИМАЙ ПЛАСКИЙ ЖИВІТ<br />
           <span className="text-[#F01147]">ТА СТРУНКУ ТАЛІЮ</span>
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto font-medium leading-relaxed">
-          Перший результат вже за 7 днів, без виснажливих тренувань та обмежень в їжі, за перевіреною системою від фітнес-тренерки.
-        </p>
-
-        <div className="flex items-center justify-center gap-3 font-league text-4xl sm:text-5xl text-[#F01147] pt-2">
+        <div className="flex items-center justify-center gap-3 font-league text-4xl text-[#F01147]">
           <span>399 грн</span>
-          <span className="text-2xl sm:text-3xl line-through text-slate-500 font-normal">2999 грн</span>
+          <span className="text-2xl line-through text-slate-500 font-normal">2999 грн</span>
         </div>
 
-        <div className="pt-2 max-w-md mx-auto">
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            animate={{ scale: [1, 1.02, 1] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            onClick={handleOpenModal}
-            className="w-full py-4 px-8 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl sm:text-3xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 cursor-pointer flex items-center justify-center gap-2 hover:brightness-110"
-          >
-            <span>ОТРИМАТИ МІНІ-КУРС</span>
-            <ArrowRight className="w-6 h-6 text-white" />
-          </motion.button>
-        </div>
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={handleOpenModal}
+          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 cursor-pointer flex items-center justify-center gap-2 hover:brightness-110"
+        >
+          <span>ОТРИМАТИ МІНІ-КУРС</span>
+          <ArrowRight className="w-5 h-5 text-white" />
+        </motion.button>
 
       </section>
 
       {/* =========================================================================
-          STICKY FLOATING FOOTER BAR (.footer-bg STYLE WITH LIVE COUNTDOWN TIMER)
+          STICKY FLOATING FOOTER BAR
           ========================================================================= */}
       <AnimatePresence>
         {showStickyUI && (
@@ -1046,33 +798,23 @@ export default function MiniCourseLanding() {
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 60 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C090A]/95 backdrop-blur-xl border-t border-[#F01147]/40 p-3 sm:p-4 shadow-2xl"
+            className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C090A]/95 backdrop-blur-xl border-t border-[#F01147]/40 p-3 shadow-2xl"
           >
-            <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+            <div className="max-w-[480px] mx-auto flex items-center justify-between gap-2.5">
               
-              {/* LEFT INFO + COUNTDOWN TIMER */}
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:block text-left">
-                  <div className="font-league text-lg text-white uppercase leading-none">
-                    Купуйте сьогодні та забирайте подарунок
-                  </div>
-                  <div className="text-[11px] text-[#EB94A9]">Міні-курс за 399 грн</div>
-                </div>
-
-                {/* COUNTDOWN DIGITS */}
-                <div className="flex items-center gap-1 font-league text-lg sm:text-xl text-white">
-                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.hours}</div>
-                  <span>:</span>
-                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.minutes}</div>
-                  <span>:</span>
-                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.seconds}</div>
-                </div>
+              {/* TIMER */}
+              <div className="flex items-center gap-1 font-league text-lg text-white">
+                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.hours}</div>
+                <span>:</span>
+                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.minutes}</div>
+                <span>:</span>
+                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.seconds}</div>
               </div>
 
               {/* CTA BUTTON */}
               <button
                 onClick={handleOpenModal}
-                className="py-3 px-5 sm:px-8 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl sm:text-2xl uppercase tracking-wider shadow-lg hover:brightness-110 cursor-pointer whitespace-nowrap border border-[#F01147]/60"
+                className="py-2.5 px-5 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg hover:brightness-110 cursor-pointer whitespace-nowrap border border-[#F01147]/60"
               >
                 ОТРИМАТИ – 399 грн
               </button>
@@ -1087,7 +829,6 @@ export default function MiniCourseLanding() {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* BACKDROP */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -1096,54 +837,48 @@ export default function MiniCourseLanding() {
               className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
 
-            {/* MODAL CONTENT */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg rounded-3xl bg-[#120E10] border border-[#F01147]/50 shadow-2xl p-6 sm:p-8 space-y-5 overflow-hidden z-10 max-h-[92vh] overflow-y-auto"
+              className="relative w-full max-w-md rounded-3xl bg-[#120E10] border border-[#F01147]/50 shadow-2xl p-5 sm:p-6 space-y-4 overflow-hidden z-10 max-h-[92vh] overflow-y-auto"
             >
               <button
                 onClick={() => !isSubmitting && setIsModalOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-white bg-white/10 hover:bg-white/20 transition-colors"
+                className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-white bg-white/10"
                 aria-label="Закрити"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F01147]/20 text-[#EB94A9] text-xs font-bold border border-[#F01147]/40">
-                  <Calendar className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F01147]/20 text-[#EB94A9] text-xs font-bold border border-[#F01147]/40">
+                  <Calendar className="w-3 h-3" />
                   <span>Старт 24.08 • Доступ назавжди</span>
                 </div>
-                <h3 className="font-league text-3xl sm:text-4xl text-white uppercase leading-none pt-1">
+                <h3 className="font-league text-3xl text-white uppercase leading-none pt-1">
                   Отримати міні-курс
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                  Заповніть форму для переходу до захищеної оплати через WayForPay.
-                </p>
               </div>
 
-              {/* PRICE HIGHLIGHT IN MODAL */}
-              <div className="p-4 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 flex items-center justify-between text-xs font-bold text-slate-200">
+              <div className="p-3 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 flex items-center justify-between text-xs font-bold text-slate-200">
                 <span>Вартість зі знижкою -87%:</span>
                 <div className="flex items-center gap-2">
-                  <span className="line-through text-slate-500 font-league text-lg">2999 грн</span>
+                  <span className="line-through text-slate-500 font-league text-base">2999 грн</span>
                   <span className="font-league text-3xl text-[#F01147]">399 грн</span>
                 </div>
               </div>
 
               {errorMessage && (
-                <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-600 text-rose-300 text-xs font-bold flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-600 text-rose-300 text-xs font-bold flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* NAME INPUT */}
+              <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
                     <User className="w-3.5 h-3.5 text-[#EB94A9]" />
                     <span>Ваше ім'я:</span>
                   </label>
@@ -1153,13 +888,12 @@ export default function MiniCourseLanding() {
                     placeholder="Олена"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium"
                   />
                 </div>
 
-                {/* PHONE INPUT */}
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
                     <Phone className="w-3.5 h-3.5 text-[#EB94A9]" />
                     <span>Номер телефону (Viber / Telegram):</span>
                   </label>
@@ -1169,14 +903,13 @@ export default function MiniCourseLanding() {
                     placeholder="+380"
                     value={formData.phone}
                     onChange={handlePhoneChange}
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium font-mono"
                   />
                 </div>
 
-                {/* TELEGRAM INPUT */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
                       <MessageCircle className="w-3.5 h-3.5 text-[#EB94A9]" />
                       <span>Ваш Telegram:</span>
                     </label>
@@ -1194,18 +927,17 @@ export default function MiniCourseLanding() {
                     placeholder="@username або посилання"
                     value={formData.telegram}
                     onChange={(e) => handleInputChange("telegram", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium"
                   />
                 </div>
 
-                {/* SUBMIT BUTTON */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-xl border border-[#F01147]/50 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all hover:brightness-110"
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-xl border border-[#F01147]/50 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all hover:brightness-110"
                 >
                   {isSubmitting ? (
-                    <span>Перенаправлення на оплату...</span>
+                    <span>Перенаправлення...</span>
                   ) : (
                     <>
                       <span>Перейти до оплати 399 грн</span>
@@ -1213,36 +945,30 @@ export default function MiniCourseLanding() {
                     </>
                   )}
                 </button>
-
-                <p className="text-[11px] text-slate-500 text-center font-medium">
-                  Безпечна оплата через WayForPay (Apple Pay, Google Pay, картка).
-                </p>
               </form>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
 
-      {/* =========================================================================
-          CASE PHOTO LIGHTBOX
-          ========================================================================= */}
+      {/* LIGHTBOX MODAL */}
       <AnimatePresence>
         {activeCaseImage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
             <button
               onClick={() => setActiveCaseImage(null)}
-              className="absolute top-4 right-4 p-3 rounded-full text-white bg-white/10 hover:bg-white/20 transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full text-white bg-white/10"
               aria-label="Закрити фото"
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="relative max-w-2xl w-full h-[80vh] rounded-2xl overflow-hidden">
+            <div className="relative max-w-xl w-full h-[70vh] rounded-2xl overflow-hidden">
               <Image
                 src={activeCaseImage}
                 alt="Результат клієнтки"
                 fill
                 className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 800px"
+                sizes="(max-width: 1024px) 100vw, 600px"
               />
             </div>
           </div>
