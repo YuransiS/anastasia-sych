@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { syncWayForPayTransactions } from "@/lib/wayforpay-sync";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
@@ -170,6 +171,11 @@ export async function GET(request: NextRequest) {
     const manualWeekly = request.nextUrl.searchParams.get("isWeekly") === "true";
 
     if (manualStart && manualEnd) {
+      await syncWayForPayTransactions({
+        startDate: manualStart,
+        endDate: manualEnd,
+      });
+
       const startLocalStr = `${manualStart}T00:00:00+03:00`;
       const endLocalStr = `${manualEnd}T23:59:59.999+03:00`;
       const label = `${manualStart} - ${manualEnd}`;
@@ -186,6 +192,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Automated daily trigger (UTC+3)
+    await syncWayForPayTransactions({ daysBack: 3 });
     const dailyRange = getTimeRangeForOffsetDays(-1, -1);
     const dailyText = await generateReportText(dailyRange.start, dailyRange.end, dailyRange.label, false);
     const dailySent = await sendTelegramMessage(dailyText);

@@ -1,0 +1,205 @@
+const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
+const { createClient } = require("@supabase/supabase-js");
+
+// Parse .env.local file to retrieve configuration
+function loadEnv() {
+  const envPath = path.resolve(process.cwd(), ".env.local");
+  if (!fs.existsSync(envPath)) return;
+  const envContent = fs.readFileSync(envPath, "utf8");
+  envContent.split("\n").forEach((line) => {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    if (match) {
+      const key = match[1];
+      let value = match[2] || "";
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.substring(1, value.length - 1);
+      } else if (value.startsWith("'") && value.endsWith("'")) {
+        value = value.substring(1, value.length - 1);
+      }
+      process.env[key] = value;
+    }
+  });
+}
+
+loadEnv();
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const merchantAccount = process.env.WAYFORPAY_MERCHANT_ACCOUNT || "freelance_user_68f25563083b8";
+const secretKey = process.env.WAYFORPAY_SECRET_KEY || "ba0f0779bda0299f07c5b7df630c95786ac06398";
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error("Missing Supabase credentials in .env.local");
+  process.exit(1);
+}
+
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: { persistSession: false, autoRefreshToken: false }
+});
+
+// Sync from the inception of the project (July 1st, 2026) to now
+const startTs = Math.floor(new Date("2026-07-01T00:00:00+03:00").getTime() / 1000);
+const endTs = Math.floor(Date.now() / 1000);
+
+async function runHistoricalSync() {
+  console.log(`Starting historical sync from 2026-07-01 to now...`);
+  
+  const SECONDS_IN_28_DAYS = 28 * 24 * 60 * 60;
+  const chunks = [];
+  
+  let currentBegin = startTs;
+  while (currentBegin < endTs) {
+    const currentEnd = Math.min(currentBegin + SECONDS_IN_28_DAYS, endTs);
+    chunks.push({ begin: currentBegin, end: currentEnd });
+    currentBegin = currentEnd + 1;
+  }
+
+  let totalFetched = 0;
+  let totalUpdated = 0;
+  let totalCreated = 0;
+
+  for (const chunk of chunks) {
+    console.log(`Fetching chunk: ${new Date(chunk.begin * 1000).toLocaleDateString("uk-UA")} to ${new Date(chunk.end * 1000).toLocaleDateString("uk-UA")}`);
+    
+    const signStr = `${merchantAccount};${chunk.begin};${chunk.end}`;
+    const signature = crypto
+      .createHmac("md5", secretKey)
+      .update(signStr, "utf8")
+      .digest("hex");
+
+    const payload = {
+      transactionType: "TRANSACTION_LIST",
+      merchantAccount,
+      merchantSignature: signature,
+      apiVersion: 1,
+      dateBegin: chunk.begin,
+      dateEnd: chunk.end,
+    };
+
+    try {
+      const response = await fetch("https://api.wayforpay.com/api", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const resData = await response.json();
+      if (resData.reasonCode !== 1100 && resData.reasonCode !== 0) {
+        console.log(`WayForPay API returned reason [${resData.reasonCode}]: ${resData.reason}`);
+        continue;
+      }
+
+      const txList = resData.transactionList || [];
+      totalFetched += txList.length;
+      console.log(`Found ${txList.length} transactions`);
+
+      for (const tx of txList) {
+        const orderRef = tx.orderReference;
+        const amount = Number(tx.amount);
+
+        // Skip developer test transactions
+        if (amount <= 5 || (orderRef && orderRef.startsWith("test_"))) {
+          continue;
+        }
+
+        const isApproved = tx.transactionStatus === "Approved";
+        const isDeclinedOrExpired = tx.transactionStatus === "Declined" || tx.transactionStatus === "Expired";
+
+        const { data: existingLeads, error: selectError } = await supabaseAdmin
+          .from("anastasia_sych_leads")
+          .select("*")
+          .eq("order_id", orderRef);
+
+        if (selectError) {
+          console.error(`Error selecting order ${orderRef}: ${selectError.message}`);
+          continue;
+        }
+
+        if (existingLeads && existingLeads.length > 0) {
+          const lead = existingLeads[0];
+          if (isApproved) {
+            if (lead.status !== "Оплачено") {
+              const { error: updateError } = await supabaseAdmin
+                .from("anastasia_sych_leads")
+                .update({
+                  status: "Оплачено",
+                  amount: amount,
+                  raw_payload: {
+                    ...(typeof lead.raw_payload === 'object' ? lead.raw_payload : {}),
+                    wayforpay_sync: tx,
+                  }
+                })
+                .eq("id", lead.id);
+
+              if (updateError) {
+                console.error(`Error updating order ${orderRef}: ${updateError.message}`);
+              } else {
+                console.log(`Updated existing order ${orderRef} to 'Оплачено'`);
+                totalUpdated++;
+              }
+            }
+          } else if (isDeclinedOrExpired) {
+            if (lead.status === "Очікує оплати" || lead.status === "Зареєстровано") {
+              const { error: updateError } = await supabaseAdmin
+                .from("anastasia_sych_leads")
+                .update({
+                  status: "Не оплачено",
+                  raw_payload: {
+                    ...(typeof lead.raw_payload === 'object' ? lead.raw_payload : {}),
+                    wayforpay_sync: tx,
+                  }
+                })
+                .eq("id", lead.id);
+
+              if (updateError) {
+                console.error(`Error updating failed order ${orderRef}: ${updateError.message}`);
+              } else {
+                console.log(`Updated failed order ${orderRef} to 'Не оплачено'`);
+                totalUpdated++;
+              }
+            }
+          }
+        } else {
+          // If transaction is Approved but lead doesn't exist, create it
+          if (isApproved) {
+            const clientName = tx.clientName || tx.cardHolder || tx.email || "WayForPay Direct Payment";
+            const clientPhone = tx.phone || tx.clientPhone || "";
+            const { error: insertError } = await supabaseAdmin
+              .from("anastasia_sych_leads")
+              .insert({
+                name: clientName,
+                phone: clientPhone,
+                email: tx.email || "",
+                order_id: orderRef,
+                amount: amount,
+                status: "Оплачено",
+                created_at: new Date(tx.createdDate * 1000).toISOString(),
+                raw_payload: {
+                  wayforpay_sync: tx,
+                }
+              });
+
+            if (insertError) {
+              console.error(`Error inserting direct order ${orderRef}: ${insertError.message}`);
+            } else {
+              console.log(`Inserted new direct paid order ${orderRef}`);
+              totalCreated++;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error(`Error processing chunk: ${err.message}`);
+    }
+  }
+
+  console.log(`Historical sync finished. Fetched: ${totalFetched}, Updated: ${totalUpdated}, Created: ${totalCreated}`);
+}
+
+runHistoricalSync();
