@@ -405,23 +405,44 @@ export default function MiniCourseLanding() {
             />
           </div>
 
-          {/* LAYER 2: SOLID TEXT (BEHIND HERO.PNG CUTOUT - SMALLER, HIGHER & READABLE) */}
-          <div className="absolute inset-0 z-10 flex flex-col items-center text-center pt-3.5 sm:pt-4 pointer-events-none select-none px-3">
+          {/* LAYER 2: SOLID SPLIT TEXT (BEHIND HERO.PNG CUTOUT - SPLIT LEFT & RIGHT) */}
+          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
             
             {/* DATE BADGE */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm mb-1.5">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>START: 24 AUGUST</span>
+            <div className="flex justify-center mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>START: 24 AUGUST</span>
+              </div>
             </div>
 
-            {/* SOLID HEADLINES - CLEAN & HIGH-READABILITY */}
-            <div className="font-outfit uppercase space-y-0.5 tracking-tight w-full max-w-sm">
-              <div className="text-3xl sm:text-4xl font-extrabold text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
+            {/* SPLIT HEADLINES (SPANNING LEFT AND RIGHT ACROSS ANASTASIA'S SILHOUETTE) */}
+            <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight">
+              
+              {/* ROW 1: ОТРИ ... МАЙ */}
+              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                <span className="text-left tracking-tight pl-0.5">ОТРИ</span>
+                <span className="text-right tracking-tight pr-0.5">МАЙ</span>
               </div>
-              <div className="font-outfit text-2xl sm:text-3xl font-extrabold text-[#F43F5E] tracking-wider leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                ТА СТРУНКУ ТАЛІЮ
+
+              {/* ROW 2: ПЛАС ... КИЙ */}
+              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                <span className="text-left tracking-tight pl-0.5">ПЛАС</span>
+                <span className="text-right tracking-tight pr-0.5">КИЙ</span>
               </div>
+
+              {/* ROW 3: ЖИ ... ВІТ */}
+              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                <span className="text-left tracking-tight pl-0.5">ЖИ</span>
+                <span className="text-right tracking-tight pr-0.5">ВІТ</span>
+              </div>
+
+              {/* ROW 4: ТА СТРУНКУ ... ТАЛІЮ */}
+              <div className="flex items-center justify-between w-full text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#F43F5E] leading-none pt-1 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+                <span className="text-left tracking-wide pl-0.5">ТА СТРУНКУ</span>
+                <span className="text-right tracking-wide pr-0.5">ТАЛІЮ</span>
+              </div>
+
             </div>
 
           </div>
