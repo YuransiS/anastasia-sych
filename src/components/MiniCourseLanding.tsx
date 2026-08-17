@@ -391,7 +391,7 @@ export default function MiniCourseLanding() {
       <section className="relative w-full max-w-[460px] mx-auto px-4 pt-3 pb-8 sm:py-6 flex flex-col items-center">
         
         {/* CONTAINER CARD */}
-        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[720px] sm:min-h-[780px] flex flex-col justify-between p-3.5 sm:p-4">
+        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[580px] sm:min-h-[620px] flex flex-col justify-between p-3.5 sm:p-4">
           
           {/* LAYER 1: HERO BACKGROUND IMAGE (hero.webp) */}
           <div className="absolute inset-0 z-0 pointer-events-none">
@@ -406,7 +406,7 @@ export default function MiniCourseLanding() {
           </div>
 
           {/* LAYER 2: BEHIND CUTOUT (SOLID WORDS: ОТРИМАЙ, ПЛАСКИЙ) */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3 sm:pt-3.5 pointer-events-none select-none px-3 sm:px-4">
+          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
             
             {/* DATE BADGE */}
             <div className="flex justify-center mb-1.5">
@@ -444,11 +444,11 @@ export default function MiniCourseLanding() {
               sizes="(max-width: 768px) 100vw, 460px"
             />
             {/* Bottom smooth dark gradient for offer overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black via-black/85 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black via-black/85 to-transparent" />
           </div>
 
-          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ) */}
-          <div className="absolute inset-0 z-30 flex flex-col justify-start pt-3 sm:pt-3.5 pointer-events-none select-none px-3 sm:px-4">
+          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ + CONNECTED BUTTONS STACK) */}
+          <div className="relative z-30 flex flex-col items-center text-center pt-3.5 sm:pt-4 pointer-events-none select-none px-1 w-full">
             
             {/* INVISIBLE DATE BADGE SPACER */}
             <div className="flex justify-center mb-1.5 invisible">
@@ -485,16 +485,16 @@ export default function MiniCourseLanding() {
 
           </div>
 
-          {/* LAYER 5: BOTTOM UI ELEMENTS (STRUCTURED & COMPACT) */}
-          <div className="relative z-30 flex flex-col items-center text-center space-y-1.5 mt-auto">
+          {/* LAYER 5: BOTTOM UI ELEMENTS (DIRECTLY BELOW ТА СТРУНКУ ТАЛІЮ - NO GAP) */}
+          <div className="relative z-30 flex flex-col items-center text-center space-y-1.5 mt-2.5 sm:mt-3 w-full pointer-events-auto">
 
-            {/* 6 LESSONS PILL (COMPACT & STRUCTURED) */}
+            {/* 6 LESSONS PILL (CONNECTED DIRECTLY BELOW HEADLINE) */}
             <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-black/90 border border-white/25 text-white px-3 py-1 rounded-full backdrop-blur-xl shadow-md">
               <span className="w-1.5 h-1.5 rounded-full bg-[#FF0033] animate-pulse" />
               <span>6 УРОКІВ • ТЕОРІЯ + ПРАКТИКА</span>
             </div>
 
-            {/* DUAL PRICING COMPARISON ROW (COMPACT) */}
+            {/* DUAL PRICING COMPARISON ROW */}
             <div className="w-full grid grid-cols-2 gap-2">
               
               {/* ACTIVE RED BOX */}
@@ -530,7 +530,7 @@ export default function MiniCourseLanding() {
               Перший результат за 7 днів • <span className="text-[#EB94A9]">Без дієт та виснаження</span>
             </div>
 
-            {/* HIGH-IMPACT RED CTA BUTTON (SLEEK & STRUCTURED) */}
+            {/* HIGH-IMPACT RED CTA BUTTON */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               animate={{ scale: [1, 1.02, 1] }}
