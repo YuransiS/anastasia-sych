@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=League+Gothic&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@400;500;600;700;800;900&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,8 +7,24 @@
 :root {
   --font-montserrat: 'Montserrat', 'Inter', system-ui, -apple-system, sans-serif;
   --font-inter: 'Inter', 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-league: 'League Gothic', 'Outfit', 'Montserrat', sans-serif;
+  --font-source: 'Source Sans 3', 'Inter', sans-serif;
   --brand-primary: #0284c7;
   --brand-accent: #059669;
+  --brand-red: #DB0B3E;
+}
+
+.font-league {
+  font-family: 'League Gothic', 'Outfit', 'Montserrat', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-source {
+  font-family: 'Source Sans 3', 'Inter', sans-serif;
+}
+
+.font-outfit {
+  font-family: 'Outfit', 'Montserrat', sans-serif;
 }
 
 body {

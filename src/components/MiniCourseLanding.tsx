@@ -22,16 +22,14 @@ import {
   Check,
   ShieldCheck,
   ZoomIn,
-  Play,
   RotateCw,
   Gift,
   Flame,
   Clock,
-  BookOpen,
-  ArrowDown,
-  Layers,
   HeartPulse,
-  GraduationCap
+  GraduationCap,
+  Shield,
+  Star
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -64,9 +62,12 @@ export default function MiniCourseLanding() {
   // Scroll state to reveal sticky bottom CTA bar
   const [showStickyUI, setShowStickyUI] = useState(false);
 
+  // Countdown timer for sticky footer bar
+  const [timeLeft, setTimeLeft] = useState({ hours: "00", minutes: "59", seconds: "59" });
+
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 400) {
         setShowStickyUI(true);
       } else {
         setShowStickyUI(false);
@@ -74,6 +75,23 @@ export default function MiniCourseLanding() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      const nextHour = new Date(now);
+      nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+      const diff = Math.max(0, Math.floor((nextHour.getTime() - now.getTime()) / 1000));
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
+      setTimeLeft({
+        hours: "00",
+        minutes: m < 10 ? `0${m}` : `${m}`,
+        seconds: s < 10 ? `0${s}` : `${s}`,
+      });
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   // Form auto-save state
@@ -275,41 +293,41 @@ export default function MiniCourseLanding() {
     }
   };
 
-  // Block 4: 5 Core Outcomes/Results the User Gets
-  const courseBenefits = [
+  // Section: What You Get (Pure Benefit/Outcome list matching lifetime-splits.com .s9 structure)
+  const whatYouGetItems = [
     {
-      number: "01",
-      title: "Зрозумієте, що реально впливає на живіт і талію",
-      desc: "Без хаотичних порад з TikTok та Instagram. Ви дізнаєтесь справжні фізіологічні причини відкладення жиру та чому стандартні поради не давали бажаного ефекту.",
+      num: "01",
+      heading: "Зрозумієте, що реально впливає на живіт і талію",
+      desc: "Без хаотичних порад з TikTok та Instagram. Дізнаєтесь справжні фізіологічні причини відкладення жиру та як їх усунути.",
       icon: "🎯",
     },
     {
-      number: "02",
-      title: "Розберете харчування",
-      desc: "Зрозумієте, що варто змінити в раціоні, щоб не жити в постійному обмеженні. Складете персональну тарілку без підрахунку кожної калорії та почуття провини.",
+      num: "02",
+      heading: "Розберете систему харчування",
+      desc: "Зрозумієте, що змінити в раціоні, щоб не жити в постійному обмеженні. Складете ситну тарілку без підрахунку калорій.",
       icon: "🥗",
     },
     {
-      number: "03",
-      title: "Навчитеся тренуватися без виснаження",
-      desc: "Зрозумієте, яке навантаження потрібне для вашої цілі. Без годин виснажливого кардіо чи надмірних навантажень — лише те, що підтягує живіт і покращує поставу.",
+      num: "03",
+      heading: "Навчитеся тренуватися без виснаження",
+      desc: "Зрозумієте, яке навантаження потрібне для вашої цілі. Без годин кардіо — робота з поставою та глибокими м'язами живота.",
       icon: "⚡",
     },
     {
-      number: "04",
-      title: "Побачите, де самі гальмуєте свій результат",
-      desc: "Харчування, режим сну, тренування, відновлення — побачите систему цілком та знайдете неочевидні помилки, які раніше зводили всі зусилля нанівець.",
+      num: "04",
+      heading: "Побачите, де самі гальмуєте свій результат",
+      desc: "Харчування, режим, тренування, відновлення — побачите всю систему цілком та приберете неочевидні помилки.",
       icon: "🔍",
     },
     {
-      number: "05",
-      title: "Отримаєте зрозумілий план дій",
-      desc: "Що робити зараз, щоб почати змінювати тіло без чергового марафону «з понеділка», страждань і повернення ваги назад.",
+      num: "05",
+      heading: "Отримаєте зрозумілий план дій",
+      desc: "Що робити зараз, щоб почати змінювати тіло без чергового марафону «з понеділка», зривів та повернення ваги.",
       icon: "📋",
     },
   ];
 
-  // Block 6: 4 Steps
+  // Section: 4 Steps
   const steps = [
     {
       step: "КРОК 1",
@@ -333,7 +351,7 @@ export default function MiniCourseLanding() {
     },
   ];
 
-  // Block 8: Real Cases
+  // Real transformation cases
   const realCaseGalleries = [
     {
       id: 1,
@@ -365,11 +383,11 @@ export default function MiniCourseLanding() {
     },
   ];
 
-  // Block 10: FAQ Items
+  // FAQ Items matching .s7 accordion
   const faqItems = [
     {
       q: "А якщо я ніколи не займалась спортом?",
-      a: "Міні-курс розрахований на звичайний ритм життя та будь-який рівень підготовки, а не на професійних спортсменок. Всі вправи та рекомендації максимально фізіологічні, безпечні та адаптовані під щоденну рутину.",
+      a: "Міні-курс розрахований на звичайний ритм життя та будь-який рівень підготовки, а не на професійних спортсменок. Всі рекомендації та вправи максимально фізіологічні, безпечні та адаптовані під щоденну рутину.",
     },
     {
       q: "Чи потрібно сидіти на дієті?",
@@ -386,403 +404,404 @@ export default function MiniCourseLanding() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] selection:bg-[#0284c7] selection:text-white pb-24 sm:pb-16 font-sans">
+    <div className="min-h-screen bg-[#070607] text-[#FFFFFF] font-source selection:bg-[#DB0B3E] selection:text-white pb-28 sm:pb-24 overflow-x-hidden">
 
-      {/* TOP NOTIFICATION MARQUEE */}
-      <div className="bg-[#0284c7] text-white py-2 overflow-hidden border-b border-[#0369a1] shadow-sm">
+      {/* TOP RED ANNOUNCEMENT BANNER */}
+      <div className="bg-gradient-to-r from-[#BA022F] to-[#D00839] text-white py-2 overflow-hidden shadow-lg sticky top-0 z-40 border-b border-[#F01147]/30">
         <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
           <span>🔥 СТАРТ МІНІ-КУРСУ 24.08</span>
-          <span className="text-[#bae6fd]">✦</span>
+          <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
-          <span className="text-[#bae6fd]">✦</span>
-          <span>6 УРОКІВ (ТЕОРІЯ + ПРАКТИКА)</span>
-          <span className="text-[#bae6fd]">✦</span>
-          <span>БОНУСНИЙ УРОК «ЯК СПАЛИТИ ЖИР» У ПОДАРУНОК</span>
-          <span className="text-[#bae6fd]">✦</span>
+          <span className="text-white/60">✦</span>
+          <span>6 УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
+          <span className="text-white/60">✦</span>
+          <span>ДОСТУП НАЗАВЖДИ</span>
+          <span className="text-white/60">✦</span>
           <span>🔥 СТАРТ МІНІ-КУРСУ 24.08</span>
-          <span className="text-[#bae6fd]">✦</span>
+          <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
-          <span className="text-[#bae6fd]">✦</span>
+          <span className="text-white/60">✦</span>
         </div>
       </div>
 
       {/* =========================================================================
-          BLOCK 1 & BLOCK 2: HERO SECTION WITH ANASTASIA'S PHOTO SPANNING BOTH BLOCKS
+          SECTION 1: HERO (MATCHING LIFETIME-SPLITS.COM .s1 SECTION)
           ========================================================================= */}
-      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 max-w-6xl mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 max-w-4xl mx-auto flex flex-col items-center text-center">
 
-          {/* LEFT COLUMN: BLOCK 1 & BLOCK 2 CONTENT */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+        {/* AMBIENT GLOW CIRCLE */}
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[340px] h-[340px] bg-[#3E1322] rounded-full blur-[90px] opacity-75 pointer-events-none -z-0" />
 
-            {/* BLOCK 1: START BADGE, MAIN HEADLINE & BULLETS */}
-            <div className="space-y-4">
-              {/* TOP START BADGE */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-[#0284c7] text-xs sm:text-sm font-extrabold shadow-sm">
-                <Calendar className="w-4 h-4 text-[#0284c7]" />
-                <span>СТАРТ 24.08</span>
-                <span className="text-slate-300">|</span>
-                <span>6 уроків (теорія + практика)</span>
-              </div>
-
-              {/* MAIN HEADLINE */}
-              <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-[1.12] tracking-tight uppercase">
-                Отримай <span className="text-[#0284c7]">плаский живіт</span> та струнку талію
-              </h1>
-
-              {/* BULLETS */}
-              <ul className="space-y-3 pt-1 text-sm sm:text-base text-slate-800 font-semibold">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-sky-100 text-[#0284c7] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  </div>
-                  <span>перший результат вже за 7 днів</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-sky-100 text-[#0284c7] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  </div>
-                  <span>без виснажливих тренувань та обмежень в їжі</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-sky-100 text-[#0284c7] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                    <Check className="w-3.5 h-3.5 stroke-[3]" />
-                  </div>
-                  <span>за перевіреною системою від фітнес тренерки з медичною освітою</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* BLOCK 2: TARGET AUDIENCE DESCRIPTION & PRICING CARD */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-white via-sky-50/50 to-white border-2 border-sky-200 shadow-xl space-y-5">
-              <p className="text-slate-800 text-sm sm:text-base font-bold leading-relaxed">
-                Міні-курс для жінок, які хочуть змінити своє тіло без постійних дієт, зривів та виснаження.
-              </p>
-
-              {/* PRICE DISPLAY */}
-              <div className="flex items-center gap-3 font-extrabold flex-wrap">
-                <span className="text-3xl sm:text-4xl font-extrabold text-[#0284c7] tracking-tight">
-                  399 грн
-                </span>
-                <span className="text-base sm:text-xl line-through text-slate-400 font-bold">
-                  2999 грн
-                </span>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-extrabold uppercase shadow-sm">
-                  Знижка -87%
-                </span>
-              </div>
-
-              {/* CTA BUTTON */}
-              <motion.button
-                whileTap={{ scale: 0.98 }}
-                animate={{ scale: [1, 1.015, 1] }}
-                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-                onClick={handleOpenModal}
-                className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-base sm:text-lg shadow-xl glow-primary flex items-center justify-center gap-2.5 cursor-pointer uppercase tracking-wider transition-all hover:brightness-105"
-              >
-                <span>Отримати міні-курс за 399 грн</span>
-                <ArrowRight className="w-5 h-5 text-sky-200 shrink-0" />
-              </motion.button>
-
-              {/* TRUST BADGES */}
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-600 pt-1 border-t border-slate-100">
-                <span className="flex items-center gap-1">
-                  <ShieldCheck className="w-4 h-4 text-[#059669]" /> Миттєвий доступ
-                </span>
-                <span className="flex items-center gap-1">
-                  <Gift className="w-4 h-4 text-[#0284c7]" /> + Бонусний урок
-                </span>
-                <span className="flex items-center gap-1">
-                  <Sparkles className="w-4 h-4 text-amber-500" /> Старт 24.08
-                </span>
-              </div>
-            </div>
-
-          </div>
-
-          {/* RIGHT COLUMN: ANASTASIA'S PHOTO IN SPORTS FORM SPANNING BLOCKS 1 & 2 */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-md h-[460px] sm:h-[540px] lg:h-full min-h-[460px] rounded-3xl overflow-hidden border-2 border-sky-200 shadow-2xl bg-slate-900 group">
-              <Image
-                src="/images/anastasia_hero_blue.webp"
-                alt="Анастасія Сич - фітнес-тренерка"
-                fill
-                priority
-                className="object-cover object-[center_18%] filter brightness-102 contrast-[1.03] transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-
-              {/* FLOATING EXPERT BADGE AT BOTTOM */}
-              <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md border border-sky-100 shadow-lg flex items-center justify-between">
-                <div>
-                  <div className="font-extrabold text-slate-900 text-sm sm:text-base">Анастасія Сич</div>
-                  <div className="text-xs text-slate-600 font-medium">8 років досвіду • Вища медична освіта</div>
-                </div>
-                <div className="w-9 h-9 rounded-xl bg-sky-100 text-[#0284c7] flex items-center justify-center shrink-0">
-                  <Award className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
-          </div>
-
+        {/* DATE PILL BADGE */}
+        <div className="relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs sm:text-sm font-semibold tracking-wider uppercase backdrop-blur-md shadow-md mb-4">
+          <Calendar className="w-4 h-4 text-[#EB94A9]" />
+          <span>START: 24 AUGUST</span>
         </div>
-      </section>
 
-      {/* =========================================================================
-          BLOCK 3: PAIN POINTS & CIRCULAR VICIOUS CYCLE INFOGRAPHIC
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200">
-        <div className="max-w-5xl mx-auto space-y-10">
+        {/* HUGE CONDENSED HEADLINES */}
+        <div className="relative z-10 space-y-1">
+          <h1 className="font-league text-5xl sm:text-7xl md:text-8xl font-normal text-[#FFF3F6] uppercase tracking-wide leading-[0.95] drop-shadow-md">
+            ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
+          </h1>
+          <div className="font-league text-3xl sm:text-5xl md:text-6xl font-normal text-[#F01147] uppercase tracking-wide leading-tight">
+            ТА СТРУНКУ ТАЛІЮ
+          </div>
+        </div>
 
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-              Поширена проблема
+        {/* HERO ATHLETIC FIGURE OF ANASTASIA */}
+        <div className="relative z-10 w-full max-w-md my-4 sm:my-6">
+          <div className="relative h-[380px] sm:h-[440px] w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-b from-transparent via-[#140D10]/40 to-[#070607]">
+            <Image
+              src="/images/anastasia_hero_blue.webp"
+              alt="Анастасія Сич"
+              fill
+              priority
+              className="object-cover object-[center_18%] filter brightness-105 contrast-[1.05]"
+              sizes="(max-width: 768px) 100vw, 440px"
+            />
+            {/* Bottom smooth dark gradient fade */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070607] via-[#070607]/20 to-transparent" />
+
+            {/* TRAINER BADGE OVERLAY */}
+            <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-black/75 backdrop-blur-md border border-white/10 flex items-center justify-between text-left">
+              <div>
+                <div className="text-white font-extrabold text-xs sm:text-sm">Анастасія Сич</div>
+                <div className="text-[11px] text-[#EB94A9] font-medium">8 років досвіду • Вища медична освіта</div>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] flex items-center justify-center shrink-0">
+                <Award className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* DUAL PRICING COMPARISON ROW (EXACT REFERENCE .s1-pricing-row) */}
+        <div className="relative z-10 w-full max-w-md grid grid-cols-2 gap-2.5 sm:gap-3 my-2">
+          
+          {/* ACTIVE RED BOX (PAY ONCE) */}
+          <div
+            onClick={handleOpenModal}
+            className="cursor-pointer p-4 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-xl border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+          >
+            <span className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-wide">
+              Сплатіть 1 раз
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Ви наче все робите правильно, але живіт і талія не змінюються?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base font-semibold">
-              Ви вже пробували різні методи, але щоразу повертаєтеся у вихідну точку:
-            </p>
+            <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1">
+              399 грн
+            </span>
           </div>
 
-          {/* LIST OF PREVIOUS ATTEMPTS */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 max-w-4xl mx-auto">
-            {[
-              "менше їсти",
-              "прибирати солодке",
-              "сідати на дієту",
-              "більше тренуватися",
-              "починати «з понеділка»",
-              "триматися кілька днів, а потім зриватися",
-            ].map((attempt, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 flex items-center gap-3 shadow-sm hover:border-sky-300 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs font-bold shrink-0">
-                  ✕
-                </div>
-                <span className="text-xs sm:text-sm font-bold leading-snug">{attempt}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* CIRCULAR INFOGRAPHIC CYCLE: ОБМЕЖЕННЯ -> СИЛЬНИЙ ГОЛОД -> ПЕРЕЇДАННЯ -> ЗРИВ -> СПОЧАТКУ */}
-          <div className="p-6 sm:p-10 rounded-3xl bg-gradient-to-br from-rose-50/70 via-white to-sky-50/70 border-2 border-rose-200/80 shadow-md space-y-6">
-            <div className="text-center space-y-1">
-              <span className="text-rose-600 font-extrabold text-xs uppercase tracking-widest">
-                Замкнене коло
-              </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                А потім знову той самий кругообіг:
-              </h3>
-            </div>
-
-            {/* INTERACTIVE CIRCULAR FLOW CAROUSEL / GRID WITH ARROWS */}
-            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-center">
-              {[
-                { step: "1", title: "ОБМЕЖЕННЯ", desc: "Різко урізаєте калорії", color: "bg-rose-100 text-rose-700 border-rose-300" },
-                { step: "2", title: "СИЛЬНИЙ ГОЛОД", desc: "Організм вимагає енергії", color: "bg-amber-100 text-amber-800 border-amber-300" },
-                { step: "3", title: "ПЕРЕЇДАННЯ", desc: "Неможливо терпіти", color: "bg-orange-100 text-orange-800 border-orange-300" },
-                { step: "4", title: "ЗРИВ", desc: "Почуття провини і відкат", color: "bg-red-100 text-red-800 border-red-300" },
-                { step: "5", title: "СПОЧАТКУ", desc: "Нова спроба з понеділка", color: "bg-slate-200 text-slate-800 border-slate-300" },
-              ].map((item, idx, arr) => (
-                <React.Fragment key={idx}>
-                  <div className={`p-4 rounded-2xl border ${item.color} text-center space-y-1 shadow-sm relative flex flex-col justify-center min-h-[110px]`}>
-                    <div className="text-[10px] font-extrabold uppercase opacity-70">Крок 0{item.step}</div>
-                    <div className="text-sm font-extrabold tracking-tight">{item.title}</div>
-                    <div className="text-[11px] opacity-80 font-medium leading-tight">{item.desc}</div>
-                  </div>
-                  {idx < arr.length - 1 && (
-                    <div className="hidden sm:flex justify-center text-slate-400">
-                      <ArrowRight className="w-5 h-5 text-rose-400 animate-pulse" />
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-center gap-2 text-xs font-bold text-rose-600 pt-2">
-              <RotateCw className="w-4 h-4 animate-spin-slow" />
-              <span>Це замкнене коло виснажує організм і вбиває мотивацію</span>
-            </div>
-          </div>
-
-          {/* CONCLUDING INSIGHT */}
-          <div className="p-6 sm:p-7 rounded-2xl bg-sky-50/80 border border-sky-200 text-slate-800 text-center max-w-3xl mx-auto space-y-2 shadow-sm">
-            <p className="text-base sm:text-lg font-extrabold text-slate-900">
-              І справа не обов'язково в тому, що вам не вистачає сили волі.
-            </p>
-            <p className="text-sm sm:text-base font-semibold text-slate-700">
-              Можливо, ви просто використовуєте підхід, який не підходить саме вам.
-            </p>
+          {/* GRAY BOX (DON'T PAY REGULAR) */}
+          <div
+            onClick={handleOpenModal}
+            className="cursor-pointer p-4 rounded-2xl bg-white/[0.08] text-slate-400 flex flex-col justify-center items-center border border-white/10 hover:scale-[1.02] transition-transform"
+          >
+            <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wide">
+              Звичайна ціна
+            </span>
+            <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1 line-through decoration-slate-500 decoration-2 text-slate-400">
+              2999 грн
+            </span>
           </div>
 
         </div>
+
+        {/* VALUE SUMMARY COPY */}
+        <p className="relative z-10 text-xs sm:text-sm text-[#EB94A9] font-semibold max-w-md my-3 leading-relaxed">
+          <span className="text-white font-bold">Міні-курс для жінок</span>, які хочуть змінити своє тіло без постійних дієт, зривів та виснаження.
+        </p>
+
+        {/* BIG HIGH-IMPACT RED CTA BUTTON (.s1-cta-btn) */}
+        <div className="relative z-10 w-full max-w-md pt-1">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+            onClick={handleOpenModal}
+            className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl sm:text-3xl tracking-wider uppercase shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
+          >
+            <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
+            <ArrowRight className="w-6 h-6 text-white shrink-0" />
+          </motion.button>
+        </div>
+
+        {/* TRUST BADGE ROW */}
+        <div className="relative z-10 flex items-center justify-center gap-4 text-xs font-semibold text-white/80 pt-4">
+          <span className="flex items-center gap-1">
+            <Star className="w-3.5 h-3.5 fill-[#F01147] text-[#F01147]" /> 4.9/5 рейтинг
+          </span>
+          <span className="text-white/30">•</span>
+          <span className="flex items-center gap-1">
+            <ShieldCheck className="w-4 h-4 text-[#059669]" /> Доступ назавжди
+          </span>
+          <span className="text-white/30">•</span>
+          <span className="flex items-center gap-1">
+            <Gift className="w-3.5 h-3.5 text-[#F01147]" /> + Бонусний урок
+          </span>
+        </div>
+
       </section>
 
       {/* =========================================================================
-          BLOCK 4: WHAT YOU GET IN MINI-COURSE (OUTCOMES & BENEFITS)
+          SECTION 2: WHAT YOU GET AFTER PAYMENT (MATCHING .s9 SECTION)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-10">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
 
-        <div className="text-center space-y-2 max-w-3xl mx-auto">
-          <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-            Результати навчання
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-            Що ви отримаєте на міні-курсі
+        {/* SECTION HEADER */}
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
+            <span className="text-[#F01147]">ЩО ВИ ОТРИМАЄТЕ</span>{" "}
+            <span className="text-white">ПІСЛЯ ОПЛАТИ</span>
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base font-semibold">
-            Конкретні знання, інструменти та покрокова система, яка дає стабільний результат:
+          <p className="text-xs sm:text-sm text-slate-400 font-semibold">
+            Повна покрокова система для гарантованого результату:
           </p>
         </div>
 
-        {/* 5 BENEFIT / OUTCOME CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {courseBenefits.map((item, idx) => (
+        {/* LIST OF OUTCOMES (.s9-list style) */}
+        <div className="space-y-3.5 max-w-3xl mx-auto">
+          {whatYouGetItems.map((item, idx) => (
             <div
               key={idx}
-              className={`p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-md hover:shadow-xl hover:border-sky-300 transition-all duration-300 flex flex-col justify-between space-y-4 group ${
-                idx === 4 ? "md:col-span-2 lg:col-span-1" : ""
-              }`}
+              className="p-4 sm:p-5 rounded-2xl bg-[#120E10] border border-white/10 flex items-start gap-4 hover:border-[#F01147]/50 transition-colors shadow-lg"
             >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="inline-block px-3 py-1 rounded-xl bg-sky-100 text-[#0284c7] text-xs font-black tracking-wider">
-                    {item.number}
-                  </span>
-                  <span className="text-2xl select-none">{item.icon}</span>
-                </div>
-
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover:text-[#0284c7] transition-colors">
-                  {item.title}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                  {item.desc}
-                </p>
+              {/* CRIMSON ICON WRAPPER */}
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F01147]/20 to-[#B0002B]/30 border border-[#F01147]/40 flex items-center justify-center text-xl shrink-0 mt-0.5 shadow-sm">
+                <span>{item.icon}</span>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-xs font-bold text-[#059669]">
-                <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
-                <span>Отримуєте одразу після оплати</span>
+              {/* ITEM TEXT */}
+              <div className="space-y-1">
+                <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                  {item.heading}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA TO ENROLL */}
-        <div className="text-center pt-4">
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={handleOpenModal}
-            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-base sm:text-lg shadow-xl glow-primary uppercase tracking-wide cursor-pointer inline-flex items-center justify-center gap-2.5"
-          >
-            <span>Отримати міні-курс за 399 грн</span>
-            <ArrowRight className="w-5 h-5 text-sky-200" />
-          </motion.button>
-        </div>
-
       </section>
 
       {/* =========================================================================
-          BLOCK 5: ROOT CAUSE & 2ND CYCLE INFOGRAPHIC
+          SECTION 3: EVERYTHING YOU GET TODAY + EXTRAS (.s25 SECTION STYLE)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-slate-900 text-white border-y border-slate-800">
-        <div className="max-w-5xl mx-auto space-y-10">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
 
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <span className="text-sky-400 text-xs font-extrabold uppercase tracking-widest bg-sky-950 px-3 py-1 rounded-full border border-sky-800">
-              Аналіз причин
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight">
-              Проблема не в тому, що ви недостатньо стараєтесь
-            </h2>
-            <p className="text-slate-300 text-sm sm:text-base font-medium">
-              Коли ви змушуєте себе діяти за типовим стресовим сценарієм:
-            </p>
-          </div>
-
-          {/* CIRCULAR LOOP INFOGRAPHIC: РІЗКО ОБМЕЖУЄТЕ -> ВИСНАЖУЄТЕ -> ТЕРПИТЕ -> ЗРИВАЄТЕСЬ */}
-          <div className="p-6 sm:p-10 rounded-3xl bg-slate-950 border border-slate-800 shadow-2xl space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-center">
-              {[
-                { title: "Різко обмежуєте їжу", desc: "Суворий дефіцит, відмова від звичних продуктів", icon: "🍽️" },
-                { title: "Виснажуєте тренуваннями", desc: "Надмірні навантаження без адаптації", icon: "⚡" },
-                { title: "Терпите на силі волі", desc: "Постійний стрес, втома та роздратування", icon: "⏳" },
-                { title: "Зриваєтесь", desc: "Організм вимагає компенсації та відновлення", icon: "💥" },
-              ].map((step, idx, arr) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-2 relative"
-                >
-                  <div className="text-2xl">{step.icon}</div>
-                  <div className="text-sm font-extrabold text-sky-400 uppercase tracking-tight">{step.title}</div>
-                  <div className="text-xs text-slate-400 font-medium leading-snug">{step.desc}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-center text-xs sm:text-sm text-slate-300 font-medium flex items-center justify-center gap-2">
-              <RotateCw className="w-4 h-4 text-sky-400 shrink-0" />
-              <span>Організм і психіка рано чи пізно вимагають повернутися до звичного.</span>
-            </div>
-          </div>
-
-          {/* CORE TAKEAWAY BOX */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-sky-900/60 to-blue-900/60 border border-sky-700/60 text-center max-w-3xl mx-auto space-y-3">
-            <h3 className="text-lg sm:text-xl font-extrabold text-white">
-              Тому наше завдання — не змусити вас ще сильніше себе контролювати.
-            </h3>
-            <p className="text-sky-200 text-sm sm:text-base font-bold">
-              А побудувати систему, якої ви зможете нормально дотримуватися день за днем без страждань.
-            </p>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BLOCK 6: 4 STEPS TO SUSTAINABLE RESULTS
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-10">
-
-        <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-            Системний підхід
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-            Не потрібно міняти все життя за один день
+        <div className="text-center space-y-3">
+          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide leading-none">
+            ВСЕ, ЩО ВИ ОТРИМУЄТЕ<br />
+            <span className="text-[#F01147]">СЬОГОДНІ</span>
           </h2>
-          <p className="text-slate-600 text-sm sm:text-base font-semibold">
+
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/50 text-white text-xs sm:text-sm font-bold shadow-md">
+            <Gift className="w-4 h-4 text-white" />
+            <span>Тільки сьогодні додаємо безкоштовний бонус</span>
+          </div>
+
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+            Замість купівлі окремо пізніше, ви отримуєте цей урок <strong>БЕЗКОШТОВНО</strong> при замовленні <strong>МІНІ-КУРСУ СЬОГОДНІ</strong>
+          </p>
+        </div>
+
+        {/* 3 EXTRA CARDS (.s25-card style) */}
+        <div className="space-y-4 max-w-3xl mx-auto">
+          
+          {/* CARD 1: BONUS LESSON */}
+          <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1A0E13] via-[#120E10] to-[#0A0708] border border-[#F01147]/40 shadow-xl space-y-3 relative overflow-hidden">
+            <div className="inline-block px-3 py-1 rounded-full bg-[#F01147]/20 border border-[#F01147]/50 text-[#EB94A9] text-xs font-bold uppercase tracking-wider">
+              🎁 Подарунок до замовлення
+            </div>
+            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
+              БОНУСНИЙ УРОК «ЯК СПАЛИТИ ЖИР»
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+              5 правил здорового схуднення, режим навантажень та харчування, щоб позбутися саме жирової тканини, а не втрачати м'язи.
+            </p>
+          </div>
+
+          {/* CARD 2: PLATE CONSTRUCTOR */}
+          <div className="p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-3">
+            <div className="inline-block px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold uppercase tracking-wider">
+              🥗 Практичний інструмент
+            </div>
+            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
+              КОНСТРУКТОР ЗБАЛАНСОВАНОЇ ТАРІЛКИ
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+              Зрозуміла схема щоденного раціону без необхідності зважувати їжу чи рахувати кожну калорію.
+            </p>
+          </div>
+
+          {/* CARD 3: TELEGRAM BOT */}
+          <div className="p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-3">
+            <div className="inline-block px-3 py-1 rounded-full bg-white/10 text-slate-300 text-xs font-bold uppercase tracking-wider">
+              📱 Зручний доступ
+            </div>
+            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase tracking-wide">
+              TELEGRAM-БОТ З МИТТЄВИМ ДОСТУПОМ
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+              Всі 6 уроків та бонусний матеріал завжди під рукою у вашому месенджері назавжди.
+            </p>
+          </div>
+
+        </div>
+
+        {/* TOTAL SUMMARY BOX (.s25-total-box) */}
+        <div
+          onClick={handleOpenModal}
+          className="cursor-pointer max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/60 shadow-2xl flex flex-col items-center text-center gap-4 hover:brightness-105 transition-all"
+        >
+          <h3 className="font-league text-2xl sm:text-4xl text-white uppercase tracking-wide leading-tight">
+            6 УРОКІВ ТА БОНУСНИЙ МАТЕРІАЛ.<br />
+            ОДИН ПЛАТІЖ. ДОСТУП НАЗАВЖДИ.
+          </h3>
+          <p className="text-xs sm:text-sm text-white/90 font-medium">
+            Без щомісячних підписок. Без прихованих платежів. Без дедлайнів.
+          </p>
+
+          {/* WHITE PRICE PILL (.s25-price-pill) */}
+          <div className="w-full max-w-md bg-white rounded-full py-3 px-6 sm:px-8 flex items-center justify-between shadow-xl">
+            <div className="text-left text-[#730924] font-bold text-xs sm:text-sm uppercase leading-tight font-source">
+              Отримати все<br />сьогодні за
+            </div>
+            <div className="font-league text-4xl sm:text-5xl font-normal text-[#730924] leading-none">
+              399 грн
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          SECTION 4: GUARANTEE (.s3 SECTION STYLE)
+          ========================================================================= */}
+      <section className="py-10 px-4 sm:px-6 max-w-3xl mx-auto">
+        <div className="p-6 sm:p-8 rounded-3xl bg-[#120E10] border border-[#EB94A9]/30 shadow-xl flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#F01147]/20 to-[#B0002B]/30 border border-[#F01147]/40 flex items-center justify-center shrink-0">
+            <Shield className="w-8 h-8 text-[#EB94A9]" />
+          </div>
+          <div className="space-y-1">
+            <div className="font-league text-2xl text-white uppercase tracking-wide">
+              100% ПЕРЕВІРЕНА СИСТЕМА
+            </div>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+              Програма базується на медичному підході до здоров'я та фізіології жіночого тіла від дипломованого фахівця з 8-річним практичним досвідом.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION 5: PAIN POINTS & VICIOUS CYCLE (.s2 / .s5 STYLE)
+          ========================================================================= */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
+
+        <div className="text-center space-y-2">
+          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
+            ЧОМУ ДІЄТИ <span className="text-[#F01147]">НЕ ПРАЦЮЮТЬ?</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 font-semibold max-w-xl mx-auto">
+            Ви наче все робите правильно, але живіт і талія не змінюються?
+          </p>
+        </div>
+
+        {/* PREVIOUS FAILED ATTEMPTS */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
+          {[
+            "менше їсти",
+            "прибирати солодке",
+            "сідати на дієту",
+            "більше тренуватися",
+            "починати «з понеділка»",
+            "триматися і зриватися",
+          ].map((attempt, idx) => (
+            <div
+              key={idx}
+              className="p-3.5 rounded-2xl bg-[#120E10] border border-white/10 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-slate-300"
+            >
+              <div className="w-5 h-5 rounded-full bg-rose-900/50 text-rose-400 flex items-center justify-center text-[10px] shrink-0 font-bold">
+                ✕
+              </div>
+              <span>{attempt}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* CIRCULAR INFOGRAPHIC CYCLE */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-[#0D0B0C] border border-[#F01147]/30 shadow-xl space-y-5 max-w-3xl mx-auto">
+          <div className="text-center space-y-1">
+            <span className="text-[#F01147] font-bold text-xs uppercase tracking-widest">
+              Замкнене коло
+            </span>
+            <h3 className="font-league text-2xl sm:text-3xl text-white uppercase">
+              Кругообіг, який виснажує організм:
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5 items-center">
+            {[
+              { step: "1", title: "ОБМЕЖЕННЯ", desc: "Суворий дефіцит" },
+              { step: "2", title: "ГОЛОД", desc: "Організм вимагає сил" },
+              { step: "3", title: "ПЕРЕЇДАННЯ", desc: "Втрата контролю" },
+              { step: "4", title: "ЗРИВ", desc: "Почуття провини" },
+              { step: "5", title: "СПОЧАТКУ", desc: "Спроба з понеділка" },
+            ].map((item, idx, arr) => (
+              <React.Fragment key={idx}>
+                <div className="p-3.5 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 text-center space-y-0.5">
+                  <div className="text-[10px] text-[#EB94A9] font-bold uppercase">0{item.step}</div>
+                  <div className="font-league text-lg text-white tracking-wide">{item.title}</div>
+                  <div className="text-[10px] text-slate-400">{item.desc}</div>
+                </div>
+                {idx < arr.length - 1 && (
+                  <div className="hidden sm:flex justify-center text-[#F01147]">
+                    <ArrowRight className="w-4 h-4 animate-pulse" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-white/[0.04] border border-white/10 text-center text-xs text-slate-300 font-medium flex items-center justify-center gap-2">
+            <RotateCw className="w-4 h-4 text-[#F01147] animate-spin-slow shrink-0" />
+            <span>Проблема не в силі волі — проблема у невідповідному підході.</span>
+          </div>
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          SECTION 6: 4 STEPS TO SUSTAINABLE RESULTS (.st7 STYLE)
+          ========================================================================= */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10">
+
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
+            4 КРОКИ ДО <span className="text-[#F01147]">РЕЗУЛЬТАТУ</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 font-semibold">
             Покроковий план трансформації без крайнощів:
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
           {steps.map((st, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-3xl bg-white border border-slate-200 shadow-md space-y-3 flex flex-col justify-between hover:border-sky-300 transition-all"
+              className="p-5 sm:p-6 rounded-3xl bg-[#120E10] border border-white/10 shadow-lg space-y-2 hover:border-[#F01147]/50 transition-colors"
             >
-              <div className="space-y-2">
-                <span className="inline-block px-3 py-1 rounded-xl bg-sky-100 text-[#0284c7] text-xs font-extrabold tracking-wider">
-                  {st.step}
-                </span>
-                <h3 className="text-lg font-extrabold text-slate-900 leading-snug">
-                  {st.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                  {st.desc}
-                </p>
-              </div>
-
-              <div className="pt-2">
-                <div className="w-8 h-1 rounded-full bg-sky-200" />
-              </div>
+              <span className="inline-block px-3 py-0.5 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#EB94A9] text-xs font-bold uppercase">
+                {st.step}
+              </span>
+              <h3 className="font-league text-2xl text-white uppercase tracking-wide">
+                {st.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+                {st.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -790,116 +809,85 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          BLOCK 7: ABOUT ANASTASIA SYCH (EXPERT SECTION WITH OVERLAY BADGES)
+          SECTION 7: ABOUT ANASTASIA SYCH
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-white border-y border-slate-200" id="about">
-        <div className="max-w-5xl mx-auto space-y-8">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10" id="about">
 
-          <div className="text-center space-y-2 max-w-3xl mx-auto">
-            <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-              Автор міні-курсу
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-              Хто вас навчатиме
-            </h2>
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-4xl sm:text-6xl font-normal uppercase tracking-wide">
+            ПРО АВТОРА <span className="text-[#F01147]">КУРСУ</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center max-w-3xl mx-auto">
+          
+          <div className="md:col-span-5 flex justify-center">
+            <div className="relative w-full max-w-xs h-[360px] rounded-3xl overflow-hidden border border-white/10 shadow-xl bg-slate-900">
+              <Image
+                src="/images/anastasia_portrait_black.webp"
+                alt="Анастасія Сич"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 320px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-black/80 backdrop-blur-md border border-white/10 text-center">
+                <div className="text-white font-bold text-xs">Анастасія Сич</div>
+                <div className="text-[10px] text-[#EB94A9]">8 років досвіду • Медична освіта</div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="md:col-span-7 space-y-4 text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
+            <h3 className="font-league text-3xl text-white uppercase tracking-wide leading-tight">
+              Я — Анастасія, фітнес-тренерка з вищою медичною освітою
+            </h3>
 
-            {/* PHOTO WITH DELICATE BADGES */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="relative w-full max-w-sm h-[440px] rounded-3xl overflow-hidden border-2 border-sky-200 shadow-xl bg-slate-900">
-                <Image
-                  src="/images/anastasia_portrait_black.webp"
-                  alt="Анастасія Сич"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+            <p>
+              Я працюю з жінками не тільки над тілом, а й над тим, щоб харчування та тренування стали частиною нормального комфортного життя.
+            </p>
 
-                {/* DELICATE OVERLAY BADGES ON PHOTO */}
-                <div className="absolute bottom-4 left-4 right-4 space-y-2">
-                  <div className="p-3.5 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200 shadow-md space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-extrabold text-[#0284c7] uppercase tracking-wide">
-                        8 років досвіду
-                      </span>
-                      <span className="text-[11px] font-bold text-slate-700">
-                        Вища медична освіта
-                      </span>
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-medium tracking-tight">
-                      Фітнес-тренерка та експерт зі здорового схуднення
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p>
+              Без жорстких заборон, постійних дієт та виснажливого підходу «терпіть ще трохи».
+            </p>
 
-            {/* BIO COPY */}
-            <div className="lg:col-span-7 space-y-5 text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
-              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
-                Я — Анастасія, фітнес-тренерка з 8-річним досвідом та вищою медичною освітою.
-              </h3>
-
-              <p className="text-slate-700">
-                Я працюю з жінками не тільки над тілом, а й над тим, щоб харчування та тренування стали частиною нормального життя.
+            <div className="p-4 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 space-y-1">
+              <p className="font-bold text-white text-xs sm:text-sm">
+                Моя задача — допомогти вам зрозуміти систему, яка залишиться з вами назавжди.
               </p>
-
-              <p className="text-slate-700">
-                Без жорстких заборон, постійних дієт та виснажливого підходу «терпіть ще трохи».
-              </p>
-
-              <div className="p-5 rounded-2xl bg-sky-50 border border-sky-200 space-y-2">
-                <p className="font-extrabold text-[#0284c7] text-sm sm:text-base">
-                  Моя задача — допомогти вам зрозуміти систему, а не просто дати черговий план, якого ви будете дотримуватися лише кілька тижнів.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2.5">
-                  <HeartPulse className="w-5 h-5 text-[#0284c7] shrink-0" />
-                  <span className="text-xs font-bold text-slate-800">Медичний підхід</span>
-                </div>
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2.5">
-                  <GraduationCap className="w-5 h-5 text-[#059669] shrink-0" />
-                  <span className="text-xs font-bold text-slate-800">Безпечні навантаження</span>
-                </div>
-              </div>
             </div>
-
           </div>
 
         </div>
+
       </section>
 
       {/* =========================================================================
-          BLOCK 8: REAL CASES & TRANSFORMATION GALLERY
+          SECTION 8: CLIENT TRANSFORMATION WINS (.s6 STYLE)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-8" id="cases">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8 border-t border-white/10" id="cases">
 
         <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-              Результати клієнток
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900">
-              Дівчата вже проходять цей шлях разом зі мною
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[#EB94A9] text-xs font-bold uppercase tracking-wider mb-2">
+              Before / After
+            </div>
+            <h2 className="font-league text-4xl sm:text-6xl font-normal text-white uppercase tracking-wide">
+              РЕЗУЛЬТАТИ <span className="text-[#F01147]">КЛІЄНТОК</span>
             </h2>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => scrollCarousel("left")}
-              className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
+              className="p-3 rounded-full bg-[#120E10] hover:bg-[#F01147]/20 text-white transition-colors border border-white/10"
               aria-label="Попередній кейс"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => scrollCarousel("right")}
-              className="p-2.5 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-700 hover:text-[#0284c7] transition-colors border border-slate-200"
+              className="p-3 rounded-full bg-[#120E10] hover:bg-[#F01147]/20 text-white transition-colors border border-white/10"
               aria-label="Наступний кейс"
             >
               <ChevronRight className="w-5 h-5" />
@@ -907,37 +895,37 @@ export default function MiniCourseLanding() {
           </div>
         </div>
 
-        {/* CAROUSEL CONTAINER */}
+        {/* SWIPER CAROUSEL */}
         <div
           ref={carouselRef}
-          className="flex items-stretch gap-5 overflow-x-auto snap-x snap-mandatory py-2 pb-4 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory py-2 pb-4 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
         >
           {realCaseGalleries.map((cs) => (
             <div
               key={cs.id}
               onClick={() => setActiveCaseImage(cs.image)}
-              className="min-w-[280px] sm:min-w-[320px] max-w-[340px] snap-start rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer flex flex-col justify-between group"
+              className="min-w-[260px] sm:min-w-[300px] max-w-[320px] snap-start rounded-3xl bg-[#120E10] border border-white/10 overflow-hidden shadow-xl hover:border-[#F01147]/50 transition-all cursor-pointer flex flex-col justify-between group"
             >
-              <div className="relative h-72 w-full bg-slate-100 overflow-hidden">
+              <div className="relative h-64 w-full bg-black overflow-hidden">
                 <Image
                   src={cs.image}
                   alt={cs.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 80vw, 320px"
+                  sizes="(max-width: 768px) 80vw, 300px"
                 />
-                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#059669] text-white text-xs font-extrabold shadow-md">
+                <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#F01147] text-white text-[11px] font-bold uppercase shadow-md">
                   {cs.badge}
                 </div>
-                <div className="absolute bottom-3 right-3 p-2 rounded-full bg-white/90 text-slate-800 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ZoomIn className="w-4 h-4 text-[#0284c7]" />
+                <div className="absolute bottom-3 right-3 p-2 rounded-full bg-black/80 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                  <ZoomIn className="w-4 h-4 text-[#EB94A9]" />
                 </div>
               </div>
 
-              <div className="p-4 sm:p-5 space-y-1.5">
-                <div className="font-extrabold text-slate-900 text-base">{cs.title}</div>
-                <p className="text-xs sm:text-sm text-slate-600 font-semibold leading-relaxed">
+              <div className="p-4 space-y-1">
+                <div className="font-bold text-white text-sm">{cs.title}</div>
+                <p className="text-xs text-slate-400 font-medium leading-relaxed">
                   {cs.desc}
                 </p>
               </div>
@@ -948,75 +936,37 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          BLOCK 9: MID-PAGE URGENCY CTA
+          SECTION 9: FAQ ACCORDION (MATCHING .s7 FAQ SECTION)
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gradient-to-br from-sky-900 via-slate-900 to-slate-950 text-white text-center">
-        <div className="max-w-3xl mx-auto space-y-6">
+      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-3xl mx-auto space-y-8 border-t border-white/10" id="faq">
 
-          <span className="text-sky-400 text-xs font-extrabold uppercase tracking-widest bg-sky-950/80 px-3.5 py-1 rounded-full border border-sky-700">
-            Дійте зараз
-          </span>
-
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-tight uppercase">
-            Почни змінювати свій підхід вже зараз
-          </h2>
-
-          <p className="text-slate-300 text-sm sm:text-base font-semibold leading-relaxed max-w-xl mx-auto">
-            Замість чергових спроб навмання — зрозуміла система, з якої ви можете почати вже зараз.
-          </p>
-
-          <div className="flex items-center justify-center gap-3 font-extrabold">
-            <span className="text-3xl sm:text-4xl font-extrabold text-white">399 грн</span>
-            <span className="text-lg line-through text-slate-400">2999 грн</span>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-extrabold uppercase">
-              -87%
-            </span>
-          </div>
-
-          <div className="pt-2">
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={handleOpenModal}
-              className="w-full sm:w-auto px-10 py-4 rounded-2xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-extrabold text-base sm:text-lg shadow-2xl glow-primary uppercase tracking-wider cursor-pointer inline-flex items-center justify-center gap-2"
-            >
-              <span>Отримати міні-курс за 399 грн</span>
-              <ArrowRight className="w-5 h-5 text-sky-200" />
-            </motion.button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BLOCK 10: FREQUENTLY ASKED QUESTIONS (FAQ)
-          ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-4xl mx-auto space-y-8" id="faq">
-
-        <div className="text-center space-y-2">
-          <span className="text-[#0284c7] text-xs font-extrabold uppercase tracking-widest bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-            Відповіді на запитання
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
-            Часті запитання
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-5xl sm:text-7xl font-normal text-white uppercase tracking-wide">
+            FAQ
           </h2>
         </div>
 
-        <div className="space-y-3.5">
+        <div className="space-y-3">
           {faqItems.map((item, idx) => {
             const isOpen = openFaqIndex === idx;
             return (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm transition-all"
+                className="rounded-2xl border border-white/10 bg-[#120E10] overflow-hidden shadow-md transition-all"
               >
                 <button
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-extrabold text-sm sm:text-base text-slate-900 hover:text-[#0284c7] transition-colors"
+                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 font-bold text-sm sm:text-base text-white hover:text-[#EB94A9] transition-colors"
                 >
-                  <span>{item.q}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] font-bold text-xs flex items-center justify-center shrink-0">
+                      Q
+                    </span>
+                    <span>{item.q}</span>
+                  </div>
                   <ChevronDown
                     className={`w-5 h-5 text-slate-400 transition-transform duration-300 shrink-0 ${
-                      isOpen ? "rotate-180 text-[#0284c7]" : ""
+                      isOpen ? "rotate-180 text-[#F01147]" : ""
                     }`}
                   />
                 </button>
@@ -1030,8 +980,18 @@ export default function MiniCourseLanding() {
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-5 pb-5 sm:px-6 sm:pb-6 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed border-t border-slate-100 pt-3">
-                        {item.a}
+                      <div className="px-4 pb-4 sm:px-5 sm:pb-5 pt-1 border-t border-white/5">
+                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                          <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-[#F01147]/40">
+                            <Image
+                              src="/images/anastasia_hero_blue.webp"
+                              alt="Анастасія"
+                              fill
+                              className="object-cover object-top"
+                            />
+                          </div>
+                          <div className="flex-1">{item.a}</div>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -1044,80 +1004,22 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          BLOCK 11: BONUS LESSON "ЯК СПАЛИТИ ЖИР"
+          SECTION 10: FINAL SUMMARY CTA
           ========================================================================= */}
-      <section className="py-12 sm:py-16 px-4 sm:px-6 bg-gradient-to-br from-amber-50 via-white to-sky-50 border-y border-amber-200">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 max-w-3xl mx-auto text-center space-y-6 border-t border-white/10">
 
-          <div className="p-6 sm:p-10 rounded-3xl bg-white border-2 border-amber-300 shadow-xl space-y-6 relative overflow-hidden">
-
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-amber-100 text-amber-700 shrink-0">
-                <Gift className="w-7 h-7 text-amber-600" />
-              </div>
-              <div>
-                <span className="text-amber-700 text-xs font-extrabold uppercase tracking-widest">
-                  Ексклюзивний подарунок
-                </span>
-                <h2 className="text-xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
-                  При оплаті міні-курсу прямо зараз отримуйте безкоштовно урок «Як спалити ЖИР»
-                </h2>
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
-                Що в цьому бонусному уроці:
-              </h3>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-800 font-semibold">
-                <li className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[#059669] font-bold">✅</span>
-                  <span>5 правил для здорового схуднення</span>
-                </li>
-                <li className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[#059669] font-bold">✅</span>
-                  <span>Як правильно харчуватись для схуднення</span>
-                </li>
-                <li className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[#059669] font-bold">✅</span>
-                  <span>Який режим навантажень обрати для схуднення</span>
-                </li>
-                <li className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-[#059669] font-bold">✅</span>
-                  <span>Чому важливо під час схуднення спалювати жир, а не мʼязи</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* INSTANT BOT ACCESS NOTICE */}
-            <div className="p-4 rounded-2xl bg-sky-50 border border-sky-200 flex items-center gap-3">
-              <Send className="w-5 h-5 text-[#0284c7] shrink-0" />
-              <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed">
-                Після оплати ви одразу потрапляєте в Telegram-бот, який миттєво відкриє для вас цей урок.
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          BLOCK 12: FINAL SUMMARY & CTA
-          ========================================================================= */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 max-w-4xl mx-auto text-center space-y-6">
-
-        <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight uppercase tracking-tight">
-          Отримай <span className="text-[#0284c7]">плоский живіт</span> та струнку талію
+        <h2 className="font-league text-5xl sm:text-7xl font-normal text-white uppercase tracking-wide leading-none">
+          ОТРИМАЙ ПЛАСКИЙ ЖИВІТ<br />
+          <span className="text-[#F01147]">ТА СТРУНКУ ТАЛІЮ</span>
         </h2>
 
-        <p className="text-slate-600 text-sm sm:text-lg font-semibold max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto font-medium leading-relaxed">
           Перший результат вже за 7 днів, без виснажливих тренувань та обмежень в їжі, за перевіреною системою від фітнес-тренерки.
         </p>
 
-        <div className="flex items-center justify-center gap-3 font-extrabold text-2xl sm:text-4xl text-[#0284c7] pt-2">
+        <div className="flex items-center justify-center gap-3 font-league text-4xl sm:text-5xl text-[#F01147] pt-2">
           <span>399 грн</span>
-          <span className="text-base sm:text-xl line-through text-slate-400">2999 грн</span>
+          <span className="text-2xl sm:text-3xl line-through text-slate-500 font-normal">2999 грн</span>
         </div>
 
         <div className="pt-2 max-w-md mx-auto">
@@ -1126,45 +1028,53 @@ export default function MiniCourseLanding() {
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             onClick={handleOpenModal}
-            className="w-full py-4 px-8 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-lg shadow-2xl glow-primary uppercase tracking-wider cursor-pointer flex items-center justify-center gap-2"
+            className="w-full py-4 px-8 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl sm:text-3xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 cursor-pointer flex items-center justify-center gap-2 hover:brightness-110"
           >
-            <span>Отримати міні-курс</span>
-            <ArrowRight className="w-5 h-5 text-sky-200" />
+            <span>ОТРИМАТИ МІНІ-КУРС</span>
+            <ArrowRight className="w-6 h-6 text-white" />
           </motion.button>
         </div>
 
       </section>
 
       {/* =========================================================================
-          STICKY BOTTOM BAR (REVEALED ON SCROLL)
+          STICKY FLOATING FOOTER BAR (.footer-bg STYLE WITH LIVE COUNTDOWN TIMER)
           ========================================================================= */}
       <AnimatePresence>
         {showStickyUI && (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200 p-3 sm:p-4 shadow-2xl"
+            exit={{ opacity: 0, y: 60 }}
+            className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C090A]/95 backdrop-blur-xl border-t border-[#F01147]/40 p-3 sm:p-4 shadow-2xl"
           >
-            <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
+            <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+              
+              {/* LEFT INFO + COUNTDOWN TIMER */}
               <div className="flex items-center gap-3">
-                <div className="hidden sm:block font-extrabold text-slate-900 text-sm">
-                  Міні-курс «Плаский живіт та струнка талія»
+                <div className="hidden sm:block text-left">
+                  <div className="font-league text-lg text-white uppercase leading-none">
+                    Купуйте сьогодні та забирайте подарунок
+                  </div>
+                  <div className="text-[11px] text-[#EB94A9]">Міні-курс за 399 грн</div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg sm:text-xl font-extrabold text-[#0284c7]">399 грн</span>
-                  <span className="text-xs line-through text-slate-400 font-bold hidden sm:inline">2999 грн</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#059669] text-white font-bold uppercase">
-                    -87%
-                  </span>
+
+                {/* COUNTDOWN DIGITS */}
+                <div className="flex items-center gap-1 font-league text-lg sm:text-xl text-white">
+                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.hours}</div>
+                  <span>:</span>
+                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.minutes}</div>
+                  <span>:</span>
+                  <div className="px-2 py-0.5 rounded-md bg-black/60 border border-white/10">{timeLeft.seconds}</div>
                 </div>
               </div>
 
+              {/* CTA BUTTON */}
               <button
                 onClick={handleOpenModal}
-                className="py-2.5 sm:py-3 px-5 sm:px-8 rounded-xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider shadow-md hover:brightness-105 cursor-pointer whitespace-nowrap"
+                className="py-3 px-5 sm:px-8 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl sm:text-2xl uppercase tracking-wider shadow-lg hover:brightness-110 cursor-pointer whitespace-nowrap border border-[#F01147]/60"
               >
-                Отримати міні-курс
+                ОТРИМАТИ – 399 грн
               </button>
             </div>
           </motion.div>
@@ -1183,7 +1093,7 @@ export default function MiniCourseLanding() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => !isSubmitting && setIsModalOpen(false)}
-              className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
             />
 
             {/* MODAL CONTENT */}
@@ -1191,40 +1101,40 @@ export default function MiniCourseLanding() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg rounded-3xl bg-white border border-sky-200 shadow-2xl p-6 sm:p-8 space-y-5 overflow-hidden z-10 max-h-[92vh] overflow-y-auto"
+              className="relative w-full max-w-lg rounded-3xl bg-[#120E10] border border-[#F01147]/50 shadow-2xl p-6 sm:p-8 space-y-5 overflow-hidden z-10 max-h-[92vh] overflow-y-auto"
             >
               <button
                 onClick={() => !isSubmitting && setIsModalOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+                className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-white bg-white/10 hover:bg-white/20 transition-colors"
                 aria-label="Закрити"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-[#0284c7] text-xs font-bold border border-sky-200">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F01147]/20 text-[#EB94A9] text-xs font-bold border border-[#F01147]/40">
                   <Calendar className="w-3.5 h-3.5" />
-                  <span>Старт 24.08 • 6 уроків</span>
+                  <span>Старт 24.08 • Доступ назавжди</span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
+                <h3 className="font-league text-3xl sm:text-4xl text-white uppercase leading-none pt-1">
                   Отримати міні-курс
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                  Заповніть форму для переходу до оплати. Після оплати ви отримаєте доступ до уроків та бонус.
+                <p className="text-xs sm:text-sm text-slate-400 font-medium">
+                  Заповніть форму для переходу до захищеної оплати через WayForPay.
                 </p>
               </div>
 
               {/* PRICE HIGHLIGHT IN MODAL */}
-              <div className="p-3.5 rounded-2xl bg-sky-50/80 border border-sky-200 flex items-center justify-between text-xs font-bold text-slate-800">
-                <span>Вартість міні-курсу:</span>
+              <div className="p-4 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 flex items-center justify-between text-xs font-bold text-slate-200">
+                <span>Вартість зі знижкою -87%:</span>
                 <div className="flex items-center gap-2">
-                  <span className="line-through text-slate-400 text-xs">2999 грн</span>
-                  <span className="text-base font-extrabold text-[#0284c7]">399 грн</span>
+                  <span className="line-through text-slate-500 font-league text-lg">2999 грн</span>
+                  <span className="font-league text-3xl text-[#F01147]">399 грн</span>
                 </div>
               </div>
 
               {errorMessage && (
-                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2">
+                <div className="p-3.5 rounded-xl bg-rose-950/80 border border-rose-600 text-rose-300 text-xs font-bold flex items-center gap-2">
                   <ShieldAlert className="w-4 h-4 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
@@ -1233,8 +1143,8 @@ export default function MiniCourseLanding() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* NAME INPUT */}
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-[#0284c7]" />
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-[#EB94A9]" />
                     <span>Ваше ім'я:</span>
                   </label>
                   <input
@@ -1243,14 +1153,14 @@ export default function MiniCourseLanding() {
                     placeholder="Олена"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#0284c7] focus:ring-2 focus:ring-sky-100 outline-none text-sm text-slate-900 font-medium"
+                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium"
                   />
                 </div>
 
                 {/* PHONE INPUT */}
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                    <Phone className="w-3.5 h-3.5 text-[#0284c7]" />
+                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#EB94A9]" />
                     <span>Номер телефону (Viber / Telegram):</span>
                   </label>
                   <input
@@ -1259,21 +1169,21 @@ export default function MiniCourseLanding() {
                     placeholder="+380"
                     value={formData.phone}
                     onChange={handlePhoneChange}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#0284c7] focus:ring-2 focus:ring-sky-100 outline-none text-sm text-slate-900 font-medium font-mono"
+                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium font-mono"
                   />
                 </div>
 
                 {/* TELEGRAM INPUT */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <MessageCircle className="w-3.5 h-3.5 text-[#0284c7]" />
+                    <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5 text-[#EB94A9]" />
                       <span>Ваш Telegram:</span>
                     </label>
                     <button
                       type="button"
                       onClick={handleNoTelegramClick}
-                      className="text-[11px] text-[#0284c7] hover:underline font-semibold"
+                      className="text-[11px] text-[#EB94A9] hover:underline font-semibold"
                     >
                       В мене немає нікнейму
                     </button>
@@ -1284,7 +1194,7 @@ export default function MiniCourseLanding() {
                     placeholder="@username або посилання"
                     value={formData.telegram}
                     onChange={(e) => handleInputChange("telegram", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-[#0284c7] focus:ring-2 focus:ring-sky-100 outline-none text-sm text-slate-900 font-medium"
+                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] focus:ring-2 focus:ring-[#F01147]/20 outline-none text-sm text-white font-medium"
                   />
                 </div>
 
@@ -1292,7 +1202,7 @@ export default function MiniCourseLanding() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-extrabold text-base shadow-xl glow-primary flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider disabled:opacity-50 transition-all hover:brightness-105"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-xl border border-[#F01147]/50 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all hover:brightness-110"
                 >
                   {isSubmitting ? (
                     <span>Перенаправлення на оплату...</span>
@@ -1304,7 +1214,7 @@ export default function MiniCourseLanding() {
                   )}
                 </button>
 
-                <p className="text-[11px] text-slate-400 text-center font-medium">
+                <p className="text-[11px] text-slate-500 text-center font-medium">
                   Безпечна оплата через WayForPay (Apple Pay, Google Pay, картка).
                 </p>
               </form>
@@ -1318,7 +1228,7 @@ export default function MiniCourseLanding() {
           ========================================================================= */}
       <AnimatePresence>
         {activeCaseImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
             <button
               onClick={() => setActiveCaseImage(null)}
               className="absolute top-4 right-4 p-3 rounded-full text-white bg-white/10 hover:bg-white/20 transition-colors"
