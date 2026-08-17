@@ -58,6 +58,13 @@
   - Server-side status lookup by `orderReference`.
 - **`/api/cron/report` (Telegram Report Cron):**
   - Runs daily at 09:00 Kyiv time via Vercel Cron (`vercel.json`).
+  - Pre-run trigger: calls `syncWayForPayTransactions` for the last 3 days to guarantee database accuracy before generating reports.
+- **`/api/cron/sync-payments` (Payment Status Sync Cron):**
+  - GET/POST endpoint to run `syncWayForPayTransactions`.
+  - Supports query parameters `?days=N` or `?start=YYYY-MM-DD&end=YYYY-MM-DD` and checks `CRON_SECRET` authorization.
+- **`scripts/run_sync.js` (Historical Sync Script):**
+  - Standalone script executing a historical run of `syncWayForPayTransactions` from the project launch date (2026-07-01) to today, chunked in 28-day intervals.
+
 
 ---
 
