@@ -405,7 +405,7 @@ export default function MiniCourseLanding() {
             />
           </div>
 
-          {/* LAYER 2: BEHIND CUTOUT (SOLID WORDS: ОТРИМАЙ, ПЛАСКИЙ, ЖИВІТ) */}
+          {/* LAYER 2: BEHIND CUTOUT (SOLID WORDS: ОТРИМАЙ, ПЛАСКИЙ) */}
           <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
             
             {/* DATE BADGE */}
@@ -416,7 +416,7 @@ export default function MiniCourseLanding() {
               </div>
             </div>
 
-            {/* SOLID WORDS (BEHIND HERO.PNG) */}
+            {/* SOLID WORDS BEHIND HERO.PNG */}
             <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight text-center">
               
               {/* ROW 1: ОТРИМАЙ */}
@@ -427,11 +427,6 @@ export default function MiniCourseLanding() {
               {/* ROW 2: ПЛАСКИЙ */}
               <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 ПЛАСКИЙ
-              </div>
-
-              {/* ROW 3: ЖИВІТ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                ЖИВІТ
               </div>
 
             </div>
@@ -452,10 +447,10 @@ export default function MiniCourseLanding() {
             <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/80 to-transparent" />
           </div>
 
-          {/* LAYER 4: IN FRONT OF CUTOUT (RIGHT PARTS: МАЙ, КИЙ, ВІТ + СТРУНКУ ТАЛІЮ + BOTTOM UI) */}
+          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ + BOTTOM UI) */}
           <div className="absolute inset-0 z-30 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
             
-            {/* INVISIBLE DATE BADGE SPACER FOR PERFECT VERTICAL ALIGNMENT */}
+            {/* INVISIBLE DATE BADGE SPACER */}
             <div className="flex justify-center mb-2 invisible">
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs uppercase">
                 <Calendar className="w-3.5 h-3.5" />
@@ -463,31 +458,27 @@ export default function MiniCourseLanding() {
               </div>
             </div>
 
-            {/* FOREGROUND PARTS & RED TEXT (IN FRONT OF HERO.PNG) */}
+            {/* IN FRONT OF HERO.PNG: ЖИВІТ & VIVID RED ТА СТРУНКУ ТАЛІЮ */}
             <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight text-center">
               
-              {/* ROW 1: [ОТРИ] МАЙ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-                <span className="invisible select-none">ОТРИ</span>
-                <span>МАЙ</span>
+              {/* INVISIBLE ROW 1 SPACER */}
+              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black leading-none invisible select-none">
+                ОТРИМАЙ
               </div>
 
-              {/* ROW 2: [ПЛАС] КИЙ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-                <span className="invisible select-none">ПЛАС</span>
-                <span>КИЙ</span>
+              {/* INVISIBLE ROW 2 SPACER */}
+              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black leading-none invisible select-none">
+                ПЛАСКИЙ
               </div>
 
-              {/* ROW 3: [ЖИ] ВІТ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-                <span className="invisible select-none">ЖИ</span>
-                <span>ВІТ</span>
+              {/* ROW 3: ЖИВІТ (IN FRONT OF HERO.PNG) */}
+              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
+                ЖИВІТ
               </div>
 
-              {/* ROW 4: СТРУНКУ ТАЛІЮ (TWO DISTINCT WORDS OVER THE BODY) */}
-              <div className="flex items-center justify-center gap-3 w-full text-3xl sm:text-4xl md:text-5xl font-black text-[#F43F5E] leading-none pt-2 drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-                <span>СТРУНКУ</span>
-                <span>ТАЛІЮ</span>
+              {/* ROW 4: ТА СТРУНКУ ТАЛІЮ (HIGH CONTRAST VIVID RED OVER BODY) */}
+              <div className="w-full text-center text-3xl sm:text-4xl md:text-5xl font-black text-[#FF0033] tracking-wide leading-none pt-2 drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
+                ТА СТРУНКУ ТАЛІЮ
               </div>
 
             </div>
