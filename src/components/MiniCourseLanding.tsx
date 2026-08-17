@@ -386,55 +386,55 @@ export default function MiniCourseLanding() {
       </div>
 
       {/* =========================================================================
-          HERO SECTION (.s1: PHOTO IN BACKGROUND, HEADINGS & OFFER OVERLAID DIRECTLY ON PHOTO)
+          HERO SECTION (.s1: HEADINGS ABOVE PHOTO, OFFER OVERLAID ON PHOTO)
           ========================================================================= */}
-      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-4 pb-8 sm:py-8 flex flex-col items-center">
+      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-4 pb-8 sm:py-6 flex flex-col items-center space-y-4">
         
-        {/* CONTAINER CARD WITH PHOTO AS HERO BACKGROUND */}
-        <div className="relative w-full rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[640px] sm:min-h-[680px] flex flex-col justify-between p-4 sm:p-5">
+        {/* TOP GROUP: DATE BADGE & CONDENSED HEADLINES (ABOVE PHOTO) */}
+        <div className="flex flex-col items-center text-center space-y-2 w-full">
           
-          {/* PHOTO OF ANASTASIA AS HERO CANVAS */}
+          {/* DATE BADGE */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>START: 24 AUGUST</span>
+          </div>
+
+          {/* HEADLINE */}
+          <div className="space-y-0.5">
+            <h1 className="font-league text-5xl sm:text-6xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-lg">
+              ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
+            </h1>
+            <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-md">
+              ТА СТРУНКУ ТАЛІЮ
+            </div>
+          </div>
+
+        </div>
+
+        {/* CONTAINER CARD WITH PHOTO AS CANVAS & OFFER OVERLAID AT BOTTOM */}
+        <div className="relative w-full rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[560px] sm:min-h-[600px] flex flex-col justify-end p-4 sm:p-5">
+          
+          {/* PHOTO OF ANASTASIA */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/images/anastasia_hero_blue.webp"
               alt="Анастасія Сич"
               fill
               priority
-              className="object-cover object-[center_15%] filter brightness-95 contrast-105"
+              className="object-cover object-[center_12%] filter brightness-100 contrast-105"
               sizes="(max-width: 768px) 100vw, 480px"
             />
-            {/* Top dark gradient for heading readability */}
-            <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-black/90 via-black/50 to-transparent" />
-            {/* Bottom heavy dark gradient for offer & CTA overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-96 bg-gradient-to-t from-black via-black/85 to-transparent" />
+            {/* Bottom dark gradient for offer & CTA overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/85 to-transparent" />
           </div>
 
-          {/* TOP GROUP: DATE BADGE & CONDENSED HEADLINES */}
-          <div className="relative z-10 flex flex-col items-center text-center space-y-2 pt-1">
-            
-            {/* DATE BADGE */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>START: 24 AUGUST</span>
-            </div>
+          {/* BOTTOM GROUP OVERLAID DIRECTLY ON PHOTO: LESSONS PILL, PRICING, OFFER & CTA */}
+          <div className="relative z-10 flex flex-col items-center text-center space-y-2.5">
 
-            {/* HEADLINE */}
-            <div className="space-y-0.5">
-              <h1 className="font-league text-5xl sm:text-6xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-lg">
-                ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
-              </h1>
-              <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-md">
-                ТА СТРУНКУ ТАЛІЮ
-              </div>
-            </div>
-
-            <div className="text-[11px] text-slate-300 font-bold uppercase tracking-wider bg-black/40 px-2.5 py-0.5 rounded-full backdrop-blur-sm">
+            {/* 6 LESSONS PILL (RIGHT ABOVE PRICE BUTTONS) */}
+            <div className="inline-flex items-center gap-1 text-[11px] text-slate-200 font-bold uppercase tracking-wider bg-black/60 border border-white/20 px-3 py-1 rounded-full backdrop-blur-md shadow-sm">
               6 уроків • теорія + практика
             </div>
-          </div>
-
-          {/* BOTTOM GROUP OVERLAID DIRECTLY ON PHOTO: OFFER, PRICING & CTA */}
-          <div className="relative z-10 flex flex-col items-center text-center space-y-3 pt-24">
 
             {/* DUAL PRICING COMPARISON ROW */}
             <div className="w-full grid grid-cols-2 gap-2">
