@@ -391,7 +391,7 @@ export default function MiniCourseLanding() {
       <section className="relative w-full max-w-[460px] mx-auto px-4 pt-3 pb-8 sm:py-6 flex flex-col items-center">
         
         {/* CONTAINER CARD */}
-        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[680px] sm:min-h-[740px] flex flex-col justify-between p-4 sm:p-5">
+        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[720px] sm:min-h-[780px] flex flex-col justify-between p-3.5 sm:p-4">
           
           {/* LAYER 1: HERO BACKGROUND IMAGE (hero.webp) */}
           <div className="absolute inset-0 z-0 pointer-events-none">
@@ -406,26 +406,26 @@ export default function MiniCourseLanding() {
           </div>
 
           {/* LAYER 2: BEHIND CUTOUT (SOLID WORDS: ОТРИМАЙ, ПЛАСКИЙ) */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
+          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3 sm:pt-3.5 pointer-events-none select-none px-3 sm:px-4">
             
             {/* DATE BADGE */}
-            <div className="flex justify-center mb-2">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm">
-                <Calendar className="w-3.5 h-3.5" />
+            <div className="flex justify-center mb-1.5">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-[11px] font-bold uppercase backdrop-blur-md shadow-sm">
+                <Calendar className="w-3 h-3" />
                 <span>START: 24 AUGUST</span>
               </div>
             </div>
 
             {/* SOLID WORDS BEHIND HERO.PNG */}
-            <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight text-center">
+            <div className="font-outfit uppercase space-y-1 w-full tracking-tight text-center">
               
               {/* ROW 1: ОТРИМАЙ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 ОТРИМАЙ
               </div>
 
               {/* ROW 2: ПЛАСКИЙ */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 ПЛАСКИЙ
               </div>
 
@@ -444,40 +444,40 @@ export default function MiniCourseLanding() {
               sizes="(max-width: 768px) 100vw, 460px"
             />
             {/* Bottom smooth dark gradient for offer overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/80 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-black via-black/85 to-transparent" />
           </div>
 
-          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ + BOTTOM UI) */}
-          <div className="absolute inset-0 z-30 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
+          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ) */}
+          <div className="absolute inset-0 z-30 flex flex-col justify-start pt-3 sm:pt-3.5 pointer-events-none select-none px-3 sm:px-4">
             
             {/* INVISIBLE DATE BADGE SPACER */}
-            <div className="flex justify-center mb-2 invisible">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs uppercase">
-                <Calendar className="w-3.5 h-3.5" />
+            <div className="flex justify-center mb-1.5 invisible">
+              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 text-[11px] uppercase">
+                <Calendar className="w-3 h-3" />
                 <span>START: 24 AUGUST</span>
               </div>
             </div>
 
             {/* IN FRONT OF HERO.PNG: ЖИВІТ & VIVID RED ТА СТРУНКУ ТАЛІЮ */}
-            <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight text-center">
+            <div className="font-outfit uppercase space-y-1 w-full tracking-tight text-center">
               
               {/* INVISIBLE ROW 1 SPACER */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black leading-none invisible select-none">
+              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-none invisible select-none">
                 ОТРИМАЙ
               </div>
 
               {/* INVISIBLE ROW 2 SPACER */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black leading-none invisible select-none">
+              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-none invisible select-none">
                 ПЛАСКИЙ
               </div>
 
               {/* ROW 3: ЖИВІТ (IN FRONT OF HERO.PNG) */}
-              <div className="w-full text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
+              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
                 ЖИВІТ
               </div>
 
               {/* ROW 4: ТА СТРУНКУ ТАЛІЮ (HIGH CONTRAST VIVID RED OVER BODY) */}
-              <div className="w-full text-center text-3xl sm:text-4xl md:text-5xl font-black text-[#FF0033] tracking-wide leading-none pt-2 drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
+              <div className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-black text-[#FF0033] tracking-wide leading-none pt-1 drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
                 ТА СТРУНКУ ТАЛІЮ
               </div>
 
@@ -485,27 +485,27 @@ export default function MiniCourseLanding() {
 
           </div>
 
-          {/* LAYER 5: BOTTOM UI ELEMENTS (PRICE, CTA, BADGES) */}
-          <div className="relative z-30 flex flex-col items-center text-center space-y-2.5 mt-auto pt-64">
+          {/* LAYER 5: BOTTOM UI ELEMENTS (STRUCTURED & COMPACT) */}
+          <div className="relative z-30 flex flex-col items-center text-center space-y-1.5 mt-auto">
 
-            {/* 6 LESSONS PILL (BOLD & IN FRONT OF EVERYTHING) */}
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider bg-black/85 border border-white/25 text-white px-4 py-1.5 rounded-full backdrop-blur-xl shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-[#F43F5E] animate-pulse" />
+            {/* 6 LESSONS PILL (COMPACT & STRUCTURED) */}
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-black/90 border border-white/25 text-white px-3 py-1 rounded-full backdrop-blur-xl shadow-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF0033] animate-pulse" />
               <span>6 УРОКІВ • ТЕОРІЯ + ПРАКТИКА</span>
             </div>
 
-            {/* DUAL PRICING COMPARISON ROW */}
+            {/* DUAL PRICING COMPARISON ROW (COMPACT) */}
             <div className="w-full grid grid-cols-2 gap-2">
               
               {/* ACTIVE RED BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-3.5 rounded-2xl bg-[#D00839] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-2.5 rounded-xl bg-[#D00839] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[11px] font-extrabold text-white uppercase tracking-wide">
+                <span className="text-[10px] font-extrabold text-white uppercase tracking-wide">
                   СПЛАТІТЬ 1 РАЗ
                 </span>
-                <span className="font-league text-4xl sm:text-5xl font-bold leading-none mt-1">
+                <span className="font-league text-3xl sm:text-4xl font-bold leading-none mt-0.5">
                   399 грн
                 </span>
               </div>
@@ -513,12 +513,12 @@ export default function MiniCourseLanding() {
               {/* STRIKETHROUGH REGULAR PRICE BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-3.5 rounded-2xl bg-black/50 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-2.5 rounded-xl bg-black/60 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                   ЗВИЧАЙНА ЦІНА
                 </span>
-                <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1 line-through decoration-slate-400 text-slate-400">
+                <span className="font-league text-3xl sm:text-4xl font-normal leading-none mt-0.5 line-through decoration-slate-400 text-slate-400">
                   2999 грн
                 </span>
               </div>
@@ -526,39 +526,39 @@ export default function MiniCourseLanding() {
             </div>
 
             {/* PUNCHY OFFER SUMMARY */}
-            <div className="text-xs text-white font-bold leading-tight drop-shadow">
+            <div className="text-[11px] text-white font-bold leading-tight drop-shadow">
               Перший результат за 7 днів • <span className="text-[#EB94A9]">Без дієт та виснаження</span>
             </div>
 
-            {/* BIG HIGH-IMPACT RED CTA BUTTON */}
+            {/* HIGH-IMPACT RED CTA BUTTON (SLEEK & STRUCTURED) */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#E11D48] via-[#D00839] to-[#BA022F] text-white shadow-2xl border border-[#F01147]/50 flex items-center justify-between cursor-pointer hover:brightness-110 transition-all"
+              className="w-full py-2.5 sm:py-3 px-3.5 rounded-xl bg-gradient-to-r from-[#E11D48] via-[#D00839] to-[#BA022F] text-white shadow-2xl border border-[#F01147]/50 flex items-center justify-between cursor-pointer hover:brightness-110 transition-all"
             >
               <div className="flex flex-col items-start leading-none text-left">
-                <span className="font-outfit text-sm sm:text-base font-bold uppercase tracking-wider">
+                <span className="font-outfit text-xs sm:text-sm font-bold uppercase tracking-wider">
                   ОТРИМАТИ МІНІ-КУРС ЗА
                 </span>
-                <span className="font-league text-3xl sm:text-4xl font-bold text-white mt-0.5">
+                <span className="font-league text-2xl sm:text-3xl font-bold text-white mt-0.5">
                   399 ГРН
                 </span>
               </div>
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                <ArrowRight className="w-6 h-6 text-white" />
+              <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0">
+                <ArrowRight className="w-4 h-4 text-white" />
               </div>
             </motion.button>
 
             {/* TRUST BADGE ROW */}
-            <div className="flex items-center justify-center gap-3 text-[11px] font-semibold text-white/80 pt-1">
+            <div className="flex items-center justify-center gap-2.5 text-[10px] font-semibold text-white/80 pt-0.5">
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-[#F01147] text-[#F01147]" /> 4.9/5
               </span>
               <span className="text-white/30">•</span>
               <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" /> Доступ назавжди
+                <ShieldCheck className="w-3 h-3 text-[#059669]" /> Доступ назавжди
               </span>
               <span className="text-white/30">•</span>
               <span className="flex items-center gap-1">
