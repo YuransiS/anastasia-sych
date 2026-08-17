@@ -405,7 +405,7 @@ export default function MiniCourseLanding() {
             />
           </div>
 
-          {/* LAYER 2: SOLID SPLIT TEXT (BEHIND HERO.PNG CUTOUT - SPLIT LEFT & RIGHT) */}
+          {/* LAYER 2: BEHIND CUTOUT (LEFT WORDS: ОТРИ, ПЛАС, ЖИ) */}
           <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
             
             {/* DATE BADGE */}
@@ -416,38 +416,29 @@ export default function MiniCourseLanding() {
               </div>
             </div>
 
-            {/* SPLIT HEADLINES (SPANNING LEFT AND RIGHT ACROSS ANASTASIA'S SILHOUETTE) */}
+            {/* LEFT WORDS (BEHIND HERO.PNG) */}
             <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight">
               
-              {/* ROW 1: ОТРИ ... МАЙ */}
-              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              {/* ROW 1: ОТРИ */}
+              <div className="flex items-center justify-start w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 <span className="text-left tracking-tight pl-0.5">ОТРИ</span>
-                <span className="text-right tracking-tight pr-0.5">МАЙ</span>
               </div>
 
-              {/* ROW 2: ПЛАС ... КИЙ */}
-              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              {/* ROW 2: ПЛАС */}
+              <div className="flex items-center justify-start w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 <span className="text-left tracking-tight pl-0.5">ПЛАС</span>
-                <span className="text-right tracking-tight pr-0.5">КИЙ</span>
               </div>
 
-              {/* ROW 3: ЖИ ... ВІТ */}
-              <div className="flex items-center justify-between w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+              {/* ROW 3: ЖИ */}
+              <div className="flex items-center justify-start w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                 <span className="text-left tracking-tight pl-0.5">ЖИ</span>
-                <span className="text-right tracking-tight pr-0.5">ВІТ</span>
-              </div>
-
-              {/* ROW 4: ТА СТРУНКУ ... ТАЛІЮ */}
-              <div className="flex items-center justify-between w-full text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#F43F5E] leading-none pt-1 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                <span className="text-left tracking-wide pl-0.5">ТА СТРУНКУ</span>
-                <span className="text-right tracking-wide pr-0.5">ТАЛІЮ</span>
               </div>
 
             </div>
 
           </div>
 
-          {/* LAYER 3: FOREGROUND CUTOUT (hero.png) OVERLAPPING THE TEXT */}
+          {/* LAYER 3: FOREGROUND CUTOUT (hero.png) */}
           <div className="absolute inset-0 z-20 pointer-events-none">
             <Image
               src="/images/hero.png"
@@ -461,7 +452,46 @@ export default function MiniCourseLanding() {
             <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/80 to-transparent" />
           </div>
 
-          {/* LAYER 4: BOTTOM UI ELEMENTS (IN FRONT OF FOREGROUND CUTOUT) */}
+          {/* LAYER 4: IN FRONT OF CUTOUT (RIGHT WORDS: МАЙ, КИЙ, ВІТ + RED TEXT OVER BODY + BOTTOM UI) */}
+          <div className="absolute inset-0 z-30 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
+            
+            {/* INVISIBLE DATE BADGE SPACER FOR PERFECT VERTICAL ALIGNMENT */}
+            <div className="flex justify-center mb-2 invisible">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 text-xs uppercase">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>START: 24 AUGUST</span>
+              </div>
+            </div>
+
+            {/* RIGHT WORDS & RED TEXT (IN FRONT OF HERO.PNG) */}
+            <div className="font-outfit uppercase space-y-1.5 w-full tracking-tight">
+              
+              {/* ROW 1: МАЙ */}
+              <div className="flex items-center justify-end w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+                <span className="text-right tracking-tight pr-0.5">МАЙ</span>
+              </div>
+
+              {/* ROW 2: КИЙ */}
+              <div className="flex items-center justify-end w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+                <span className="text-right tracking-tight pr-0.5">КИЙ</span>
+              </div>
+
+              {/* ROW 3: ВІТ */}
+              <div className="flex items-center justify-end w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+                <span className="text-right tracking-tight pr-0.5">ВІТ</span>
+              </div>
+
+              {/* ROW 4: ТА СТРУНКУ ... ТАЛІЮ (IN FRONT OF HERO.PNG OVER BODY) */}
+              <div className="flex items-center justify-between w-full text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#F43F5E] leading-none pt-1 drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
+                <span className="text-left tracking-wide pl-0.5">ТА СТРУНКУ</span>
+                <span className="text-right tracking-wide pr-0.5">ТАЛІЮ</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* LAYER 5: BOTTOM UI ELEMENTS (PRICE, CTA, BADGES) */}
           <div className="relative z-30 flex flex-col items-center text-center space-y-2.5 mt-auto pt-64">
 
             {/* 6 LESSONS PILL (BOLD & IN FRONT OF EVERYTHING) */}
