@@ -386,53 +386,71 @@ export default function MiniCourseLanding() {
       </div>
 
       {/* =========================================================================
-          HERO SECTION (.s1: HEADINGS ABOVE PHOTO, OFFER OVERLAID ON PHOTO)
+          HERO SECTION (3D LAYERED: hero.webp BACK -> SOLID TEXT -> hero.png FOREGROUND -> BOTTOM OFFER UI)
           ========================================================================= */}
-      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-4 pb-8 sm:py-6 flex flex-col items-center space-y-4">
+      <section className="relative w-full max-w-[460px] mx-auto px-4 pt-3 pb-8 sm:py-6 flex flex-col items-center">
         
-        {/* TOP GROUP: DATE BADGE & CONDENSED HEADLINES (ABOVE PHOTO) */}
-        <div className="flex flex-col items-center text-center space-y-2 w-full">
+        {/* CONTAINER CARD */}
+        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[680px] sm:min-h-[740px] flex flex-col justify-between p-4 sm:p-5">
           
-          {/* DATE BADGE */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>START: 24 AUGUST</span>
-          </div>
-
-          {/* HEADLINE */}
-          <div className="space-y-0.5">
-            <h1 className="font-league text-5xl sm:text-6xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-lg">
-              ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
-            </h1>
-            <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-md">
-              ТА СТРУНКУ ТАЛІЮ
-            </div>
-          </div>
-
-        </div>
-
-        {/* CONTAINER CARD WITH PHOTO AS CANVAS & OFFER OVERLAID AT BOTTOM */}
-        <div className="relative w-full rounded-3xl overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[560px] sm:min-h-[600px] flex flex-col justify-end p-4 sm:p-5">
-          
-          {/* PHOTO OF ANASTASIA */}
-          <div className="absolute inset-0 z-0">
+          {/* LAYER 1: HERO BACKGROUND IMAGE (hero.webp) */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
             <Image
-              src="/images/anastasia_hero_blue.webp"
+              src="/images/hero.webp"
+              alt="Background"
+              fill
+              priority
+              className="object-cover object-top"
+              sizes="(max-width: 768px) 100vw, 460px"
+            />
+          </div>
+
+          {/* LAYER 2: SOLID TEXT (BEHIND HERO.PNG CUTOUT) */}
+          <div className="absolute inset-0 z-10 flex flex-col items-center text-center pt-5 pointer-events-none select-none">
+            
+            {/* DATE BADGE */}
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/40 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm mb-2">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>START: 24 AUGUST</span>
+            </div>
+
+            {/* SOLID HEADLINES */}
+            <div className="font-outfit uppercase space-y-0 tracking-tight">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
+                ОТРИМАЙ
+              </div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
+                ПЛАСКИЙ
+              </div>
+              <div className="text-5xl sm:text-6xl md:text-7xl font-light text-white leading-[0.92] drop-shadow-md">
+                ЖИВІТ
+              </div>
+              <div className="font-outfit text-3xl sm:text-4xl md:text-5xl font-normal text-[#E11D48] tracking-widest leading-none pt-2 drop-shadow-md">
+                ТА СТРУНКУ ТАЛІЮ
+              </div>
+            </div>
+
+          </div>
+
+          {/* LAYER 3: FOREGROUND CUTOUT (hero.png) OVERLAPPING THE TEXT */}
+          <div className="absolute inset-0 z-20 pointer-events-none">
+            <Image
+              src="/images/hero.png"
               alt="Анастасія Сич"
               fill
               priority
-              className="object-cover object-[center_12%] filter brightness-100 contrast-105"
-              sizes="(max-width: 768px) 100vw, 480px"
+              className="object-cover object-top"
+              sizes="(max-width: 768px) 100vw, 460px"
             />
-            {/* Bottom dark gradient for offer & CTA overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/85 to-transparent" />
+            {/* Bottom smooth dark gradient for offer overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-80 bg-gradient-to-t from-black via-black/80 to-transparent" />
           </div>
 
-          {/* BOTTOM GROUP OVERLAID DIRECTLY ON PHOTO: LESSONS PILL, PRICING, OFFER & CTA */}
-          <div className="relative z-10 flex flex-col items-center text-center space-y-2.5">
+          {/* LAYER 4: BOTTOM UI ELEMENTS (IN FRONT OF FOREGROUND CUTOUT) */}
+          <div className="relative z-30 flex flex-col items-center text-center space-y-2.5 mt-auto pt-64">
 
             {/* 6 LESSONS PILL (RIGHT ABOVE PRICE BUTTONS) */}
-            <div className="inline-flex items-center gap-1 text-[11px] text-slate-200 font-bold uppercase tracking-wider bg-black/60 border border-white/20 px-3 py-1 rounded-full backdrop-blur-md shadow-sm">
+            <div className="inline-flex items-center gap-1 text-[11px] text-slate-200 font-bold uppercase tracking-wider bg-black/60 border border-white/20 px-3.5 py-1 rounded-full backdrop-blur-md shadow-sm">
               6 уроків • теорія + практика
             </div>
 
@@ -442,12 +460,12 @@ export default function MiniCourseLanding() {
               {/* ACTIVE RED BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-3 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-3.5 rounded-2xl bg-[#D00839] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[11px] font-bold text-white/90 uppercase tracking-wide">
-                  Сплатіть 1 раз
+                <span className="text-[11px] font-extrabold text-white uppercase tracking-wide">
+                  СПЛАТІТЬ 1 РАЗ
                 </span>
-                <span className="font-league text-4xl font-normal leading-none mt-0.5">
+                <span className="font-league text-4xl sm:text-5xl font-bold leading-none mt-1">
                   399 грн
                 </span>
               </div>
@@ -455,12 +473,12 @@ export default function MiniCourseLanding() {
               {/* STRIKETHROUGH REGULAR PRICE BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-3 rounded-2xl bg-white/10 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-3.5 rounded-2xl bg-black/50 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
-                  Звичайна ціна
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">
+                  ЗВИЧАЙНА ЦІНА
                 </span>
-                <span className="font-league text-4xl font-normal leading-none mt-0.5 line-through decoration-slate-400 text-slate-400">
+                <span className="font-league text-4xl sm:text-5xl font-normal leading-none mt-1 line-through decoration-slate-400 text-slate-400">
                   2999 грн
                 </span>
               </div>
@@ -468,8 +486,8 @@ export default function MiniCourseLanding() {
             </div>
 
             {/* PUNCHY OFFER SUMMARY */}
-            <div className="text-xs text-[#EB94A9] font-bold leading-tight drop-shadow">
-              <span className="text-white">Перший результат за 7 днів</span> • Без дієт та виснаження
+            <div className="text-xs text-white font-bold leading-tight drop-shadow">
+              Перший результат за 7 днів • <span className="text-[#EB94A9]">Без дієт та виснаження</span>
             </div>
 
             {/* BIG HIGH-IMPACT RED CTA BUTTON */}
@@ -478,10 +496,19 @@ export default function MiniCourseLanding() {
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#E11D48] via-[#D00839] to-[#BA022F] text-white shadow-2xl border border-[#F01147]/50 flex items-center justify-between cursor-pointer hover:brightness-110 transition-all"
             >
-              <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
-              <ArrowRight className="w-5 h-5 text-white shrink-0" />
+              <div className="flex flex-col items-start leading-none text-left">
+                <span className="font-outfit text-sm sm:text-base font-bold uppercase tracking-wider">
+                  ОТРИМАТИ МІНІ-КУРС ЗА
+                </span>
+                <span className="font-league text-3xl sm:text-4xl font-bold text-white mt-0.5">
+                  399 ГРН
+                </span>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                <ArrowRight className="w-6 h-6 text-white" />
+              </div>
             </motion.button>
 
             {/* TRUST BADGE ROW */}
