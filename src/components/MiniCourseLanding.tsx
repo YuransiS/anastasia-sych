@@ -367,7 +367,7 @@ export default function MiniCourseLanding() {
   return (
     <div className="min-h-screen bg-[#070607] text-[#FFFFFF] font-source selection:bg-[#DB0B3E] selection:text-white pb-28 sm:pb-24 overflow-x-hidden">
 
-      {/* TOP RED TICKER BANNER */}
+      {/* TOP RED TICKER BANNER (START 24.08) */}
       <div className="bg-gradient-to-r from-[#BA022F] to-[#D00839] text-white py-1.5 overflow-hidden shadow-lg sticky top-0 z-40 border-b border-[#F01147]/30">
         <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
           <span>🔥 СТАРТ 24.08</span>
