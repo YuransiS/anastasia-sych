@@ -32,7 +32,11 @@
 
 ## 3. Routes & Page Map
 - **`/` (Root Page):** Clean, high-end 404 page ("Ви не туди потрапили") with zero external links.
-- **`/mini-course/waist` (New Mini-Course Landing Page - August 2026):**
+- **`/mini-course/flat-belly` (13-Block Mini-Course Landing Page - August 2026):**
+  - High-converting landing page strictly based on 13-block technical specification and reference design (`sashahavryleiko-10kg.lovable.app`) for Anastasia Sych's mini-course «Зроби плаский живіт та струнку талію всього за 20 хвилин на день» (399 UAH instead of 3999 UAH, -90% discount).
+  - Features 13 structured blocks: Start 24.08 Hero with dual price comparisons, 6 pain point frames with frustration visuals, messenger chat bubbles around Anastasia's full-height portrait, 6 YouTube-style video lessons curriculum, 20-minute daily system, nutrition & fat percentage breakdown, multi-disciplinary synergy formula, Anastasia's 8-year expert profile, target audience checklist, transformation cases carousel with zoom lightbox, inside features summary, 4 FAQ items, and final high-conversion CTA block.
+  - Integrates persistent sticky bottom buy bar across the entire page, lead capture modal with auto-save to `localStorage`, phone formatting (`+380`), Telegram validation, Facebook Pixel tracking, and automatic WayForPay checkout.
+- **`/mini-course/waist` (Mini-Course Landing Page - August 2026):**
   - High-converting landing page matching the consultation design reference for Anastasia Sych's mini-course «Позбудься випираючого живота та створи чітку талію з перших тренувань» (399 UAH instead of 2999 UAH, -87% discount).
   - 12 structured blocks strictly following specifications: Hero, Price & 3 benefits, 6 Pain Points, Core Insight, 5 Lessons curriculum, Dedicated Bonus lesson on habits, Key outcomes, Target profile checklist, Anastasia Sych author profile, Transformation cases carousel with zoom lightbox, Final offer, and 5 FAQ items.
   - Integrates contact lead modal with auto-save to `localStorage`, phone formatting (`+380`), Telegram validation, and automatic WayForPay checkout.
