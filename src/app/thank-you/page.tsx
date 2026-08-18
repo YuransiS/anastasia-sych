@@ -34,11 +34,12 @@ function ThankYouContent() {
   const isMiniCourse =
     orderData?.page_path === "/mini-course" ||
     orderData?.offer_variant === "mini-course" ||
+    orderData?.amount === 279 ||
     orderData?.amount === 399;
 
   // Track Facebook Pixel Purchase event on Thank You page
   useEffect(() => {
-    const value = orderData?.amount || (isMiniCourse ? 399 : 480);
+    const value = orderData?.amount || (isMiniCourse ? 279 : 480);
     const contentName = isMiniCourse
       ? "Анастасія Сич - Міні-курс «Плаский живіт та струнка талія»"
       : "Анастасія Сич - Персональна діагностика";

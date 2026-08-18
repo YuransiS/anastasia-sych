@@ -7,7 +7,7 @@ const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 export function getOfferLabel(variant?: string): string {
   const v = String(variant || "1");
   if (v === "mini-course" || v === "minicourse" || v === "mc" || v.startsWith("mini-course")) {
-    return "Міні-курс: «Плаский живіт та струнка талія» (399 грн)";
+    return "Міні-курс: «Плаский живіт та струнка талія» (279 грн)";
   }
   if (v === "2") return "Офер #2 (Дивишся в дзеркало і тобі не подобається відображення?)";
   if (v === "3") return "Офер #3 (Марафон закінчився, мотивація зникла, а старі звички повернулися?)";
@@ -39,7 +39,7 @@ export async function processPaymentStatusUpdate(payload: {
     return null;
   }
 
-  const paidAmount = amount ? Number(amount) : (existingLead.amount ? Number(existingLead.amount) : 399);
+  const paidAmount = amount ? Number(amount) : (existingLead.amount ? Number(existingLead.amount) : 279);
 
   // 2. Update status in Supabase
   const { data: updatedLead, error: updateErr } = await supabaseAdmin

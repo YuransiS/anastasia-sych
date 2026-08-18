@@ -171,7 +171,7 @@ export default function MiniCourseLanding() {
     setErrorMessage("");
     trackPixelEvent("InitiateCheckout", {
       offer_variant: "mini-course",
-      amount: 399,
+      amount: 279,
       currency: "UAH",
       content_name: "Міні-курс: Плаский живіт та струнка талія",
     });
@@ -247,9 +247,9 @@ export default function MiniCourseLanding() {
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
-          notes: formData.notes || "Заявка на міні-курс (399 грн)",
+          notes: formData.notes || "Заявка на міні-курс (279 грн)",
           offer_variant: "mini-course",
-          amount: 399,
+          amount: 279,
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
@@ -265,7 +265,7 @@ export default function MiniCourseLanding() {
       if (response.ok && data.status === "success") {
         trackPixelEvent("Lead", {
           offer_variant: "mini-course",
-          value: 399,
+          value: 279,
           currency: "UAH",
         });
 
@@ -323,23 +323,23 @@ export default function MiniCourseLanding() {
   const systemSteps = [
     {
       step: "КРОК 1",
-      title: "Розбираємо основу",
-      desc: "Харчування, активність, режим та звички, які впливають на результат.",
+      title: "Спочатку розуміємо причину",
+      desc: "Аналізуємо харчування, щоденну активність, режим та індивідуальні особливості тіла.",
     },
     {
       step: "КРОК 2",
       title: "Прибираємо те, що заважає",
-      desc: "Без списку з 50 заборон і життя на курячій грудці.",
+      desc: "Без жорстких заборон, виснажливого голодування та повторних зривів.",
     },
     {
       step: "КРОК 3",
-      title: "Додаємо те, що працює",
-      desc: "Зрозуміле харчування та адекватне фізичне навантаження.",
+      title: "Підбираємо ефективні вправи",
+      desc: "Отримуєте цільове навантаження та збалансований раціон, які дають швидкий результат.",
     },
     {
       step: "КРОК 4",
-      title: "Закріплюємо",
-      desc: "Щоб ви не повернулися до старого режиму після першого тижня.",
+      title: "Закріплюємо результат",
+      desc: "Формуємо стабільну звичку, щоб плаский живіт та тонка талія залишалися з вами назавжди.",
     },
   ];
 
@@ -391,7 +391,7 @@ export default function MiniCourseLanding() {
     },
     {
       q: "Чи допоможе якщо у мене вага постійно повертається назад?",
-      a: "Задача цього курсу не ввести вас в коротко тривалі обмеження, а вибудувати систему, яка стане частиною вашого життя.",
+      a: "Задача цього курсу не ввести вас в короткотривалі обмеження, а вибудувати систему, яка стане частиною вашого життя.",
     },
   ];
 
@@ -403,17 +403,17 @@ export default function MiniCourseLanding() {
         <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8 whitespace-nowrap">
           <span>🔥 СТАРТ 27.08</span>
           <span className="text-white/60">✦</span>
-          <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
+          <span>ЗНИЖКА -90% ДІЄ СЬОГОДНІ</span>
           <span className="text-white/60">✦</span>
-          <span>6 УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
+          <span>6 ПРАКТИЧНИХ УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
           <span className="text-white/60">✦</span>
           <span>ДОСТУП НАЗАВЖДИ</span>
           <span className="text-white/60">✦</span>
           <span>🔥 СТАРТ 27.08</span>
           <span className="text-white/60">✦</span>
-          <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
+          <span>ЗНИЖКА -90% ДІЄ СЬОГОДНІ</span>
           <span className="text-white/60">✦</span>
-          <span>6 УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
+          <span>6 ПРАКТИЧНИХ УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
           <span className="text-white/60">✦</span>
         </div>
       </div>
@@ -423,10 +423,10 @@ export default function MiniCourseLanding() {
           ========================================================================= */}
       <section className="relative w-full max-w-[480px] mx-auto px-4 pt-1.5 pb-4 flex flex-col items-center space-y-2.5">
         
-        {/* TOP DATE PILL (UKRAINIAN: СТАРТ 27.08) */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm">
+        {/* TOP DATE PILL (UKRAINIAN: Старт 27.08 | 6 практичних уроків) */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm">
           <Calendar className="w-3.5 h-3.5 text-[#F01147]" />
-          <span>СТАРТ 27.08 | 6 УРОКІВ (ТЕОРІЯ + ПРАКТИКА)</span>
+          <span>Старт 27.08 | 6 практичних уроків</span>
         </div>
 
         {/* HERO CARD (PHOTO TOP WITH CLEAN BOTTOM GRADIENT) */}
@@ -471,7 +471,7 @@ export default function MiniCourseLanding() {
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-200 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#F01147] shrink-0" />
-                <span>за перевіреною системою від фітнес тренерки</span>
+                <span>за перевіреною системою від фітнес-тренерки</span>
               </div>
             </div>
 
@@ -493,7 +493,7 @@ export default function MiniCourseLanding() {
                   <ArrowRight className="w-3 h-3 text-white" />
                 </div>
                 <span className="font-league text-3xl sm:text-4xl font-bold leading-none mt-0.5">
-                  399 грн
+                  279 грн
                 </span>
               </motion.div>
 
@@ -789,7 +789,7 @@ export default function MiniCourseLanding() {
           onClick={handleOpenModal}
           className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
         >
-          <span>ОТРИМАТИ ДОСТУП ЗА 399 ГРН</span>
+          <span>ОТРИМАТИ ДОСТУП ЗА 279 ГРН</span>
           <ArrowRight className="w-4 h-4 text-white" />
         </button>
 
@@ -1012,7 +1012,7 @@ export default function MiniCourseLanding() {
           <div className="inline-flex items-center gap-3 bg-black/60 border border-white/15 px-4 py-2 rounded-2xl backdrop-blur-md">
             <span className="font-league text-2xl text-slate-400 line-through">2999 грн</span>
             <span className="text-white text-xs">→</span>
-            <span className="font-league text-4xl text-[#F01147] font-bold">399 грн</span>
+            <span className="font-league text-4xl text-[#F01147] font-bold">279 грн</span>
           </div>
 
           <motion.button
@@ -1022,7 +1022,7 @@ export default function MiniCourseLanding() {
             onClick={handleOpenModal}
             className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
           >
-            <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
+            <span>ОТРИМАТИ МІНІ-КУРС ЗА 279 ГРН</span>
             <ArrowRight className="w-5 h-5 text-white shrink-0" />
           </motion.button>
 
@@ -1088,7 +1088,7 @@ export default function MiniCourseLanding() {
           
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#EB94A9] text-xs font-bold uppercase">
             <Gift className="w-3.5 h-3.5 text-[#F01147]" />
-            <span>Безкоштовний бонус при оплаті прямо зараз</span>
+            <span>Бонусний урок</span>
           </div>
 
           <div className="space-y-1.5">
@@ -1132,7 +1132,7 @@ export default function MiniCourseLanding() {
         </div>
 
         <div className="font-league text-5xl text-[#F01147] font-bold">
-          399 грн
+          279 грн
         </div>
 
         <motion.button
@@ -1142,7 +1142,7 @@ export default function MiniCourseLanding() {
           onClick={handleOpenModal}
           className="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
         >
-          <span>ОТРИМАТИ МІНІ-КУРС</span>
+          <span>ОТРИМАТИ МІНІ-КУРС ЗА 279 ГРН</span>
           <ArrowRight className="w-5 h-5 text-white shrink-0" />
         </motion.button>
 
@@ -1179,7 +1179,7 @@ export default function MiniCourseLanding() {
                 onClick={handleOpenModal}
                 className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
               >
-                <span>ОТРИМАТИ – 399 ГРН</span>
+                <span>ОТРИМАТИ – 279 ГРН</span>
                 <ArrowRight className="w-4 h-4 text-white" />
               </button>
 
@@ -1223,7 +1223,7 @@ export default function MiniCourseLanding() {
       </AnimatePresence>
 
       {/* =========================================================================
-          CHECKOUT LEAD FORM MODAL (399 UAH)
+          CHECKOUT LEAD FORM MODAL (279 UAH)
           ========================================================================= */}
       <AnimatePresence>
         {isModalOpen && (
@@ -1252,7 +1252,7 @@ export default function MiniCourseLanding() {
                   ОТРИМАТИ МІНІ-КУРС
                 </h3>
                 <p className="text-xs text-slate-300">
-                  Заповніть форму для переходу до захищеної оплати 399 грн
+                  Заповніть форму для переходу до захищеної оплати 279 грн
                 </p>
               </div>
 
@@ -1325,7 +1325,7 @@ export default function MiniCourseLanding() {
                   <span className="text-slate-300">До сплати:</span>
                   <div className="flex items-center gap-2">
                     <span className="line-through text-slate-500 text-xs">2999 грн</span>
-                    <span className="font-league text-2xl text-[#F01147] font-bold">399 грн</span>
+                    <span className="font-league text-2xl text-[#F01147] font-bold">279 грн</span>
                   </div>
                 </div>
 
@@ -1339,7 +1339,7 @@ export default function MiniCourseLanding() {
                     <span className="text-sm font-sans">Переходимо до оплати...</span>
                   ) : (
                     <>
-                      <span>ПЕРЕЙТИ ДО ОПЛАТИ (399 ГРН)</span>
+                      <span>ПЕРЕЙТИ ДО ОПЛАТИ (279 ГРН)</span>
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}

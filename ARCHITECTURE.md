@@ -40,9 +40,9 @@
   - High-converting landing page matching the consultation design reference for Anastasia Sych's mini-course «Позбудься випираючого живота та створи чітку талію з перших тренувань» (399 UAH instead of 2999 UAH, -87% discount).
   - 12 structured blocks strictly following specifications: Hero, Price & 3 benefits, 6 Pain Points, Core Insight, 5 Lessons curriculum, Dedicated Bonus lesson on habits, Key outcomes, Target profile checklist, Anastasia Sych author profile, Transformation cases carousel with zoom lightbox, Final offer, and 5 FAQ items.
   - Integrates contact lead modal with auto-save to `localStorage`, phone formatting (`+380`), Telegram validation, and automatic WayForPay checkout.
-- **`/mini-course` (Mini-Course Landing Page):**
-  - High-converting landing page for Anastasia Sych's 6-lesson mini-course «Плаский живіт та струнка талія» (399 UAH instead of 2999 UAH, -87% discount).
-  - Features 12 structured blocks, circular cycle infographics, YouTube-style lesson cards, Anastasia's sports attire imagery, transformation case carousel, FAQ, and free bonus lesson "Як спалити ЖИР".
+- **`/mini-course` (Mini-Course Landing Page - 279 UAH / Start 27.08):**
+  - High-converting landing page for Anastasia Sych's 6-lesson mini-course «Плаский живіт та струнка талія» (279 UAH instead of 2999 UAH, -90% discount, Start 27.08).
+  - 12 comprehensive structural sections matching TZ: photo-top hero card, circular failure cycle infographic, 5 video lesson preview steps, 4-step progressive system, trainer credential bio, real case studies carousel with zoom lightbox, FAQ accordion, bonus lesson breakdown, and sticky countdown footer bar.
   - Integrates contact lead modal with auto-save, phone formatting (`+380`), Telegram validation, and automatic WayForPay payment generation.
 - **`/diagnostic` (Diagnostic Landing Page):**
   - Interactive landing page for Anastasia Sych's 60-minute personal diagnostics (480 UAH instead of 1190 UAH).

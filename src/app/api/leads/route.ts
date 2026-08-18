@@ -128,8 +128,9 @@ export async function POST(request: NextRequest) {
       offerVariant.startsWith("mini-course") ||
       offerVariant === "minicourse" ||
       offerVariant === "mc" ||
+      body.amount === 279 ||
       body.amount === 399;
-    const defaultAmount = isMiniCourse ? 399 : 480;
+    const defaultAmount = isMiniCourse ? 279 : 480;
     const amount = isTestPayment ? 1 : (body.amount ? Number(body.amount) : defaultAmount);
 
     const orderReference = `AS_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
