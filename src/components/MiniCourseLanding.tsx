@@ -568,39 +568,166 @@ export default function MiniCourseLanding() {
         </div>
 
         {/* AND THEN AGAIN - VISUAL CIRCULAR INFOGRAPHIC */}
-        <div className="p-4 rounded-2xl bg-gradient-to-b from-[#1A0E13] to-[#120E10] border border-[#F01147]/40 shadow-xl space-y-4 text-center">
+        <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-b from-[#1A0E13] via-[#120E10] to-[#0A0708] border border-[#F01147]/50 shadow-2xl space-y-3 text-center overflow-hidden">
           
-          <div className="font-league text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#F01147]">
-            А ПОТІМ ЗНОВУ:
+          <div className="space-y-0.5">
+            <div className="font-league text-3xl font-bold uppercase tracking-wider text-[#F01147]">
+              А ПОТІМ ЗНОВУ:
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Замкнене коло, яке повторюється з кожною новою спробою
+            </p>
           </div>
 
-          {/* VISUAL LOOP FLOW WITH ARROWS */}
-          <div className="grid grid-cols-1 gap-2 text-left">
-            {[
-              { step: "1", title: "Обмеження", desc: "Суворий контроль та заборони в їжі", icon: "🔒" },
-              { step: "2", title: "Сильний голод", desc: "Організм вимагає швидкої енергії", icon: "⚡" },
-              { step: "3", title: "Переїдання", desc: "Втрата контролю над порціями", icon: "🍕" },
-              { step: "4", title: "Зрив", desc: "Почуття провини та розчарування", icon: "💥" },
-              { step: "5", title: "Починаєте спочатку", desc: "Черговий марафон «з понеділка»", icon: "🔄" },
-            ].map((loop, idx) => (
-              <div key={idx} className="relative">
-                <div className="p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">{loop.icon}</span>
-                    <div>
-                      <div className="text-xs font-bold text-white uppercase">{loop.title}</div>
-                      <div className="text-[11px] text-slate-400">{loop.desc}</div>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-[#F01147]/80">0{loop.step}</span>
+          {/* CIRCULAR INFOGRAPHIC CONTAINER */}
+          <div className="relative w-full max-w-[350px] h-[360px] mx-auto my-2 flex items-center justify-center">
+            
+            {/* SVG BACKGROUND CIRCLE TRACK AND CLOCKWISE ARROWS */}
+            <svg
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              viewBox="0 0 350 360"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <marker
+                  id="cycle-arrow"
+                  viewBox="0 0 10 10"
+                  refX="6"
+                  refY="5"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto-start-reverse"
+                >
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#F01147" />
+                </marker>
+              </defs>
+
+              {/* DASHED CIRCLE ORBIT */}
+              <circle
+                cx="175"
+                cy="180"
+                r="115"
+                stroke="#F01147"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                strokeOpacity="0.35"
+              />
+
+              {/* 5 DIRECTIONAL CLOCKWISE ARROW ARCS */}
+              {/* Arrow 1: Top to Top-Right */}
+              <path
+                d="M 215 88 A 115 115 0 0 1 268 128"
+                stroke="#F01147"
+                strokeWidth="2"
+                markerEnd="url(#cycle-arrow)"
+              />
+              {/* Arrow 2: Top-Right to Bottom-Right */}
+              <path
+                d="M 285 200 A 115 115 0 0 1 258 258"
+                stroke="#F01147"
+                strokeWidth="2"
+                markerEnd="url(#cycle-arrow)"
+              />
+              {/* Arrow 3: Bottom-Right to Bottom-Left */}
+              <path
+                d="M 205 292 A 115 115 0 0 1 145 292"
+                stroke="#F01147"
+                strokeWidth="2"
+                markerEnd="url(#cycle-arrow)"
+              />
+              {/* Arrow 4: Bottom-Left to Top-Left */}
+              <path
+                d="M 92 258 A 115 115 0 0 1 65 200"
+                stroke="#F01147"
+                strokeWidth="2"
+                markerEnd="url(#cycle-arrow)"
+              />
+              {/* Arrow 5: Top-Left to Top */}
+              <path
+                d="M 82 128 A 115 115 0 0 1 135 88"
+                stroke="#F01147"
+                strokeWidth="2"
+                markerEnd="url(#cycle-arrow)"
+              />
+            </svg>
+
+            {/* CENTER HUB */}
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#240F18] to-[#0E090B] border border-[#F01147]/60 shadow-[0_0_20px_rgba(240,17,71,0.35)] flex flex-col items-center justify-center text-center p-2 z-10">
+              <RotateCw className="w-5 h-5 text-[#F01147] animate-spin" style={{ animationDuration: "10s" }} />
+              <span className="font-league text-xs font-bold text-white uppercase tracking-wider mt-1 leading-none">
+                ЗАМКНЕНЕ КОЛО
+              </span>
+              <span className="text-[8px] text-[#EB94A9] font-semibold mt-0.5 leading-tight">
+                по колу
+              </span>
+            </div>
+
+            {/* NODE 1: TOP (ОБМЕЖЕННЯ) */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
+              <div className="flex flex-col items-center justify-center px-2.5 py-1.5 rounded-xl bg-black/90 border border-[#F01147]/60 shadow-lg backdrop-blur-md text-center min-w-[95px]">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs">🔒</span>
+                  <span className="text-[9px] font-black text-[#F01147]">01</span>
                 </div>
-                {idx < 4 && (
-                  <div className="flex justify-center my-0.5">
-                    <span className="text-[#F01147] text-xs">↓</span>
-                  </div>
-                )}
+                <span className="text-[10px] font-bold text-white uppercase tracking-tight leading-none mt-0.5">
+                  ОБМЕЖЕННЯ
+                </span>
               </div>
-            ))}
+            </div>
+
+            {/* NODE 2: TOP-RIGHT (СИЛЬНИЙ ГОЛОД) */}
+            <div className="absolute top-[28%] right-0 -translate-y-1/2 z-20">
+              <div className="flex flex-col items-center justify-center px-2.5 py-1.5 rounded-xl bg-black/90 border border-[#F01147]/60 shadow-lg backdrop-blur-md text-center min-w-[95px]">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs">⚡</span>
+                  <span className="text-[9px] font-black text-[#F01147]">02</span>
+                </div>
+                <span className="text-[10px] font-bold text-white uppercase tracking-tight leading-none mt-0.5">
+                  СИЛЬНИЙ ГОЛОД
+                </span>
+              </div>
+            </div>
+
+            {/* NODE 3: BOTTOM-RIGHT (ПЕРЕЇДАННЯ) */}
+            <div className="absolute bottom-1 right-2 z-20">
+              <div className="flex flex-col items-center justify-center px-2.5 py-1.5 rounded-xl bg-black/90 border border-[#F01147]/60 shadow-lg backdrop-blur-md text-center min-w-[95px]">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs">🍕</span>
+                  <span className="text-[9px] font-black text-[#F01147]">03</span>
+                </div>
+                <span className="text-[10px] font-bold text-white uppercase tracking-tight leading-none mt-0.5">
+                  ПЕРЕЇДАННЯ
+                </span>
+              </div>
+            </div>
+
+            {/* NODE 4: BOTTOM-LEFT (ЗРИВ) */}
+            <div className="absolute bottom-1 left-2 z-20">
+              <div className="flex flex-col items-center justify-center px-2.5 py-1.5 rounded-xl bg-black/90 border border-[#F01147]/60 shadow-lg backdrop-blur-md text-center min-w-[95px]">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs">💥</span>
+                  <span className="text-[9px] font-black text-[#F01147]">04</span>
+                </div>
+                <span className="text-[10px] font-bold text-white uppercase tracking-tight leading-none mt-0.5">
+                  ЗРИВ
+                </span>
+              </div>
+            </div>
+
+            {/* NODE 5: TOP-LEFT (ПОЧИНАЄТЕ СПОЧАТКУ) */}
+            <div className="absolute top-[28%] left-0 -translate-y-1/2 z-20">
+              <div className="flex flex-col items-center justify-center px-2 py-1.5 rounded-xl bg-black/90 border border-[#F01147]/60 shadow-lg backdrop-blur-md text-center min-w-[95px]">
+                <div className="flex items-center gap-1">
+                  <span className="text-xs">🔄</span>
+                  <span className="text-[9px] font-black text-[#F01147]">05</span>
+                </div>
+                <span className="text-[9px] font-bold text-white uppercase tracking-tight leading-tight mt-0.5">
+                  ПОЧИНАЄТЕ СПОЧАТКУ
+                </span>
+              </div>
+            </div>
+
           </div>
 
           {/* REPEAT LOOP FOOTER */}
