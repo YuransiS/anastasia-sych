@@ -22,8 +22,10 @@ const config: Config = {
       },
       fontFamily: {
         accent: ["var(--font-yeseva)", "serif"],
-        serif: ["var(--font-yeseva)", "serif"],
-        sans: ["var(--font-carlito)", "sans-serif"]
+        serif: ["'Playfair Display'", "'Cormorant Garamond'", "Georgia", "serif"],
+        playfair: ["'Playfair Display'", "Georgia", "serif"],
+        cormorant: ["'Cormorant Garamond'", "Georgia", "serif"],
+        sans: ["'Source Sans 3'", "Inter", "-apple-system", "sans-serif"],
       }
     },
   },
