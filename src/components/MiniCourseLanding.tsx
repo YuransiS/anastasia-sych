@@ -1115,17 +1115,6 @@ export default function MiniCourseLanding() {
             ))}
           </div>
 
-          {/* TELEGRAM BOT EXPLANATION */}
-          <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1.5 text-left">
-            <div className="text-[11px] font-bold text-[#EB94A9] uppercase flex items-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5 text-[#229ED9]" />
-              <span>Миттєвий доступ через Telegram-бот:</span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Одразу після оплати ви отримуєте посилання на Telegram-бота із усіма 6 уроками курсу та бонусним уроком.
-            </p>
-          </div>
-
         </div>
 
       </section>
