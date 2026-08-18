@@ -655,11 +655,8 @@ export default function MiniCourseLanding() {
             {/* CENTER HUB */}
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#240F18] to-[#0E090B] border border-[#F01147]/60 shadow-[0_0_20px_rgba(240,17,71,0.35)] flex flex-col items-center justify-center text-center p-2 z-10">
               <RotateCw className="w-5 h-5 text-[#F01147] animate-spin" style={{ animationDuration: "10s" }} />
-              <span className="font-league text-xs font-bold text-white uppercase tracking-wider mt-1 leading-none">
+              <span className="font-league text-xs font-bold text-white uppercase tracking-wider mt-1.5 leading-none">
                 ЗАМКНЕНЕ КОЛО
-              </span>
-              <span className="text-[8px] text-[#EB94A9] font-semibold mt-0.5 leading-tight">
-                по колу
               </span>
             </div>
 
