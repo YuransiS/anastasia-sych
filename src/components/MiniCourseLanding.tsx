@@ -18,8 +18,13 @@ import {
   ChevronDown,
   Gift,
   Star,
-  ShieldAlert,
-  Shield
+  CheckCircle2,
+  XCircle,
+  PlayCircle,
+  RotateCw,
+  Award,
+  GraduationCap,
+  Clock
 } from "lucide-react";
 import { trackPixelEvent } from "./FacebookPixel";
 import {
@@ -57,7 +62,7 @@ export default function MiniCourseLanding() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 400) {
+      if (window.scrollY > 350) {
         setShowStickyUI(true);
       } else {
         setShowStickyUI(false);
@@ -262,15 +267,12 @@ export default function MiniCourseLanding() {
           offer_variant: "mini-course",
           value: 399,
           currency: "UAH",
-          content_name: "Міні-курс: Плаский живіт та струнка талія",
         });
 
         if (data.wayforpayData) {
           submitWayForPayForm(data.wayforpayData);
         } else {
-          setIsSubmitting(false);
-          alert("Дякуємо! Ваша заявка прийнята.");
-          setIsModalOpen(false);
+          window.location.href = "https://secure.wayforpay.com";
         }
       } else {
         setErrorMessage(data.message || "Помилка при збереженні заявки. Спробуйте ще раз.");
@@ -283,94 +285,123 @@ export default function MiniCourseLanding() {
     }
   };
 
-  // Section: What You Get (Clean & Short)
-  const whatYouGetItems = [
+  // 4 Block: What you get on mini-course (5 video preview items)
+  const courseLessons = [
     {
-      heading: "Справжні причини жирових відкладень",
-      desc: "Дізнаєтесь, що реально впливає на живіт і талію без міфів із соцмереж.",
-      icon: "🎯",
+      num: "1",
+      title: "Зрозумієте, що реально впливає на живіт і талію",
+      desc: "Без хаотичних порад з TikTok та Instagram.",
+      tag: "УРОК 01",
     },
     {
-      heading: "Система харчування без заборон",
-      desc: "Як скласти ситний раціон без підрахунку калорій, зважування та голоду.",
-      icon: "🥗",
+      num: "2",
+      title: "Розберете харчування",
+      desc: "Зрозумієте, що варто змінити в раціоні, щоб не жити в постійному обмеженні.",
+      tag: "УРОК 02",
     },
     {
-      heading: "Тренування без виснаження",
-      desc: "Адекватне навантаження для талії, постави та глибоких м'язів живота.",
-      icon: "⚡",
+      num: "3",
+      title: "Навчитеся тренуватися без виснаження",
+      desc: "Зрозумієте, яке навантаження потрібне для вашої цілі.",
+      tag: "УРОК 03",
     },
     {
-      heading: "Аудит особистих гальм",
-      desc: "Побачите, чому вага поверталась (сон, стрес, режим, відновлення).",
-      icon: "🔍",
+      num: "4",
+      title: "Побачите, де самі гальмуєте свій результат",
+      desc: "Харчування, режим, тренування, відновлення — побачите систему цілком.",
+      tag: "УРОК 04",
     },
     {
-      heading: "Покроковий план на кожен день",
-      desc: "Чіткий алгоритм дій без зривів і чергових починань «з понеділка».",
-      icon: "📋",
+      num: "5",
+      title: "Отримаєте зрозумілий план дій",
+      desc: "Що робити зараз, щоб почати змінювати тіло без чергового марафону «з понеділка».",
+      tag: "УРОК 05",
     },
   ];
 
-  // Case Studies
+  // 6 Block: 4 Steps
+  const systemSteps = [
+    {
+      step: "КРОК 1",
+      title: "Розбираємо основу",
+      desc: "Харчування, активність, режим та звички, які впливають на результат.",
+    },
+    {
+      step: "КРОК 2",
+      title: "Прибираємо те, що заважає",
+      desc: "Без списку з 50 заборон і життя на курячій грудці.",
+    },
+    {
+      step: "КРОК 3",
+      title: "Додаємо те, що працює",
+      desc: "Зрозуміле харчування та адекватне фізичне навантаження.",
+    },
+    {
+      step: "КРОК 4",
+      title: "Закріплюємо",
+      desc: "Щоб ви не повернулися до старого режиму після першого тижня.",
+    },
+  ];
+
+  // 8 Block: Cases
   const realCaseGalleries = [
     {
       id: 1,
       title: "Ярославна, 34 р",
       badge: "Результат за 3 міс",
-      desc: "-12 кг, -5 см в талії, рельєфний прес",
+      desc: "-12 кг, -5 см в талії, -4 см в стегнах, +пружні сідниці",
       image: "/images/cases/case_5.webp",
     },
     {
       id: 2,
       title: "Наталі, 36 р",
       badge: "Результат за 3 міс",
-      desc: "-5 кг, -4 см в талії, підтягнуте тіло",
+      desc: "-5 кг, -4 см в талії, -3 см в стегнах, мінус набряки",
       image: "/images/cases/case_natali.png",
     },
     {
       id: 3,
       title: "Ірина, 38 р",
       badge: "Результат за 2 міс",
-      desc: "-4 кг, -10 см в талії, мінус набряки",
+      desc: "-4 кг, -10 см в талії, -5 см в стегнах, мінус целюліт",
       image: "/images/cases/case_irina.jpg",
     },
     {
       id: 4,
       title: "Настя, 28 р",
       badge: "Результат за 3 міс",
-      desc: "-8 кг, -6 см в талії, без зривів",
+      desc: "-8 кг, -6 см в талії і стегнах, мінус постійний голод",
       image: "/images/cases/case_3.webp",
     },
   ];
 
-  // FAQ Items (Concise)
+  // 10 Block: FAQ
   const faqItems = [
     {
-      q: "Чи підійде для початківців?",
-      a: "Так. Всі вправи та рекомендації адаптовані для звичайного ритму життя без спортивного минулого.",
+      q: "А якщо я ніколи не займалась спортом?",
+      a: "Міні-курс розрахований на звичайний ритм життя, а не на професійних спортсменок.",
     },
     {
       q: "Чи потрібно сидіти на дієті?",
-      a: "Ні. Курс вчить вибудовувати повноцінне смачне харчування без голодування та підрахунку калорій.",
+      a: "Ні. Завдання курсу — показати, як вибудувати харчування без постійних жорстких обмежень.",
     },
     {
-      q: "Як довго зберігається доступ?",
-      a: "Доступ назавжди. Всі матеріали залишаються у вашому особистому Telegram-боті.",
+      q: "А якщо я вже багато чого пробувала?",
+      a: "Саме тому важливо не починати ще одну дієту навмання, а зрозуміти, чому попередні підходи не дали стабільного результату.",
     },
     {
-      q: "Як я отримаю доступ після оплати?",
-      a: "Одразу після оплати ви отримаєте посилання на Telegram-бот із усіма уроками та бонусами.",
+      q: "Чи допоможе якщо у мене вага постійно повертається назад?",
+      a: "Задача цього курсу не ввести вас в коротко тривалі обмеження, а вибудувати систему, яка стане частиною вашого життя.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#070607] text-[#FFFFFF] font-source selection:bg-[#DB0B3E] selection:text-white pb-28 sm:pb-24 overflow-x-hidden">
+    <div className="min-h-screen bg-[#070607] text-[#FFFFFF] font-source selection:bg-[#F01147] selection:text-white pb-28 sm:pb-24 overflow-x-hidden">
 
-      {/* TOP RED TICKER BANNER (START 24.08) */}
+      {/* TOP RED TICKER BANNER (START 27.08) */}
       <div className="bg-gradient-to-r from-[#BA022F] to-[#D00839] text-white py-1.5 overflow-hidden shadow-lg sticky top-0 z-40 border-b border-[#F01147]/30">
-        <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8">
-          <span>🔥 СТАРТ 24.08</span>
+        <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8 whitespace-nowrap">
+          <span>🔥 СТАРТ 27.08</span>
           <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
           <span className="text-white/60">✦</span>
@@ -378,131 +409,88 @@ export default function MiniCourseLanding() {
           <span className="text-white/60">✦</span>
           <span>ДОСТУП НАЗАВЖДИ</span>
           <span className="text-white/60">✦</span>
-          <span>🔥 СТАРТ 24.08</span>
+          <span>🔥 СТАРТ 27.08</span>
           <span className="text-white/60">✦</span>
           <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
+          <span className="text-white/60">✦</span>
+          <span>6 УРОКІВ + БОНУС «ЯК СПАЛИТИ ЖИР»</span>
           <span className="text-white/60">✦</span>
         </div>
       </div>
 
       {/* =========================================================================
-          HERO SECTION (3D LAYERED: hero.webp BACK -> SOLID TEXT -> hero.png FOREGROUND -> BOTTOM OFFER UI)
+          1 БЛОК + 2 БЛОК: HERO SECTION (PHOTO TOP, STRUCTURED OFFER BOTTOM)
           ========================================================================= */}
-      <section className="relative w-full max-w-[460px] mx-auto px-4 pt-3 pb-8 sm:py-6 flex flex-col items-center">
+      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-3 pb-6 flex flex-col items-center space-y-3.5">
         
-        {/* CONTAINER CARD */}
-        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/15 shadow-2xl bg-black min-h-[580px] sm:min-h-[620px] flex flex-col justify-between p-3.5 sm:p-4">
+        {/* TOP DATE PILL (UKRAINIAN: СТАРТ 27.08) */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs sm:text-sm font-bold uppercase backdrop-blur-md shadow-sm">
+          <Calendar className="w-3.5 h-3.5 text-[#F01147]" />
+          <span>СТАРТ 27.08 | 6 УРОКІВ (ТЕОРІЯ + ПРАКТИКА)</span>
+        </div>
+
+        {/* HERO CARD (PHOTO TOP WITH CLEAN BOTTOM GRADIENT) */}
+        <div className="relative w-full rounded-[28px] overflow-hidden border border-white/15 shadow-2xl bg-[#0D090B] flex flex-col">
           
-          {/* LAYER 1: HERO BACKGROUND IMAGE (hero.webp) */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* PHOTO CANVAS OF ANASTASIA (FULL FIGURE IN ATHLETIC WEAR) */}
+          <div className="relative w-full h-[360px] sm:h-[400px] overflow-hidden">
             <Image
-              src="/images/hero.webp"
-              alt="Background"
+              src="/images/anastasia_hero_blue.webp"
+              alt="Анастасія Сич - Фітнес тренерка"
               fill
               priority
-              className="object-cover object-top"
-              sizes="(max-width: 768px) 100vw, 460px"
+              className="object-cover object-[center_15%] filter brightness-100 contrast-105"
+              sizes="(max-width: 768px) 100vw, 480px"
             />
+            {/* Smooth bottom fade into content */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0D090B] via-[#0D090B]/80 to-transparent" />
           </div>
 
-          {/* LAYER 2: BEHIND CUTOUT (SOLID WORDS: ОТРИМАЙ, ПЛАСКИЙ) */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-start pt-3.5 sm:pt-4 pointer-events-none select-none px-3 sm:px-4">
+          {/* 1 БЛОК: HEADLINE & 3 BULLETS */}
+          <div className="p-4 sm:p-5 pt-0 space-y-3 relative z-10">
             
-            {/* DATE BADGE */}
-            <div className="flex justify-center mb-1.5">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-black/60 border border-[#EB94A9]/50 text-[#EB94A9] text-[11px] font-bold uppercase backdrop-blur-md shadow-sm">
-                <Calendar className="w-3 h-3" />
-                <span>START: 24 AUGUST</span>
-              </div>
-            </div>
-
-            {/* SOLID WORDS BEHIND HERO.PNG */}
-            <div className="font-outfit uppercase space-y-1 w-full tracking-tight text-center">
-              
-              {/* ROW 1: ОТРИМАЙ */}
-              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                ОТРИМАЙ
-              </div>
-
-              {/* ROW 2: ПЛАСКИЙ */}
-              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-                ПЛАСКИЙ
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* LAYER 3: FOREGROUND CUTOUT (hero.png) */}
-          <div className="absolute inset-0 z-20 pointer-events-none">
-            <Image
-              src="/images/hero.png"
-              alt="Анастасія Сич"
-              fill
-              priority
-              className="object-cover object-top"
-              sizes="(max-width: 768px) 100vw, 460px"
-            />
-            {/* Bottom smooth dark gradient for offer overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-black via-black/85 to-transparent" />
-          </div>
-
-          {/* LAYER 4: IN FRONT OF CUTOUT (ЖИВІТ + ТА СТРУНКУ ТАЛІЮ + CONNECTED BUTTONS STACK) */}
-          <div className="relative z-30 flex flex-col items-center text-center pt-3.5 sm:pt-4 pointer-events-none select-none px-1 w-full">
-            
-            {/* INVISIBLE DATE BADGE SPACER */}
-            <div className="flex justify-center mb-1.5 invisible">
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 text-[11px] uppercase">
-                <Calendar className="w-3 h-3" />
-                <span>START: 24 AUGUST</span>
-              </div>
-            </div>
-
-            {/* IN FRONT OF HERO.PNG: ЖИВІТ & VIVID RED ТА СТРУНКУ ТАЛІЮ */}
-            <div className="font-outfit uppercase space-y-1 w-full tracking-tight text-center">
-              
-              {/* INVISIBLE ROW 1 SPACER */}
-              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-none invisible select-none">
-                ОТРИМАЙ
-              </div>
-
-              {/* INVISIBLE ROW 2 SPACER */}
-              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black leading-none invisible select-none">
-                ПЛАСКИЙ
-              </div>
-
-              {/* ROW 3: ЖИВІТ (IN FRONT OF HERO.PNG) */}
-              <div className="w-full text-4xl sm:text-5xl md:text-6xl font-black text-white leading-none drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
-                ЖИВІТ
-              </div>
-
-              {/* ROW 4: ТА СТРУНКУ ТАЛІЮ (HIGH CONTRAST VIVID RED OVER BODY) */}
-              <div className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-black text-[#FF0033] tracking-wide leading-none pt-1 drop-shadow-[0_4px_16px_rgba(0,0,0,1)]">
+            {/* MAIN HEADLINE */}
+            <div className="space-y-0.5 text-left">
+              <h1 className="font-league text-4xl sm:text-5xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-md">
+                ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
+              </h1>
+              <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-sm">
                 ТА СТРУНКУ ТАЛІЮ
               </div>
-
             </div>
 
-          </div>
-
-          {/* LAYER 5: BOTTOM UI ELEMENTS (DIRECTLY BELOW ТА СТРУНКУ ТАЛІЮ - NO GAP) */}
-          <div className="relative z-30 flex flex-col items-center text-center space-y-1.5 mt-2.5 sm:mt-3 w-full pointer-events-auto">
-
-            {/* 6 LESSONS PILL (CONNECTED DIRECTLY BELOW HEADLINE) */}
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-black/90 border border-white/25 text-white px-3 py-1 rounded-full backdrop-blur-xl shadow-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF0033] animate-pulse" />
-              <span>6 УРОКІВ • ТЕОРІЯ + ПРАКТИКА</span>
+            {/* 3 BULLETS FROM TZ */}
+            <div className="space-y-1.5 pt-1">
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+                <span>перший результат вже за 7 днів</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+                <span>без виснажливих тренувань та обмежень в їжі</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+                <span>за перевіреною системою від фітнес тренерки</span>
+              </div>
             </div>
 
-            {/* DUAL PRICING COMPARISON ROW */}
-            <div className="w-full grid grid-cols-2 gap-2">
+            {/* 2 БЛОК: DESCRIPTION */}
+            <div className="pt-2 border-t border-white/10">
+              <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
+                Міні-курс для жінок, які хочуть змінити своє тіло без постійних дієт, зривів та виснаження.
+              </p>
+            </div>
+
+            {/* 2 БЛОК: DUAL PRICING COMPARISON ROW */}
+            <div className="w-full grid grid-cols-2 gap-2 pt-1">
               
               {/* ACTIVE RED BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-2.5 rounded-xl bg-[#D00839] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-3 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[10px] font-extrabold text-white uppercase tracking-wide">
+                <span className="text-[10px] sm:text-[11px] font-extrabold text-white uppercase tracking-wide">
                   СПЛАТІТЬ 1 РАЗ
                 </span>
                 <span className="font-league text-3xl sm:text-4xl font-bold leading-none mt-0.5">
@@ -513,9 +501,9 @@ export default function MiniCourseLanding() {
               {/* STRIKETHROUGH REGULAR PRICE BOX */}
               <div
                 onClick={handleOpenModal}
-                className="cursor-pointer p-2.5 rounded-xl bg-black/60 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-3 rounded-2xl bg-white/5 backdrop-blur-md text-slate-400 flex flex-col justify-center items-center border border-white/15 hover:scale-[1.02] transition-transform"
               >
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wide">
                   ЗВИЧАЙНА ЦІНА
                 </span>
                 <span className="font-league text-3xl sm:text-4xl font-normal leading-none mt-0.5 line-through decoration-slate-400 text-slate-400">
@@ -525,44 +513,30 @@ export default function MiniCourseLanding() {
 
             </div>
 
-            {/* PUNCHY OFFER SUMMARY */}
-            <div className="text-[11px] text-white font-bold leading-tight drop-shadow">
-              Перший результат за 7 днів • <span className="text-[#EB94A9]">Без дієт та виснаження</span>
-            </div>
-
-            {/* HIGH-IMPACT RED CTA BUTTON */}
+            {/* BIG HIGH-IMPACT RED CTA BUTTON */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
               onClick={handleOpenModal}
-              className="w-full py-2.5 sm:py-3 px-3.5 rounded-xl bg-gradient-to-r from-[#E11D48] via-[#D00839] to-[#BA022F] text-white shadow-2xl border border-[#F01147]/50 flex items-center justify-between cursor-pointer hover:brightness-110 transition-all"
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
             >
-              <div className="flex flex-col items-start leading-none text-left">
-                <span className="font-outfit text-xs sm:text-sm font-bold uppercase tracking-wider">
-                  ОТРИМАТИ МІНІ-КУРС ЗА
-                </span>
-                <span className="font-league text-2xl sm:text-3xl font-bold text-white mt-0.5">
-                  399 ГРН
-                </span>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0">
-                <ArrowRight className="w-4 h-4 text-white" />
-              </div>
+              <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
+              <ArrowRight className="w-5 h-5 text-white shrink-0" />
             </motion.button>
 
             {/* TRUST BADGE ROW */}
-            <div className="flex items-center justify-center gap-2.5 text-[10px] font-semibold text-white/80 pt-0.5">
+            <div className="flex items-center justify-center gap-3 text-[11px] font-semibold text-white/80 pt-0.5">
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-[#F01147] text-[#F01147]" /> 4.9/5
               </span>
               <span className="text-white/30">•</span>
               <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-[#059669]" /> Доступ назавжди
+                <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" /> Доступ назавжди
               </span>
               <span className="text-white/30">•</span>
               <span className="flex items-center gap-1">
-                <Gift className="w-3 h-3 text-[#F01147]" /> + Подарунок
+                <Gift className="w-3.5 h-3.5 text-[#F01147]" /> + Бонус
               </span>
             </div>
 
@@ -573,34 +547,207 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 2: WHAT YOU GET (.s9: CLEAN & CRISP)
+          3 БЛОК: YOU DO EVERYTHING RIGHT BUT STOMACH WON'T CHANGE? + CIRCLE LOOP
           ========================================================================= */}
       <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
+        
+        <div className="text-center space-y-1.5">
+          <h2 className="font-league text-3xl sm:text-4xl font-normal uppercase tracking-wide leading-tight text-white">
+            Ви наче все робите правильно, <br />
+            <span className="text-[#F01147]">але живіт і талія не змінюються?</span>
+          </h2>
+        </div>
 
+        {/* YOU ALREADY TRIED CARD */}
+        <div className="p-4 rounded-2xl bg-[#120E10] border border-white/10 shadow-lg space-y-2.5">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-300">
+            Ви вже пробували:
+          </div>
+          <div className="space-y-2">
+            {[
+              "менше їсти;",
+              "прибирати солодке;",
+              "сідати на дієту;",
+              "більше тренуватися;",
+              "починати «з понеділка»;",
+              "триматися кілька днів, а потім зриватися.",
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-slate-300 font-medium">
+                <XCircle className="w-4 h-4 text-[#F01147] shrink-0" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* AND THEN AGAIN - VISUAL CIRCULAR INFOGRAPHIC */}
+        <div className="p-4 rounded-2xl bg-gradient-to-b from-[#1A0E13] to-[#120E10] border border-[#F01147]/40 shadow-xl space-y-4 text-center">
+          
+          <div className="font-league text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#F01147]">
+            А ПОТІМ ЗНОВУ:
+          </div>
+
+          {/* VISUAL LOOP FLOW WITH ARROWS */}
+          <div className="grid grid-cols-1 gap-2 text-left">
+            {[
+              { step: "1", title: "Обмеження", desc: "Суворий контроль та заборони в їжі", icon: "🔒" },
+              { step: "2", title: "Сильний голод", desc: "Організм вимагає швидкої енергії", icon: "⚡" },
+              { step: "3", title: "Переїдання", desc: "Втрата контролю над порціями", icon: "🍕" },
+              { step: "4", title: "Зрив", desc: "Почуття провини та розчарування", icon: "💥" },
+              { step: "5", title: "Починаєте спочатку", desc: "Черговий марафон «з понеділка»", icon: "🔄" },
+            ].map((loop, idx) => (
+              <div key={idx} className="relative">
+                <div className="p-2.5 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{loop.icon}</span>
+                    <div>
+                      <div className="text-xs font-bold text-white uppercase">{loop.title}</div>
+                      <div className="text-[11px] text-slate-400">{loop.desc}</div>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold text-[#F01147]/80">0{loop.step}</span>
+                </div>
+                {idx < 4 && (
+                  <div className="flex justify-center my-0.5">
+                    <span className="text-[#F01147] text-xs">↓</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* REPEAT LOOP FOOTER */}
+          <div className="inline-flex items-center gap-2 text-xs font-bold text-[#EB94A9] bg-[#F01147]/15 border border-[#F01147]/40 px-3 py-1 rounded-full">
+            <RotateCw className="w-3.5 h-3.5 animate-spin text-[#F01147]" />
+            <span>Замкнене коло повторюється знову і знову</span>
+          </div>
+
+        </div>
+
+        {/* CONCLUSION */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-slate-300 font-medium space-y-1.5 leading-relaxed">
+          <p>І справа не обов'язково в тому, що вам не вистачає сили волі.</p>
+          <p className="text-white font-semibold">
+            Можливо, ви просто використовуєте підхід, який не підходить саме вам.
+          </p>
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          4 БЛОК: WHAT YOU GET (5 VIDEO PREVIEW CARDS)
+          ========================================================================= */}
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
+        
         <div className="text-center space-y-1">
-          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none">
-            <span className="text-[#F01147]">ЩО ВИ ОТРИМАЄТЕ</span>{" "}
-            <span className="text-white">ПІСЛЯ ОПЛАТИ</span>
+          <h2 className="font-league text-3xl sm:text-4xl font-normal uppercase tracking-wide leading-tight">
+            <span className="text-white">ЩО ВИ ОТРИМАЄТЕ</span> <br />
+            <span className="text-[#F01147]">НА МІНІ-КУРСІ</span>
+          </h2>
+        </div>
+
+        <div className="space-y-3">
+          {courseLessons.map((lesson, idx) => (
+            <div
+              key={idx}
+              className="rounded-2xl overflow-hidden bg-[#120E10] border border-white/15 shadow-lg group hover:border-[#F01147]/50 transition-colors"
+            >
+              {/* VIDEO COVER HEADER */}
+              <div className="bg-gradient-to-r from-[#241017] to-[#160B0E] p-3 flex items-center justify-between border-b border-white/10">
+                <span className="text-[10px] font-bold tracking-wider uppercase text-[#EB94A9] bg-[#F01147]/20 border border-[#F01147]/40 px-2.5 py-0.5 rounded-md">
+                  {lesson.tag}
+                </span>
+                <PlayCircle className="w-4 h-4 text-[#F01147]" />
+              </div>
+
+              {/* LESSON CONTENT */}
+              <div className="p-3.5 space-y-1">
+                <h3 className="text-sm font-bold text-white leading-snug">
+                  {lesson.num}. {lesson.title}
+                </h3>
+                <p className="text-xs text-slate-400 font-medium leading-tight">
+                  {lesson.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA TO ENROLL */}
+        <button
+          onClick={handleOpenModal}
+          className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
+        >
+          <span>ОТРИМАТИ ДОСТУП ЗА 399 ГРН</span>
+          <ArrowRight className="w-4 h-4 text-white" />
+        </button>
+
+      </section>
+
+      {/* =========================================================================
+          5 БЛОК: THE PROBLEM IS NOT THAT YOU ARE NOT TRYING HARD ENOUGH
+          ========================================================================= */}
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
+        
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-3xl sm:text-4xl font-normal uppercase tracking-wide leading-tight text-white">
+            Проблема не в тому, <br />
+            <span className="text-[#F01147]">що ви недостатньо стараєтесь</span>
+          </h2>
+        </div>
+
+        {/* LOOP CHAIN */}
+        <div className="p-4 rounded-2xl bg-[#120E10] border border-[#F01147]/40 shadow-lg space-y-2.5">
+          <div className="text-xs font-bold uppercase tracking-wider text-[#EB94A9]">
+            Коли ви:
+          </div>
+          <div className="p-3 rounded-xl bg-black/60 border border-white/10 text-xs sm:text-sm text-slate-200 font-semibold leading-relaxed flex items-center justify-between">
+            <span>різко обмежуєте їжу → виснажуєте себе тренуваннями → терпите → зриваєтесь</span>
+          </div>
+        </div>
+
+        {/* EXPLANATION */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs sm:text-sm text-slate-300 font-medium space-y-2 leading-relaxed">
+          <p>
+            Організм і психіка рано чи пізно вимагають повернутися до звичного.
+          </p>
+          <p>
+            Тому наше завдання — не змусити вас ще сильніше себе контролювати.
+          </p>
+          <p className="text-white font-bold text-sm text-[#EB94A9]">
+            А побудувати систему, яку ви зможете нормально дотримуватися.
+          </p>
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          6 БЛОК: NO NEED TO CHANGE YOUR WHOLE LIFE IN ONE DAY (4 STEPS)
+          ========================================================================= */}
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
+        
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-3xl sm:text-4xl font-normal uppercase tracking-wide leading-tight text-white">
+            Не потрібно міняти <br />
+            <span className="text-[#F01147]">все життя за один день</span>
           </h2>
         </div>
 
         <div className="space-y-2.5">
-          {whatYouGetItems.map((item, idx) => (
+          {systemSteps.map((step, idx) => (
             <div
               key={idx}
-              className="p-3.5 rounded-2xl bg-[#120E10] border border-white/10 flex items-center gap-3.5 shadow-md"
+              className="p-3.5 rounded-2xl bg-[#120E10] border border-white/10 shadow-md space-y-1"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#F01147]/20 border border-[#F01147]/40 flex items-center justify-center text-lg shrink-0">
-                {item.icon}
+              <div className="text-[10px] font-bold text-[#EB94A9] uppercase tracking-wider">
+                {step.step}
               </div>
-              <div className="space-y-0.5">
-                <h3 className="text-sm font-bold text-white leading-snug">
-                  {item.heading}
-                </h3>
-                <p className="text-xs text-slate-400 font-medium leading-tight">
-                  {item.desc}
-                </p>
-              </div>
+              <h3 className="font-league text-2xl text-white uppercase tracking-wide leading-none">
+                {step.title}
+              </h3>
+              <p className="text-xs text-slate-400 font-medium leading-tight">
+                {step.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -608,163 +755,125 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 3: EVERYTHING YOU GET TODAY + BONUS (.s25)
+          7 БЛОК: WHO WILL TEACH YOU (ABOUT ANASTASIA)
           ========================================================================= */}
       <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
-
-        <div className="text-center space-y-2">
-          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none">
-            ВСЕ, ЩО ВИ ОТРИМУЄТЕ <span className="text-[#F01147]">СЬОГОДНІ</span>
+        
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none text-white">
+            ХТО ВАС <span className="text-[#F01147]">НАВЧАТИМЕ</span>
           </h2>
-
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/50 text-white text-xs font-bold shadow-md">
-            <Gift className="w-3.5 h-3.5 text-white" />
-            <span>Безкоштовний бонус до замовлення</span>
-          </div>
         </div>
 
-        {/* 3 CRISP CARDS */}
-        <div className="space-y-2.5">
+        <div className="rounded-3xl overflow-hidden bg-[#120E10] border border-white/15 shadow-2xl space-y-4 p-4">
           
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#1A0E13] to-[#120E10] border border-[#F01147]/40 shadow-lg space-y-1">
-            <div className="text-[10px] text-[#EB94A9] font-bold uppercase tracking-wider">
-              🎁 БОНУСНИЙ УРОК
+          {/* PHOTO OF ANASTASIA WITH BADGES */}
+          <div className="relative w-full h-[320px] rounded-2xl overflow-hidden">
+            <Image
+              src="/images/anastasia_portrait_black.webp"
+              alt="Анастасія Сич"
+              fill
+              className="object-cover object-[center_10%]"
+              sizes="(max-width: 768px) 100vw, 480px"
+            />
+            {/* Top gradient for badges */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/60" />
+            
+            {/* BADGES ON PHOTO AS REQUESTED IN TZ */}
+            <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+                <GraduationCap className="w-3 h-3 text-[#F01147]" />
+                Вища медична освіта
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+                <Clock className="w-3 h-3 text-[#F01147]" />
+                8 років досвіду
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+                <Award className="w-3 h-3 text-[#F01147]" />
+                Фітнес-тренерка
+              </span>
             </div>
-            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
-              «ЯК СПАЛИТИ ЖИР»
-            </h3>
-            <p className="text-xs text-slate-300 font-medium">
-              5 правил здорового схуднення, щоб прибрати жир, а не м'язи.
+          </div>
+
+          {/* BIO TEXT */}
+          <div className="space-y-2 text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
+            <p>
+              Я — <span className="text-white font-bold">Анастасія</span>, фітнес-тренерка з 8-річним досвідом та вищою медичною освітою.
+            </p>
+            <p>
+              Я працюю з жінками не тільки над тілом, а й над тим, щоб харчування та тренування стали частиною нормального життя.
+            </p>
+            <p>
+              Без жорстких заборон, постійних дієт та підходу «терпіть ще трохи».
+            </p>
+            <p className="text-white font-semibold pt-1 border-t border-white/10">
+              Моя задача — допомогти вам зрозуміти систему, а не просто дати черговий план, якого ви будете дотримуватися кілька тижнів.
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#120E10] border border-white/10 shadow-md space-y-1">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-              🥗 ПРАКТИЧНИЙ ШАБЛОН
-            </div>
-            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
-              КОНСТРУКТОР ТАРІЛКИ
-            </h3>
-            <p className="text-xs text-slate-400 font-medium">
-              Ситний раціон без зважування їжі та підрахунку калорій.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-[#120E10] border border-white/10 shadow-md space-y-1">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-              📱 ЗРУЧНИЙ ФОРМАТ
-            </div>
-            <h3 className="font-league text-2xl text-white uppercase tracking-wide">
-              TELEGRAM-БОТ
-            </h3>
-            <p className="text-xs text-slate-400 font-medium">
-              Миттєвий доступ до всіх 6 уроків з будь-якого пристрою назавжди.
-            </p>
-          </div>
-
-        </div>
-
-        {/* TOTAL SUMMARY BOX */}
-        <div
-          onClick={handleOpenModal}
-          className="cursor-pointer p-5 rounded-3xl bg-gradient-to-r from-[#B0002B] to-[#660A22] border border-[#F01147]/60 shadow-xl flex flex-col items-center text-center gap-3 hover:brightness-105 transition-all"
-        >
-          <h3 className="font-league text-2xl text-white uppercase tracking-wide leading-tight">
-            6 УРОКІВ + БОНУСИ. ОДИН ПЛАТІЖ. ДОСТУП НАЗАВЖДИ.
-          </h3>
-
-          <div className="w-full bg-white rounded-full py-2.5 px-6 flex items-center justify-between shadow-lg">
-            <div className="text-left text-[#730924] font-bold text-xs uppercase leading-tight font-source">
-              Отримати все<br />сьогодні за
-            </div>
-            <div className="font-league text-4xl font-normal text-[#730924] leading-none">
-              399 грн
-            </div>
-          </div>
         </div>
 
       </section>
 
       {/* =========================================================================
-          SECTION 4: GUARANTEE (.s3)
+          8 БЛОК: CLIENT TRANSFORMATION CASES
           ========================================================================= */}
-      <section className="py-6 px-4 max-w-[480px] mx-auto">
-        <div className="p-4 rounded-2xl bg-[#120E10] border border-[#EB94A9]/30 shadow-lg flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-[#F01147]/20 border border-[#F01147]/40 flex items-center justify-center shrink-0">
-            <Shield className="w-6 h-6 text-[#EB94A9]" />
-          </div>
-          <div className="space-y-0.5">
-            <div className="font-league text-xl text-white uppercase tracking-wide">
-              100% МЕДИЧНИЙ ПІДХІД
-            </div>
-            <p className="text-xs text-slate-300 font-medium leading-tight">
-              Система від фітнес-тренерки з вищою медичною освітою та 8 роками досвіду.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 5: CLIENT TRANSFORMATIONS (.s6)
-          ========================================================================= */}
-      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10" id="cases">
-
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10">
+        
         <div className="flex items-center justify-between">
-          <h2 className="font-league text-3xl font-normal text-white uppercase tracking-wide">
-            РЕЗУЛЬТАТИ <span className="text-[#F01147]">КЛІЄНТОК</span>
-          </h2>
-
+          <div className="space-y-0.5">
+            <h2 className="font-league text-3xl font-normal uppercase tracking-wide leading-none text-white">
+              ДІВЧАТА ВЖЕ ПРОХОДЯТЬ <span className="text-[#F01147]">ЦЕЙ ШЛЯХ</span>
+            </h2>
+            <p className="text-xs text-slate-400 font-medium">Реальні результати моїх підопічних</p>
+          </div>
+          
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => scrollCarousel("left")}
-              className="p-2 rounded-full bg-[#120E10] text-white border border-white/10"
-              aria-label="Попередній"
+              className="w-8 h-8 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scrollCarousel("right")}
-              className="p-2 rounded-full bg-[#120E10] text-white border border-white/10"
-              aria-label="Наступний"
+              className="w-8 h-8 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* SWIPER CAROUSEL */}
+        {/* HORIZONTAL SCROLL CAROUSEL */}
         <div
           ref={carouselRef}
-          className="flex items-stretch gap-3 overflow-x-auto snap-x snap-mandatory py-1 pb-3 scrollbar-none [::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+          className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-1"
         >
-          {realCaseGalleries.map((cs) => (
+          {realCaseGalleries.map((c) => (
             <div
-              key={cs.id}
-              onClick={() => setActiveCaseImage(cs.image)}
-              className="min-w-[220px] max-w-[240px] snap-start rounded-2xl bg-[#120E10] border border-white/10 overflow-hidden shadow-lg hover:border-[#F01147]/50 transition-all cursor-pointer flex flex-col justify-between group"
+              key={c.id}
+              onClick={() => setActiveCaseImage(c.image)}
+              className="min-w-[270px] max-w-[270px] snap-center rounded-2xl overflow-hidden bg-[#120E10] border border-white/15 flex flex-col shadow-lg cursor-pointer group"
             >
-              <div className="relative h-48 w-full bg-black overflow-hidden">
+              <div className="relative w-full h-72 overflow-hidden">
                 <Image
-                  src={cs.image}
-                  alt={cs.title}
+                  src={c.image}
+                  alt={c.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="240px"
+                  className="object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                  sizes="270px"
                 />
-                <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#F01147] text-white text-[10px] font-bold uppercase">
-                  {cs.badge}
+                <div className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full text-white backdrop-blur-md">
+                  <ZoomIn className="w-3.5 h-3.5" />
                 </div>
-                <div className="absolute bottom-2 right-2 p-1.5 rounded-full bg-black/80 text-white">
-                  <ZoomIn className="w-3.5 h-3.5 text-[#EB94A9]" />
+                <div className="absolute bottom-2 left-2 bg-[#F01147] text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow">
+                  {c.badge}
                 </div>
               </div>
-
-              <div className="p-3 space-y-0.5">
-                <div className="font-bold text-white text-xs">{cs.title}</div>
-                <p className="text-[11px] text-slate-400 font-medium leading-tight">
-                  {cs.desc}
-                </p>
+              <div className="p-3 space-y-1">
+                <div className="font-bold text-white text-xs">{c.title}</div>
+                <div className="text-[11px] text-slate-300 font-medium leading-tight">{c.desc}</div>
               </div>
             </div>
           ))}
@@ -773,196 +882,309 @@ export default function MiniCourseLanding() {
       </section>
 
       {/* =========================================================================
-          SECTION 6: FAQ ACCORDION (.s7)
+          9 БЛОК: START CHANGING YOUR APPROACH NOW (OFFER)
           ========================================================================= */}
-      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10" id="faq">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-5 border-t border-white/10">
+        
+        <div className="p-5 rounded-3xl bg-gradient-to-b from-[#1E0E14] to-[#120E10] border border-[#F01147]/50 shadow-2xl text-center space-y-4">
+          
+          <div className="space-y-1">
+            <h2 className="font-league text-3xl sm:text-4xl font-normal uppercase tracking-wide leading-none text-white">
+              ПОЧНИ ЗМІНЮВАТИ СВІЙ ПІДХІД <span className="text-[#F01147]">ВЖЕ ЗАРАЗ</span>
+            </h2>
+            <p className="text-xs text-slate-300 font-medium leading-relaxed pt-1">
+              Замість чергових спроб навмання — зрозуміла система, з якої ви можете почати вже зараз.
+            </p>
+          </div>
 
-        <div className="text-center">
-          <h2 className="font-league text-4xl font-normal text-white uppercase tracking-wide">
-            FAQ
+          {/* DUAL PRICING */}
+          <div className="inline-flex items-center gap-3 bg-black/60 border border-white/15 px-4 py-2 rounded-2xl backdrop-blur-md">
+            <span className="font-league text-2xl text-slate-400 line-through">2999 грн</span>
+            <span className="text-white text-xs">→</span>
+            <span className="font-league text-4xl text-[#F01147] font-bold">399 грн</span>
+          </div>
+
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
+            onClick={handleOpenModal}
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
+          >
+            <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
+            <ArrowRight className="w-5 h-5 text-white shrink-0" />
+          </motion.button>
+
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          10 БЛОК: FAQ ACCORDION
+          ========================================================================= */}
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10">
+        
+        <div className="text-center space-y-1">
+          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none text-white">
+            ЧАСТІ <span className="text-[#F01147]">ЗАПИТАННЯ:</span>
           </h2>
         </div>
 
         <div className="space-y-2">
-          {faqItems.map((item, idx) => {
-            const isOpen = openFaqIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="rounded-2xl border border-white/10 bg-[#120E10] overflow-hidden shadow-md"
+          {faqItems.map((item, idx) => (
+            <div
+              key={idx}
+              className="rounded-2xl overflow-hidden bg-[#120E10] border border-white/10 shadow-sm"
+            >
+              <button
+                onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                className="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-bold text-white hover:text-[#EB94A9] transition-colors"
               >
-                <button
-                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-3.5 text-left flex items-center justify-between gap-3 font-bold text-xs sm:text-sm text-white"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#F01147] font-bold text-[10px] flex items-center justify-center shrink-0">
-                      Q
-                    </span>
-                    <span>{item.q}</span>
-                  </div>
-                  <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
-                      isOpen ? "rotate-180 text-[#F01147]" : ""
-                    }`}
-                  />
-                </button>
-
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-3.5 pb-3.5 pt-1 text-xs text-slate-300 font-medium leading-relaxed border-t border-white/5">
-                        {item.a}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+                <span>{item.q}</span>
+                <ChevronDown
+                  className={`w-4 h-4 text-[#F01147] shrink-0 transition-transform duration-200 ${
+                    openFaqIndex === idx ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              
+              <AnimatePresence>
+                {openFaqIndex === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="px-4 pb-4 pt-1 text-xs text-slate-300 leading-relaxed font-medium border-t border-white/5">
+                      {item.a}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
 
       </section>
 
       {/* =========================================================================
-          SECTION 7: FINAL CTA
+          11 БЛОК: BONUS LESSON «ЯК СПАЛИТИ ЖИР» & TELEGRAM BOT INFO
           ========================================================================= */}
-      <section className="py-8 px-4 max-w-[480px] mx-auto text-center space-y-4 border-t border-white/10">
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10">
+        
+        <div className="p-5 rounded-3xl bg-gradient-to-br from-[#220E17] via-[#160B10] to-[#0E080A] border border-[#F01147]/50 shadow-2xl space-y-4">
+          
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#EB94A9] text-xs font-bold uppercase">
+            <Gift className="w-3.5 h-3.5 text-[#F01147]" />
+            <span>Безкоштовний бонус при оплаті прямо зараз</span>
+          </div>
 
-        <h2 className="font-league text-4xl sm:text-5xl font-normal text-white uppercase tracking-wide leading-none">
-          ОТРИМАЙ ПЛАСКИЙ ЖИВІТ<br />
-          <span className="text-[#F01147]">ТА СТРУНКУ ТАЛІЮ</span>
-        </h2>
+          <div className="space-y-1.5">
+            <h2 className="font-league text-3xl font-normal uppercase tracking-wide leading-tight text-white">
+              УРОК <span className="text-[#F01147]">«ЯК СПАЛИТИ ЖИР»</span>
+            </h2>
+            <div className="text-xs text-slate-300 font-medium">Що в цьому уроці:</div>
+          </div>
 
-        <div className="flex items-center justify-center gap-3 font-league text-4xl text-[#F01147]">
-          <span>399 грн</span>
-          <span className="text-2xl line-through text-slate-500 font-normal">2999 грн</span>
+          <div className="space-y-2">
+            {[
+              "5 правил для здорового схуднення;",
+              "як правильно харчуватись для схуднення;",
+              "який режим навантажень обрати для схуднення;",
+              "чому важливо під час схуднення спалювати жир, а не мʼязи.",
+            ].map((rule, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-200 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                <span>{rule}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* TELEGRAM BOT EXPLANATION */}
+          <div className="p-3.5 rounded-2xl bg-black/60 border border-white/10 space-y-1.5 text-left">
+            <div className="text-[11px] font-bold text-[#EB94A9] uppercase flex items-center gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5 text-[#229ED9]" />
+              <span>Миттєвий доступ через Telegram-бот:</span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Одразу після оплати ви отримуєте посилання на Telegram-бота із усіма 6 уроками курсу та бонусним уроком.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* =========================================================================
+          12 БЛОК: FINAL CTA SECTION
+          ========================================================================= */}
+      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4 border-t border-white/10 text-center">
+        
+        <div className="space-y-1">
+          <h2 className="font-league text-4xl font-normal uppercase tracking-wide leading-none text-white">
+            ОТРИМАЙ ПЛАСКИЙ ЖИВІТ <br />
+            <span className="text-[#F01147]">ТА СТРУНКУ ТАЛІЮ</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed pt-1">
+            Перший результат вже за 7 днів, без виснажливих тренувань та обмежень в їжі, за перевіреною системою від фітнес-тренерки.
+          </p>
+        </div>
+
+        <div className="font-league text-5xl text-[#F01147] font-bold">
+          399 грн
         </div>
 
         <motion.button
           whileTap={{ scale: 0.98 }}
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
           onClick={handleOpenModal}
-          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 cursor-pointer flex items-center justify-center gap-2 hover:brightness-110"
+          className="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
         >
           <span>ОТРИМАТИ МІНІ-КУРС</span>
-          <ArrowRight className="w-5 h-5 text-white" />
+          <ArrowRight className="w-5 h-5 text-white shrink-0" />
         </motion.button>
+
+        <p className="text-[10px] text-slate-500 pt-4">
+          © {new Date().getFullYear()} Анастасія Сич. Всі права захищені.
+        </p>
 
       </section>
 
       {/* =========================================================================
-          STICKY FLOATING FOOTER BAR
+          STICKY COUNTDOWN FOOTER BAR (APPEARS ON SCROLL)
           ========================================================================= */}
       <AnimatePresence>
         {showStickyUI && (
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 60 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-[#0C090A]/95 backdrop-blur-xl border-t border-[#F01147]/40 p-3 shadow-2xl"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="fixed bottom-0 inset-x-0 z-50 bg-[#070607]/95 backdrop-blur-xl border-t border-white/15 p-3 px-4 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
           >
-            <div className="max-w-[480px] mx-auto flex items-center justify-between gap-2.5">
+            <div className="max-w-[480px] mx-auto flex items-center justify-between gap-3">
               
-              {/* TIMER */}
-              <div className="flex items-center gap-1 font-league text-lg text-white">
-                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.hours}</div>
-                <span>:</span>
-                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.minutes}</div>
-                <span>:</span>
-                <div className="px-2 py-0.5 rounded bg-black/60 border border-white/10">{timeLeft.seconds}</div>
+              {/* TIMER BOX */}
+              <div className="flex items-center gap-1 font-mono text-sm font-bold text-white bg-white/10 px-2.5 py-1.5 rounded-xl border border-white/15">
+                <span>{timeLeft.hours}</span>
+                <span className="text-[#F01147]">:</span>
+                <span>{timeLeft.minutes}</span>
+                <span className="text-[#F01147]">:</span>
+                <span>{timeLeft.seconds}</span>
               </div>
 
-              {/* CTA BUTTON */}
+              {/* ACTION BUTTON */}
               <button
                 onClick={handleOpenModal}
-                className="py-2.5 px-5 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg hover:brightness-110 cursor-pointer whitespace-nowrap border border-[#F01147]/60"
+                className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-xl uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
               >
-                ОТРИМАТИ – 399 грн
+                <span>ОТРИМАТИ – 399 ГРН</span>
+                <ArrowRight className="w-4 h-4 text-white" />
               </button>
+
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* =========================================================================
-          LEAD FORM MODAL
+          LIGHTBOX MODAL FOR CASE TRANSFORMATION IMAGES
+          ========================================================================= */}
+      <AnimatePresence>
+        {activeCaseImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveCaseImage(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          >
+            <button
+              onClick={() => setActiveCaseImage(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-lg w-full h-[80vh] rounded-2xl overflow-hidden"
+            >
+              <Image
+                src={activeCaseImage}
+                alt="Case preview"
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 600px"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================================================
+          CHECKOUT LEAD FORM MODAL (399 UAH)
           ========================================================================= */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => !isSubmitting && setIsModalOpen(false)}
-              className="absolute inset-0 bg-black/85 backdrop-blur-md"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-md rounded-3xl bg-[#120E10] border border-[#F01147]/50 shadow-2xl p-5 sm:p-6 space-y-4 overflow-hidden z-10 max-h-[92vh] overflow-y-auto"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md bg-[#140E11] border border-[#F01147]/50 rounded-3xl p-5 sm:p-6 shadow-2xl text-white space-y-4"
             >
+              
+              {/* CLOSE BUTTON */}
               <button
-                onClick={() => !isSubmitting && setIsModalOpen(false)}
-                className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-white bg-white/10"
-                aria-label="Закрити"
+                onClick={() => setIsModalOpen(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F01147]/20 text-[#EB94A9] text-xs font-bold border border-[#F01147]/40">
-                  <Calendar className="w-3 h-3" />
-                  <span>Старт 24.08 • Доступ назавжди</span>
+              {/* MODAL HEADER */}
+              <div className="space-y-1 text-center pr-6">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F01147]/20 border border-[#F01147]/40 text-[#EB94A9] text-xs font-bold uppercase">
+                  <span>СТАРТ 27 СЕРПНЯ</span>
                 </div>
-                <h3 className="font-league text-3xl text-white uppercase leading-none pt-1">
-                  Отримати міні-курс
+                <h3 className="font-league text-3xl font-bold uppercase tracking-wide text-white">
+                  ОТРИМАТИ МІНІ-КУРС
                 </h3>
+                <p className="text-xs text-slate-300">
+                  Заповніть форму для переходу до захищеної оплати 399 грн
+                </p>
               </div>
 
-              <div className="p-3 rounded-2xl bg-[#1A0E13] border border-[#F01147]/40 flex items-center justify-between text-xs font-bold text-slate-200">
-                <span>Вартість зі знижкою -87%:</span>
-                <div className="flex items-center gap-2">
-                  <span className="line-through text-slate-500 font-league text-base">2999 грн</span>
-                  <span className="font-league text-3xl text-[#F01147]">399 грн</span>
-                </div>
-              </div>
-
+              {/* ERROR MESSAGE */}
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-600 text-rose-300 text-xs font-bold flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 shrink-0" />
-                  <span>{errorMessage}</span>
+                <div className="p-3 rounded-xl bg-red-950/60 border border-red-500/50 text-red-200 text-xs">
+                  {errorMessage}
                 </div>
               )}
 
+              {/* FORM */}
               <form onSubmit={handleSubmit} className="space-y-3">
+                
+                {/* NAME INPUT */}
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
-                    <User className="w-3.5 h-3.5 text-[#EB94A9]" />
-                    <span>Ваше ім'я:</span>
+                  <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-[#F01147]" /> Ваше ім'я
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Олена"
+                    placeholder="Наприклад: Олена"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#F01147] transition-colors"
                   />
                 </div>
 
+                {/* PHONE INPUT */}
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
-                    <Phone className="w-3.5 h-3.5 text-[#EB94A9]" />
-                    <span>Номер телефону (Viber / Telegram):</span>
+                  <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#F01147]" /> Номер телефону
                   </label>
                   <input
                     type="tel"
@@ -970,74 +1192,66 @@ export default function MiniCourseLanding() {
                     placeholder="+380"
                     value={formData.phone}
                     onChange={handlePhoneChange}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium font-mono"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#F01147] transition-colors font-mono"
                   />
                 </div>
 
+                {/* TELEGRAM INPUT */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-300 flex items-center gap-1">
-                      <MessageCircle className="w-3.5 h-3.5 text-[#EB94A9]" />
-                      <span>Ваш Telegram:</span>
+                    <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5 text-[#F01147]" /> Telegram нікнейм
                     </label>
                     <button
                       type="button"
                       onClick={handleNoTelegramClick}
-                      className="text-[11px] text-[#EB94A9] hover:underline font-semibold"
+                      className="text-[11px] text-[#EB94A9] hover:underline"
                     >
-                      В мене немає нікнейму
+                      Немає нікнейму
                     </button>
                   </div>
                   <input
                     type="text"
                     required
-                    placeholder="@username або посилання"
+                    placeholder="@username"
                     value={formData.telegram}
                     onChange={(e) => handleInputChange("telegram", e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/20 focus:border-[#F01147] outline-none text-sm text-white font-medium"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-[#F01147] transition-colors"
                   />
                 </div>
 
+                {/* PRICE SUMMARY */}
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs">
+                  <span className="text-slate-300">До сплати:</span>
+                  <div className="flex items-center gap-2">
+                    <span className="line-through text-slate-500 text-xs">2999 грн</span>
+                    <span className="font-league text-2xl text-[#F01147] font-bold">399 грн</span>
+                  </div>
+                </div>
+
+                {/* SUBMIT BUTTON */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-xl border border-[#F01147]/50 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all hover:brightness-110"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#F01147] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-xl flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all disabled:opacity-50"
                 >
                   {isSubmitting ? (
-                    <span>Перенаправлення...</span>
+                    <span className="text-sm font-sans">Переходимо до оплати...</span>
                   ) : (
                     <>
-                      <span>Перейти до оплати 399 грн</span>
+                      <span>ПЕРЕЙТИ ДО ОПЛАТИ (399 ГРН)</span>
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}
                 </button>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
-      {/* LIGHTBOX MODAL */}
-      <AnimatePresence>
-        {activeCaseImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-            <button
-              onClick={() => setActiveCaseImage(null)}
-              className="absolute top-4 right-4 p-2 rounded-full text-white bg-white/10"
-              aria-label="Закрити фото"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="relative max-w-xl w-full h-[70vh] rounded-2xl overflow-hidden">
-              <Image
-                src={activeCaseImage}
-                alt="Результат клієнтки"
-                fill
-                className="object-contain"
-                sizes="(max-width: 1024px) 100vw, 600px"
-              />
-            </div>
+                <p className="text-[10px] text-center text-slate-400 pt-1">
+                  🔒 Безпечна оплата банківською картою через сервіс WayForPay
+                </p>
+
+              </form>
+
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
