@@ -421,10 +421,10 @@ export default function MiniCourseLanding() {
       {/* =========================================================================
           1 БЛОК + 2 БЛОК: HERO SECTION (PHOTO TOP, STRUCTURED OFFER BOTTOM)
           ========================================================================= */}
-      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-3 pb-6 flex flex-col items-center space-y-3.5">
+      <section className="relative w-full max-w-[480px] mx-auto px-4 pt-1.5 pb-4 flex flex-col items-center space-y-2.5">
         
         {/* TOP DATE PILL (UKRAINIAN: СТАРТ 27.08) */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs sm:text-sm font-bold uppercase backdrop-blur-md shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#EB94A9]/40 text-[#EB94A9] text-xs font-bold uppercase backdrop-blur-md shadow-sm">
           <Calendar className="w-3.5 h-3.5 text-[#F01147]" />
           <span>СТАРТ 27.08 | 6 УРОКІВ (ТЕОРІЯ + ПРАКТИКА)</span>
         </div>
@@ -433,70 +433,69 @@ export default function MiniCourseLanding() {
         <div className="relative w-full rounded-[28px] overflow-hidden border border-white/15 shadow-2xl bg-[#0D090B] flex flex-col">
           
           {/* PHOTO CANVAS OF ANASTASIA (FULL FIGURE IN ATHLETIC WEAR) */}
-          <div className="relative w-full h-[360px] sm:h-[400px] overflow-hidden">
+          <div className="relative w-full h-[290px] sm:h-[350px] overflow-hidden">
             <Image
               src="/images/anastasia_hero_blue.webp"
               alt="Анастасія Сич - Фітнес тренерка"
               fill
               priority
-              className="object-cover object-[center_15%] filter brightness-100 contrast-105"
+              className="object-cover object-[center_12%] filter brightness-100 contrast-105"
               sizes="(max-width: 768px) 100vw, 480px"
             />
             {/* Smooth bottom fade into content */}
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0D090B] via-[#0D090B]/80 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0D090B] via-[#0D090B]/80 to-transparent" />
           </div>
 
           {/* 1 БЛОК: HEADLINE & 3 BULLETS */}
-          <div className="p-4 sm:p-5 pt-0 space-y-3 relative z-10">
+          <div className="p-4 sm:p-5 pt-0 space-y-2.5 relative z-10">
             
             {/* MAIN HEADLINE */}
             <div className="space-y-0.5 text-left">
-              <h1 className="font-league text-4xl sm:text-5xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-md">
+              <h1 className="font-league text-3xl sm:text-4xl font-normal text-white uppercase tracking-wide leading-[0.95] drop-shadow-md">
                 ОТРИМАЙ ПЛАСКИЙ ЖИВІТ
               </h1>
-              <div className="font-league text-3xl sm:text-4xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-sm">
+              <div className="font-league text-2xl sm:text-3xl font-normal text-[#F01147] uppercase tracking-wide leading-none drop-shadow-sm">
                 ТА СТРУНКУ ТАЛІЮ
               </div>
             </div>
 
             {/* 3 BULLETS FROM TZ */}
-            <div className="space-y-1.5 pt-1">
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+            <div className="space-y-1 pt-0.5">
+              <div className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#F01147] shrink-0" />
                 <span>перший результат вже за 7 днів</span>
               </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+              <div className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#F01147] shrink-0" />
                 <span>без виснажливих тренувань та обмежень в їжі</span>
               </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-[#F01147] shrink-0" />
+              <div className="flex items-center gap-2 text-xs text-slate-200 font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#F01147] shrink-0" />
                 <span>за перевіреною системою від фітнес тренерки</span>
               </div>
             </div>
 
-            {/* 2 БЛОК: DESCRIPTION */}
-            <div className="pt-2 border-t border-white/10">
-              <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
-                Міні-курс для жінок, які хочуть змінити своє тіло без постійних дієт, зривів та виснаження.
-              </p>
-            </div>
-
-            {/* 2 БЛОК: DUAL PRICING COMPARISON ROW */}
+            {/* 2 БЛОК: DUAL PRICING COMPARISON ROW (RED BOX AS PRIMARY CTA) */}
             <div className="w-full grid grid-cols-2 gap-2 pt-1">
               
-              {/* ACTIVE RED BOX */}
-              <div
+              {/* ACTIVE RED BUY BOX */}
+              <motion.div
+                whileTap={{ scale: 0.97 }}
+                animate={{ scale: [1, 1.02, 1] }}
+                transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
                 onClick={handleOpenModal}
-                className="cursor-pointer p-3 rounded-2xl bg-gradient-to-br from-[#F01147] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-lg border border-[#F01147]/50 hover:scale-[1.02] transition-transform"
+                className="cursor-pointer p-3 rounded-2xl bg-gradient-to-br from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white flex flex-col justify-center items-center shadow-xl border border-[#F01147]/60 hover:brightness-110 transition-all"
               >
-                <span className="text-[10px] sm:text-[11px] font-extrabold text-white uppercase tracking-wide">
-                  СПЛАТІТЬ 1 РАЗ
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] font-extrabold text-white uppercase tracking-wide">
+                    СПЛАТІТЬ 1 РАЗ
+                  </span>
+                  <ArrowRight className="w-3 h-3 text-white" />
+                </div>
                 <span className="font-league text-3xl sm:text-4xl font-bold leading-none mt-0.5">
                   399 грн
                 </span>
-              </div>
+              </motion.div>
 
               {/* STRIKETHROUGH REGULAR PRICE BOX */}
               <div
@@ -513,20 +512,8 @@ export default function MiniCourseLanding() {
 
             </div>
 
-            {/* BIG HIGH-IMPACT RED CTA BUTTON */}
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              animate={{ scale: [1, 1.02, 1] }}
-              transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
-              onClick={handleOpenModal}
-              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#F01147] via-[#DB0B3E] to-[#B0002B] text-white font-league text-2xl uppercase tracking-wider shadow-2xl border border-[#F01147]/60 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 transition-all"
-            >
-              <span>ОТРИМАТИ МІНІ-КУРС ЗА 399 ГРН</span>
-              <ArrowRight className="w-5 h-5 text-white shrink-0" />
-            </motion.button>
-
             {/* TRUST BADGE ROW */}
-            <div className="flex items-center justify-center gap-3 text-[11px] font-semibold text-white/80 pt-0.5">
+            <div className="flex items-center justify-center gap-3 text-[10px] sm:text-[11px] font-semibold text-white/80 pt-0.5">
               <span className="flex items-center gap-1">
                 <Star className="w-3 h-3 fill-[#F01147] text-[#F01147]" /> 4.9/5
               </span>
