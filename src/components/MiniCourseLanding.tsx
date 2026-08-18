@@ -878,29 +878,29 @@ export default function MiniCourseLanding() {
 
         <div className="rounded-3xl overflow-hidden bg-[#120E10] border border-white/15 shadow-2xl space-y-4 p-4">
           
-          {/* PHOTO OF ANASTASIA WITH BADGES */}
-          <div className="relative w-full h-[320px] rounded-2xl overflow-hidden">
+          {/* PHOTO OF ANASTASIA WITH BADGES AT BOTTOM */}
+          <div className="relative w-full h-[320px] sm:h-[350px] rounded-2xl overflow-hidden">
             <Image
               src="/images/anastasia_portrait_black.webp"
               alt="Анастасія Сич"
               fill
-              className="object-cover object-[center_10%]"
+              className="object-cover object-[center_8%]"
               sizes="(max-width: 768px) 100vw, 480px"
             />
-            {/* Top gradient for badges */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/60" />
+            {/* Smooth bottom gradient for badges */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 via-35% to-transparent" />
             
-            {/* BADGES ON PHOTO AS REQUESTED IN TZ */}
-            <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+            {/* BADGES AT BOTTOM OF PHOTO (NO FACE OVERLAP) */}
+            <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-1.5 z-10">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/80 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
                 <GraduationCap className="w-3 h-3 text-[#F01147]" />
                 Вища медична освіта
               </span>
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/80 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
                 <Clock className="w-3 h-3 text-[#F01147]" />
                 8 років досвіду
               </span>
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/75 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/80 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
                 <Award className="w-3 h-3 text-[#F01147]" />
                 Фітнес-тренерка
               </span>
