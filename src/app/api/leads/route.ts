@@ -123,7 +123,12 @@ export async function POST(request: NextRequest) {
     const cleanTg = telegram.replace("@", "").trim().toLowerCase();
     const isTestPayment = cleanTg === "yuransis";
 
-    const isMiniCourse = pagePath === "/mini-course" || offerVariant === "mini-course" || body.amount === 399;
+    const isMiniCourse =
+      pagePath.startsWith("/mini-course") ||
+      offerVariant.startsWith("mini-course") ||
+      offerVariant === "minicourse" ||
+      offerVariant === "mc" ||
+      body.amount === 399;
     const defaultAmount = isMiniCourse ? 399 : 480;
     const amount = isTestPayment ? 1 : (body.amount ? Number(body.amount) : defaultAmount);
 
