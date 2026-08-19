@@ -179,7 +179,7 @@ export default function FlatBellyLanding() {
     setErrorMessage("");
     trackPixelEvent("InitiateCheckout", {
       offer_variant: "mini-course-flat-belly",
-      amount: 399,
+      amount: 279,
       currency: "UAH",
       content_name: "Міні-курс: Плаский живіт та струнка талія",
     });
@@ -255,9 +255,9 @@ export default function FlatBellyLanding() {
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
-          notes: formData.notes || "Заявка на міні-курс (399 грн)",
+          notes: formData.notes || "Заявка на міні-курс (279 грн)",
           offer_variant: "mini-course",
-          amount: 399,
+          amount: 279,
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
@@ -273,7 +273,7 @@ export default function FlatBellyLanding() {
       if (response.ok && data.status === "success") {
         trackPixelEvent("Lead", {
           offer_variant: "mini-course-flat-belly",
-          value: 399,
+          value: 279,
           currency: "UAH",
         });
 
@@ -532,13 +532,13 @@ export default function FlatBellyLanding() {
           
           <div className="space-y-1 text-center">
             <p className="text-sm text-slate-200 leading-snug">
-              СТАРТ 24.08 | 6 практичних уроків
+              СТАРТ 27.08 | 6 практичних уроків
             </p>
             <div className="text-sm font-medium text-slate-300 flex items-center justify-center gap-2 pt-0.5">
               <span>Ціна:</span>
               <span className="line-through text-slate-400">3999 грн</span>
-              <span className="font-bold text-white text-base">399 грн</span>
-              <span className="text-[#F472B6] font-bold">· знижка -90%</span>
+              <span className="font-bold text-white text-base">279 грн</span>
+              <span className="text-[#F472B6] font-bold">· знижка -93%</span>
             </div>
           </div>
 
@@ -1293,7 +1293,7 @@ export default function FlatBellyLanding() {
             <span className="font-playfair text-base font-bold">Міні-курс —</span>
             <div className="flex items-center gap-2">
               <span className="text-slate-400 line-through text-sm">3999 грн</span>
-              <span className="font-bold text-white text-lg text-[#F472B6]">399 грн</span>
+              <span className="font-bold text-white text-lg text-[#F472B6]">279 грн</span>
             </div>
           </div>
 
@@ -1339,7 +1339,7 @@ export default function FlatBellyLanding() {
                 </div>
                 <div className="flex items-baseline gap-1.5">
                   <span className="font-playfair text-2xl font-black text-[#261A23] leading-none">
-                    399 грн
+                    279 грн
                   </span>
                   <span className="text-xs text-slate-400 line-through leading-none">
                     3999 грн
@@ -1397,13 +1397,13 @@ export default function FlatBellyLanding() {
                 {/* HEADER */}
                 <div className="space-y-1 text-left">
                   <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FCE1ED] text-[#D8438A] text-[10px] font-black uppercase tracking-wider">
-                    🔥 ЗНИЖКА -90% ДІЄ СЬОГОДНІ
+                    🔥 ЗНИЖКА -93% ДІЄ СЬОГОДНІ
                   </div>
                   <h3 className="font-playfair text-2xl font-black text-[#261A23] leading-tight">
                     Отримати міні-курс
                   </h3>
                   <p className="text-xs text-[#5A4B56]">
-                    Заповніть форму для миттєвого переходу до безпечної оплати (399 грн).
+                    Заповніть форму для миттєвого переходу до безпечної оплати (279 грн).
                   </p>
                 </div>
 
@@ -1481,7 +1481,7 @@ export default function FlatBellyLanding() {
                       <span>Обробка...</span>
                     ) : (
                       <>
-                        <span>Перейти до оплати 399 грн</span>
+                        <span>Перейти до оплати 279 грн</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}

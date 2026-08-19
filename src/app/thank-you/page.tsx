@@ -32,8 +32,8 @@ function ThankYouContent() {
   }, [orderReference, router]);
 
   const isMiniCourse =
-    orderData?.page_path === "/mini-course" ||
-    orderData?.offer_variant === "mini-course" ||
+    orderData?.page_path?.startsWith("/mini-course") ||
+    orderData?.offer_variant?.startsWith("mini-course") ||
     orderData?.amount === 279 ||
     orderData?.amount === 399;
 
@@ -110,7 +110,7 @@ function ThankYouContent() {
           </div>
           <p className="text-[11px] text-slate-500 font-medium">
             {isMiniCourse
-              ? "У боті ви одразу отримаєте доступ до уроку та інформацію про старт 24.08."
+              ? "У боті ви одразу отримаєте доступ до уроку та інформацію про старт 27.08."
               : "У боті ви отримаєте бонусний урок та зможете обрати зручний час зустрічі."}
           </p>
         </div>

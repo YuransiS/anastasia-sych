@@ -172,7 +172,7 @@ export default function WaistMiniCourseLanding() {
     setErrorMessage("");
     trackPixelEvent("InitiateCheckout", {
       offer_variant: "mini-course-waist",
-      amount: 399,
+      amount: 279,
       currency: "UAH",
       content_name: "Міні-курс: Плаский живіт та струнка талія",
     });
@@ -251,9 +251,9 @@ export default function WaistMiniCourseLanding() {
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
-          notes: formData.notes || "Міні-курс: Плаский живіт та чітка талія (399 грн)",
+          notes: formData.notes || "Міні-курс: Плаский живіт та чітка талія (279 грн)",
           offer_variant: "mini-course-waist",
-          amount: 399,
+          amount: 279,
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
@@ -269,7 +269,7 @@ export default function WaistMiniCourseLanding() {
       if (response.ok && data.status === "success") {
         trackPixelEvent("Lead", {
           offer_variant: "mini-course-waist",
-          value: 399,
+          value: 279,
           currency: "UAH",
         });
 
@@ -445,9 +445,9 @@ export default function WaistMiniCourseLanding() {
             className="bg-[#0284c7] text-white py-2 overflow-hidden border-b border-[#0369a1] shadow-md fixed top-0 left-0 right-0 z-40"
           >
             <div className="animate-marquee font-extrabold text-xs sm:text-sm tracking-wider uppercase flex items-center gap-8 whitespace-nowrap">
-              <span>🔥 СТАРТ 24.08 | 6 УРОКІВ</span>
+              <span>🔥 СТАРТ 27.08 | 6 УРОКІВ</span>
               <span className="text-[#bae6fd]">✦</span>
-              <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
+              <span>ЗНИЖКА -91% ДІЄ СЬОГОДНІ</span>
               <span className="text-[#bae6fd]">✦</span>
               <span>ПЛАСКИЙ ЖИВІТ ТА ЧІТКА ТАЛІЯ</span>
               <span className="text-[#bae6fd]">✦</span>
@@ -455,9 +455,9 @@ export default function WaistMiniCourseLanding() {
               <span className="text-[#bae6fd]">✦</span>
               <span>ДОСТУП ДО МАТЕРІАЛІВ ОНЛАЙН</span>
               <span className="text-[#bae6fd]">✦</span>
-              <span>🔥 СТАРТ 24.08 | 6 УРОКІВ</span>
+              <span>🔥 СТАРТ 27.08 | 6 УРОКІВ</span>
               <span className="text-[#bae6fd]">✦</span>
-              <span>ЗНИЖКА -87% ДІЄ СЬОГОДНІ</span>
+              <span>ЗНИЖКА -91% ДІЄ СЬОГОДНІ</span>
               <span className="text-[#bae6fd]">✦</span>
               <span>ПЛАСКИЙ ЖИВІТ ТА ЧІТКА ТАЛІЯ</span>
             </div>
@@ -490,7 +490,7 @@ export default function WaistMiniCourseLanding() {
             <span className="text-slate-300">|</span>
             <div className="flex items-center gap-1.5 text-slate-800">
               <Calendar className="w-3.5 h-3.5 text-[#0284c7]" />
-              <span>СТАРТ <b>24.08</b> | <b>6 УРОКІВ</b></span>
+              <span>СТАРТ <b>27.08</b> | <b>6 УРОКІВ</b></span>
             </div>
           </div>
         </div>
@@ -522,13 +522,13 @@ export default function WaistMiniCourseLanding() {
           {/* 2 БЛОК: 1-LINE PRICE ROW */}
           <div className="flex items-center gap-2.5 font-extrabold pt-2 whitespace-nowrap">
             <span className="text-3xl sm:text-4xl font-extrabold text-[#0284c7] font-accent">
-              399 грн
+              279 грн
             </span>
             <span className="text-base sm:text-xl line-through text-slate-400 font-bold">
               2999 грн
             </span>
             <span className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
-              -87% знижка
+              -91% знижка
             </span>
           </div>
 
@@ -688,7 +688,7 @@ export default function WaistMiniCourseLanding() {
               onClick={handleOpenModal}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#0284c7] to-[#0369a1] text-white font-bold text-base sm:text-lg shadow-xl glow-primary uppercase tracking-wide cursor-pointer"
             >
-              Отримати міні-курс за 399 грн
+              Отримати міні-курс за 279 грн
             </motion.button>
           </div>
         </div>
@@ -946,7 +946,7 @@ export default function WaistMiniCourseLanding() {
         <div className="glass-card p-6 sm:p-12 rounded-3xl border border-sky-200 bg-gradient-to-b from-white via-white to-sky-50/70 space-y-6 shadow-xl relative overflow-hidden">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-100 text-[#0284c7] text-xs sm:text-sm font-bold border border-sky-200">
             <Sparkles className="w-4 h-4 text-[#0284c7]" />
-            <span>Старт 24.08 | Онлайн доступ</span>
+            <span>Старт 27.08 | Онлайн доступ</span>
           </div>
 
           <h2 className="text-[22px] sm:text-3xl font-extrabold text-slate-900 leading-snug max-w-2xl mx-auto uppercase">
@@ -963,10 +963,10 @@ export default function WaistMiniCourseLanding() {
           </div>
 
           <div className="flex items-center justify-center gap-2.5 sm:gap-3 font-extrabold pt-2 whitespace-nowrap">
-            <span className="text-3xl sm:text-4xl text-[#0284c7] font-accent">399 грн</span>
+            <span className="text-3xl sm:text-4xl text-[#0284c7] font-accent">279 грн</span>
             <span className="text-sm sm:text-base line-through text-slate-400 font-bold">2999 грн</span>
             <span className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-[#059669] text-white font-bold uppercase shadow-sm">
-              -87% знижка
+              -91% знижка
             </span>
           </div>
 
@@ -1044,9 +1044,9 @@ export default function WaistMiniCourseLanding() {
             className="fixed bottom-0 left-0 right-0 z-[9990] p-2.5 sm:p-3 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,0.12)] flex items-center justify-between gap-2 overflow-hidden"
           >
             <div className="flex flex-col shrink-0">
-              <span className="text-[9px] sm:text-[10px] text-slate-600 font-bold uppercase tracking-wider">Старт 24.08 • 6 уроків</span>
+              <span className="text-[9px] sm:text-[10px] text-slate-600 font-bold uppercase tracking-wider">Старт 27.08 • 6 уроків</span>
               <div className="flex items-baseline gap-1 font-extrabold">
-                <span className="text-sm sm:text-lg text-[#0284c7]">399 грн</span>
+                <span className="text-sm sm:text-lg text-[#0284c7]">279 грн</span>
                 <span className="line-through text-[10px] text-slate-400">2999 грн</span>
               </div>
             </div>
@@ -1116,7 +1116,7 @@ export default function WaistMiniCourseLanding() {
               <div className="space-y-5">
                 <div className="space-y-1.5">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-[#0284c7] text-xs font-bold border border-sky-100">
-                    <span>Старт 24.08 • Доступ онлайн</span>
+                    <span>Старт 27.08 • Доступ онлайн</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">
                     Отримати міні-курс
@@ -1130,7 +1130,7 @@ export default function WaistMiniCourseLanding() {
                   <span className="text-xs font-bold text-slate-700">Вартість міні-курсу:</span>
                   <div className="flex items-center gap-2">
                     <span className="text-xs line-through text-slate-400 font-bold">2999 грн</span>
-                    <span className="text-lg font-extrabold text-[#0284c7]">399 грн</span>
+                    <span className="text-lg font-extrabold text-[#0284c7]">279 грн</span>
                   </div>
                 </div>
 
@@ -1209,7 +1209,7 @@ export default function WaistMiniCourseLanding() {
                       <span>Перенаправлення на оплату...</span>
                     ) : (
                       <>
-                        <span>Перейти до оплати 399 грн</span>
+                        <span>Перейти до оплати 279 грн</span>
                         <ArrowRight className="w-5 h-5 text-sky-200" />
                       </>
                     )}
