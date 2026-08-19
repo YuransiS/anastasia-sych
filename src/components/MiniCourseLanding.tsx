@@ -898,7 +898,7 @@ export default function MiniCourseLanding() {
               </span>
               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/80 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
                 <Clock className="w-3 h-3 text-[#F01147]" />
-                8 років досвіду
+                5+ років досвіду
               </span>
               <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider bg-black/80 border border-white/20 text-white px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
                 <Award className="w-3 h-3 text-[#F01147]" />
@@ -910,7 +910,7 @@ export default function MiniCourseLanding() {
           {/* BIO TEXT */}
           <div className="space-y-2 text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
             <p>
-              Я — <span className="text-white font-bold">Анастасія</span>, фітнес-тренерка з 8-річним досвідом та вищою медичною освітою.
+              Я — <span className="text-white font-bold">Анастасія</span>, фітнес-тренерка з пʼятирічним досвідом та вищою медичною освітою.
             </p>
             <p>
               Я працюю з жінками не тільки над тілом, а й над тим, щоб харчування та тренування стали частиною нормального життя.
