@@ -345,46 +345,46 @@ export default function FlatBellyLanding() {
   // 4 БЛОК: 6 YouTube-styled Video Lessons
   const lessons = [
     {
-      lessonBadge: "Урок 0. Бонусна лекція",
+      lessonBadge: "Бонусний урок",
       title: "Як закріпити результат",
-      desc: "Розберемо, як працювати зі звичками та чому не варто намагатися змінити все одразу.\n\nВи зрозумієте силу маленьких кроків і чому краще послідовно працювати з однією проблемною зоною, ніж взятися за все одночасно і втратити мотивацію.",
-      duration: "18 хв",
+      desc: "Як працювати зі звичками та чому маленькі послідовні кроки ефективніші за спроби змінити все одразу.",
       image: "/images/anastasia_yoga_white.webp",
+      imagePosition: "center 20%",
     },
     {
       lessonBadge: "Урок 1",
       title: "Чому живіт випирає",
       desc: "Розберемо анатомію та біомеханіку і визначимо, над чим саме потрібно працювати, щоб змінити вигляд живота.",
-      duration: "20 хв",
       image: "/images/anastasia_outdoor.webp",
+      imagePosition: "center 15%",
     },
     {
       lessonBadge: "Урок 2",
       title: "Практичні вправи для плаского живота",
-      desc: "Покажу вправи, за допомогою яких ви зможете правильно працювати з м'язами живота.\n\nБез тренувань до стану, коли наступного дня неможливо підвестись з ліжка.",
-      duration: "22 хв",
+      desc: "Вправи, за допомогою яких ви зможете правильно працювати з м'язами живота. Без тренувань до стану, коли наступного дня неможливо підвестись з ліжка.",
       image: "/images/anastasia_hero_blue.webp",
+      imagePosition: "center 15%",
     },
     {
       lessonBadge: "Урок 3",
       title: "Талія робиться на кухні",
-      desc: "Розберемо, чому для плаского живота та стрункої талії важливо зменшувати відсоток жиру в організмі.\n\nТакож поговоримо про харчування та поясню, чому під час схуднення важливо тренуватися, щоб зберігати м'язи.",
-      duration: "25 хв",
+      desc: "Чому для плаского живота та стрункої талії важливо зменшувати відсоток жиру. Харчування та тренування під час схуднення — як зберегти м'язи.",
       image: "/images/expert.webp",
+      imagePosition: "center 5%",
     },
     {
       lessonBadge: "Урок 4",
       title: "Вправи для стрункої талії",
       desc: "Практичний урок з вправами, які допоможуть вам працювати над м'язами та формою талії.",
-      duration: "20 хв",
       image: "/images/anastasia_yoga_white.webp",
+      imagePosition: "center 20%",
     },
     {
       lessonBadge: "Урок 5",
       title: "Full Body — тренування на все тіло",
-      desc: "Повноцінне тренування для формування сильного м'язевого каркасу.\n\nТому що ми не хочемо просто працювати над животом — нам потрібно формувати сильне, підтягнуте тіло в цілому.",
-      duration: "24 хв",
+      desc: "Повноцінне тренування для формування сильного м'язевого каркасу — для підтягнутого тіла в цілому.",
       image: "/images/anastasia_portrait_black.webp",
+      imagePosition: "center 10%",
     },
   ];
 
@@ -783,6 +783,7 @@ export default function FlatBellyLanding() {
                   alt={lesson.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  style={{ objectPosition: lesson.imagePosition }}
                   sizes="(max-width: 768px) 100vw, 480px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
@@ -792,12 +793,6 @@ export default function FlatBellyLanding() {
                   <div className="w-12 h-12 rounded-full bg-[#D8438A]/90 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                     <PlayCircle className="w-7 h-7 fill-white text-[#D8438A]" />
                   </div>
-                </div>
-
-                {/* DURATION BADGE */}
-                <div className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md bg-black/80 text-white text-[11px] font-bold flex items-center gap-1 backdrop-blur-sm">
-                  <Clock className="w-3 h-3 text-[#F472B6]" />
-                  <span>{lesson.duration}</span>
                 </div>
 
                 {/* LESSON BADGE */}
@@ -834,10 +829,7 @@ export default function FlatBellyLanding() {
           ========================================================================= */}
       <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4">
         
-        <div className="text-center space-y-1">
-          <div className="text-[#D8438A] text-xs font-black tracking-widest uppercase">
-            РЕГУЛЯРНІСТЬ ТА ЧАС
-          </div>
+        <div className="text-center">
           <h2 className="font-playfair text-2xl sm:text-3xl font-black text-[#261A23] leading-tight">
             Не потрібно тренуватися годинами
           </h2>
@@ -914,7 +906,7 @@ export default function FlatBellyLanding() {
                   {idx + 1}
                 </span>
                 <span className="text-xs sm:text-[13px] text-[#261A23] font-medium leading-snug">
-                  — {point}
+                  {point}
                 </span>
               </div>
             ))}
@@ -1079,7 +1071,7 @@ export default function FlatBellyLanding() {
                 {idx + 1}
               </span>
               <span className="text-xs sm:text-[13px] text-[#261A23] font-medium leading-snug">
-                — {item}
+                {item}
               </span>
             </div>
           ))}
@@ -1179,45 +1171,6 @@ export default function FlatBellyLanding() {
 
       </section>
 
-      {/* =========================================================================
-          11 БЛОК: EVERYTHING INSIDE
-          ========================================================================= */}
-      <section className="py-8 px-4 max-w-[480px] mx-auto space-y-4">
-        
-        <div className="text-center space-y-1">
-          <div className="text-[#D8438A] text-xs font-black tracking-widest uppercase">
-            НАПОВНЕННЯ КУРСУ
-          </div>
-          <h2 className="font-playfair text-2xl sm:text-3xl font-black text-[#261A23] leading-tight">
-            Все необхідне вже всередині
-          </h2>
-        </div>
-
-        <div className="space-y-2.5">
-          {insideFeatures.map((feat, idx) => {
-            const IconComp = feat.icon;
-            return (
-              <div
-                key={idx}
-                className="p-4 rounded-3xl bg-white border border-[#F2DEE9] flex items-start gap-3.5 shadow-sm text-left"
-              >
-                <div className="w-10 h-10 rounded-2xl bg-[#FCE1ED] text-[#D8438A] flex items-center justify-center shrink-0">
-                  <IconComp className="w-5 h-5" />
-                </div>
-                <div className="space-y-0.5">
-                  <h3 className="font-playfair text-lg font-bold text-[#261A23] leading-tight">
-                    {feat.title}
-                  </h3>
-                  <p className="text-xs text-[#5A4B56] leading-snug">
-                    {feat.desc}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-      </section>
 
       {/* =========================================================================
           12 БЛОК: FAQ (ACCORDION)
