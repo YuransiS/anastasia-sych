@@ -1,12 +1,16 @@
 import { supabaseAdmin } from "@/lib/supabase";
+import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
 const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 
-export function getOfferLabel(variant?: string): string {
+export function getOfferLabel(variant?: string, amount?: number | string, currency?: string): string {
   const v = String(variant || "1");
   if (v === "mini-course" || v === "minicourse" || v === "mc" || v.startsWith("mini-course")) {
+    if (amount === 7.6 || currency === "EUR") {
+      return "Міні-курс: «Плаский живіт та струнка талія» (7,6€)";
+    }
     return "Міні-курс: «Плаский живіт та струнка талія» (279 грн)";
   }
   if (v === "2") return "Офер #2 (Дивишся в дзеркало і тобі не подобається відображення?)";
@@ -25,7 +29,8 @@ export async function processPaymentStatusUpdate(payload: {
   if (!orderReference) return null;
 
   const isApproved = transactionStatus === "Approved";
-  const newStatus = isApproved ? "Оплачено" : "Не оплачено";
+  const legacyStatus = isApproved ? "Оплачено" : "Не оплачено";
+  const canonicalStatus = isApproved ? "closed_won" : "declined";
 
   // 1. Fetch lead from Supabase
   const { data: existingLead, error: selectErr } = await supabaseAdmin
@@ -34,41 +39,61 @@ export async function processPaymentStatusUpdate(payload: {
     .eq("order_id", orderReference)
     .maybeSingle();
 
-  if (selectErr || !existingLead) {
-    console.error("[Payment Handler] Lead not found for orderReference:", orderReference, selectErr);
-    return null;
+  if (selectErr) {
+    console.error("[Payment Handler] Error querying lead for orderReference:", orderReference, selectErr);
   }
 
-  const paidAmount = amount ? Number(amount) : (existingLead.amount ? Number(existingLead.amount) : 279);
+  const paidAmount = amount
+    ? Number(Number(amount).toFixed(2))
+    : (existingLead?.amount ? Number(Number(existingLead.amount).toFixed(2)) : 279.0);
 
-  // 2. Update status in Supabase
-  const { data: updatedLead, error: updateErr } = await supabaseAdmin
-    .from("anastasia_sych_leads")
-    .update({
-      status: newStatus,
+  // 2. Canonical B&W CRM v2.0 Enrichment Protocol: Update unified_orders
+  try {
+    await updateUnifiedOrderStatus({
+      orderId: orderReference,
+      status: canonicalStatus,
       amount: paidAmount,
-      raw_payload: {
-        ...(existingLead.raw_payload || {}),
-        payment_processed_at: new Date().toISOString(),
-        payment_payload: payload,
-      },
-    })
-    .eq("order_id", orderReference)
-    .select()
-    .single();
-
-  if (updateErr) {
-    console.error("[Payment Handler] Supabase update error:", updateErr);
-  } else {
-    console.log(`[Payment Handler] Successfully updated lead ${orderReference} to ${newStatus}`);
+      reason: reason || (reasonCode ? `Reason code: ${reasonCode}` : undefined),
+      paymentPayload: payload,
+    });
+  } catch (crmErr) {
+    console.error("[Payment Handler] Unified order status update error:", crmErr);
   }
 
-  // 3. Edit Telegram message in thread 904
-  const tgMessageId = existingLead.raw_payload?.tg_message_id;
-  const offerVariant = existingLead.offer_variant || "1";
-  const offerLabel = getOfferLabel(offerVariant);
-  const amountText = paidAmount === 1 ? "1 UAH (ТЕСТ)" : `${paidAmount} UAH`;
-  const userNotes = existingLead.raw_payload?.notes;
+  // 3. Update status in local anastasia_sych_leads
+  let updatedLead = null;
+  if (existingLead) {
+    const { data: leadUpdate, error: updateErr } = await supabaseAdmin
+      .from("anastasia_sych_leads")
+      .update({
+        status: legacyStatus,
+        amount: paidAmount,
+        raw_payload: {
+          ...(existingLead.raw_payload || {}),
+          canonical_status: canonicalStatus,
+          payment_processed_at: new Date().toISOString(),
+          payment_payload: payload,
+        },
+      })
+      .eq("order_id", orderReference)
+      .select()
+      .single();
+
+    if (updateErr) {
+      console.error("[Payment Handler] Supabase update error (anastasia_sych_leads):", updateErr);
+    } else {
+      updatedLead = leadUpdate;
+      console.log(`[Payment Handler] Successfully updated lead ${orderReference} to ${legacyStatus} (${canonicalStatus})`);
+    }
+  }
+
+  // 4. Edit Telegram message in thread 904
+  const tgMessageId = existingLead?.raw_payload?.tg_message_id;
+  const offerVariant = existingLead?.offer_variant || "1";
+  const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
+  const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
+  const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
+  const userNotes = existingLead?.raw_payload?.notes;
 
   let message = "";
   if (isApproved) {
@@ -77,10 +102,10 @@ export async function processPaymentStatusUpdate(payload: {
     message += `<b>🔴 Оплату відхилено</b>\n\n`;
   }
 
-  message += `👤 <b>Ім'я:</b> ${existingLead.name || "-"}\n`;
-  message += `📞 <b>Телефон:</b> <code>${existingLead.phone || "-"}</code>\n`;
+  message += `👤 <b>Ім'я:</b> ${existingLead?.name || "-"}\n`;
+  message += `📞 <b>Телефон:</b> <code>${existingLead?.phone || "-"}</code>\n`;
 
-  if (existingLead.telegram) {
+  if (existingLead?.telegram) {
     const tg = existingLead.telegram.startsWith("@") ? existingLead.telegram : `@${existingLead.telegram}`;
     message += `📱 <b>Telegram:</b> ${tg}\n`;
   }
@@ -105,11 +130,11 @@ export async function processPaymentStatusUpdate(payload: {
     message += `⚠️ <b>Статус:</b> Не оплачено\n`;
   }
 
-  const utmSource = existingLead.utm_source || existingLead.raw_payload?.utm_source;
-  const utmMedium = existingLead.utm_medium || existingLead.raw_payload?.utm_medium;
-  const utmCampaign = existingLead.utm_campaign || existingLead.raw_payload?.utm_campaign;
-  const utmContent = existingLead.utm_content || existingLead.raw_payload?.utm_content;
-  const utmTerm = existingLead.utm_term || existingLead.raw_payload?.utm_term;
+  const utmSource = existingLead?.utm_source || existingLead?.raw_payload?.utm_source;
+  const utmMedium = existingLead?.utm_medium || existingLead?.raw_payload?.utm_medium;
+  const utmCampaign = existingLead?.utm_campaign || existingLead?.raw_payload?.utm_campaign;
+  const utmContent = existingLead?.utm_content || existingLead?.raw_payload?.utm_content;
+  const utmTerm = existingLead?.utm_term || existingLead?.raw_payload?.utm_term;
 
   const hasUtm = utmSource || utmMedium || utmCampaign || utmContent || utmTerm;
   if (hasUtm) {

@@ -30,6 +30,7 @@ import {
   validateUkrainianPhone,
   validateTelegramHandle
 } from "@/lib/validation";
+import { getMarketingAttribution } from "@/lib/attribution";
 
 interface LeadFormData {
   name: string;
@@ -198,20 +199,20 @@ export default function DiagnosticLanding() {
     setErrorMessage("");
 
     try {
+      const attribution = getMarketingAttribution();
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...attribution,
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
           notes: formData.notes,
           offer_variant: offerVariant,
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          utm_content: utmContent,
-          utm_term: utmTerm,
+          amount: 480.0,
+          currency: "UAH",
+          product_type: "consultation",
           page_path: typeof window !== "undefined" ? window.location.pathname : "/diagnostic",
           page_url: typeof window !== "undefined" ? window.location.href : "/diagnostic",
         }),

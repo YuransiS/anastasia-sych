@@ -33,6 +33,7 @@ import {
   validateUkrainianPhone,
   validateTelegramHandle
 } from "@/lib/validation";
+import { getMarketingAttribution } from "@/lib/attribution";
 
 interface LeadFormData {
   name: string;
@@ -241,6 +242,7 @@ export default function WaistMiniCourseLanding() {
     setErrorMessage("");
 
     try {
+      const attribution = getMarketingAttribution();
       const pagePath = typeof window !== "undefined" ? window.location.pathname : "/mini-course/waist";
       const pageUrl = typeof window !== "undefined" ? window.location.href : "https://anastasiia-sych.vercel.app/mini-course/waist";
 
@@ -248,17 +250,15 @@ export default function WaistMiniCourseLanding() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...attribution,
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
           notes: formData.notes || "Міні-курс: Плаский живіт та чітка талія (279 грн)",
           offer_variant: "mini-course-waist",
-          amount: 279,
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          utm_content: utmContent,
-          utm_term: utmTerm,
+          amount: 279.0,
+          currency: "UAH",
+          product_type: "tripwire",
           page_path: pagePath,
           page_url: pageUrl,
         }),

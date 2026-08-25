@@ -4,6 +4,7 @@ import {
   verifyWayForPayCallbackSignature,
   generateWayForPayCallbackResponse,
 } from "@/lib/wayforpay";
+import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
@@ -126,8 +127,9 @@ export async function POST(request: NextRequest) {
     const isApproved = transactionStatus === "Approved";
 
     if (orderReference) {
-      const newStatus = isApproved ? "Оплачено" : "Не оплачено";
-      const paidAmount = amount ? Number(amount) : 480;
+      const legacyStatus = isApproved ? "Оплачено" : "Не оплачено";
+      const canonicalStatus = isApproved ? "closed_won" : "declined";
+      const paidAmount = amount ? Number(Number(amount).toFixed(2)) : 480.0;
 
       // 1. Fetch existing lead to get tg_message_id and lead details
       const { data: existingLead } = await supabaseAdmin
@@ -139,14 +141,28 @@ export async function POST(request: NextRequest) {
       const tgMessageId = existingLead?.raw_payload?.tg_message_id;
       const offerVariant = existingLead?.offer_variant || "1";
 
-      // 2. Update lead status in Supabase
+      // 2. Canonical B&W CRM v2.0 Enrichment Protocol: Update unified_orders
+      try {
+        await updateUnifiedOrderStatus({
+          orderId: orderReference,
+          status: canonicalStatus,
+          amount: paidAmount,
+          reason: reason || (reasonCode ? `Reason code: ${reasonCode}` : undefined),
+          paymentPayload: payload,
+        });
+      } catch (crmErr) {
+        console.error("[WayForPay Callback] Unified CRM update error:", crmErr);
+      }
+
+      // 3. Update lead status in Supabase anastasia_sych_leads table
       const { data: updatedLead, error: dbErr } = await supabaseAdmin
         .from("anastasia_sych_leads")
         .update({
-          status: newStatus,
+          status: legacyStatus,
           amount: paidAmount,
           raw_payload: {
             ...(existingLead?.raw_payload || {}),
+            canonical_status: canonicalStatus,
             wayforpay_callback: payload,
           },
         })
@@ -157,10 +173,10 @@ export async function POST(request: NextRequest) {
       if (dbErr) {
         console.error("[WayForPay Callback] DB update error:", dbErr);
       } else {
-        console.log(`[WayForPay Callback] Lead updated to ${newStatus}:`, updatedLead);
+        console.log(`[WayForPay Callback] Lead updated to ${legacyStatus} (${canonicalStatus}):`, updatedLead);
       }
 
-      // 3. Edit original Telegram message in thread 904 or send new status update
+      // 4. Edit original Telegram message in thread 904 or send new status update
       await updateOrSendTelegramPaymentStatus({
         name: existingLead?.name || updatedLead?.name,
         phone: existingLead?.phone || updatedLead?.phone,
@@ -173,7 +189,7 @@ export async function POST(request: NextRequest) {
         tgMessageId,
       });
 
-      // 4. Central Analytics Gateway payment sync
+      // 5. Central Analytics Gateway payment sync
       try {
         fetch("https://bnw-prod.vercel.app/api/v1/leads/register", {
           method: "POST",
@@ -186,10 +202,12 @@ export async function POST(request: NextRequest) {
               phone: existingLead?.phone || "",
               telegram: existingLead?.telegram || null,
               amount: paidAmount,
-              status: newStatus,
+              currency: "UAH",
+              status: legacyStatus,
             },
             metadata: {
               order_id: orderReference,
+              canonical_status: canonicalStatus,
               payment_gateway: "WayForPay",
               transaction_status: transactionStatus,
               reason,

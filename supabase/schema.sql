@@ -1,5 +1,5 @@
 -- =========================================================
--- DATABASE MIGRATION & RLS POLICIES FOR ANASTASIA SYCH LEADS
+-- DATABASE MIGRATION & RLS POLICIES FOR ANASTASIA SYCH LEADS (B&W CRM v2.0)
 -- =========================================================
 
 -- 1. Create main leads table if not existing
@@ -52,7 +52,7 @@ TO service_role
 USING (true) 
 WITH CHECK (true);
 
--- 5. Attach PostgreSQL Trigger for Central Unified CRM Replication
+-- 5. Attach PostgreSQL Trigger for Central Unified CRM Replication (B&W CRM v2.0 Enrichment Protocol)
 DROP TRIGGER IF EXISTS trg_sync_anastasia_sych_lead ON public.anastasia_sych_leads;
 
 CREATE TRIGGER trg_sync_anastasia_sych_lead

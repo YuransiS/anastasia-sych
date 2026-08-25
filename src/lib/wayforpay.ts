@@ -20,6 +20,7 @@ export interface WayForPayPurchaseParams {
 export function generateWayForPayPurchaseData(params: {
   orderReference: string;
   amount: number;
+  currency?: string;
   productName: string;
   clientName?: string;
   clientPhone?: string;
@@ -31,7 +32,7 @@ export function generateWayForPayPurchaseData(params: {
   const merchantDomainName = params.domainName || "anastasiia-sych.vercel.app";
 
   const orderDate = Math.floor(Date.now() / 1000);
-  const currency = "UAH";
+  const currency = params.currency || "UAH";
   const productNames = [params.productName];
   const productCounts = [1];
   const productPrices = [params.amount];

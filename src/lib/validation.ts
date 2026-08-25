@@ -59,3 +59,54 @@ export function validateTelegramHandle(handle: string): { isValid: boolean; erro
 
   return { isValid: true };
 }
+
+/**
+ * Normalizes phone number to standard format with leading plus (+380XXXXXXXXX or +XXXXXXXXXXX).
+ * Strips all spaces, brackets, dashes, and non-digit characters.
+ */
+export function normalizePhone(input: string): string {
+  let digitsOnly = input.replace(/\D/g, "");
+  if (!digitsOnly) return "";
+
+  // Convert Ukrainian local format variants: 0XXXXXXXXX (10 digits) -> 380XXXXXXXXX
+  if (digitsOnly.length === 10 && digitsOnly.startsWith("0")) {
+    digitsOnly = "38" + digitsOnly;
+  }
+  // Convert 80XXXXXXXXX (11 digits) -> 380XXXXXXXXX
+  if (digitsOnly.length === 11 && digitsOnly.startsWith("80")) {
+    digitsOnly = "38" + digitsOnly.substring(1);
+  }
+
+  return "+" + digitsOnly;
+}
+
+/**
+ * Normalizes email address to lower case and trims surrounding whitespace.
+ */
+export function normalizeEmail(email?: string | null): string | null {
+  if (!email) return null;
+  const trimmed = email.trim().toLowerCase();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+/**
+ * Normalizes Telegram handle by trimming whitespace, removing leading '@',
+ * or returns null if handle indicates no username.
+ */
+export function normalizeTelegram(telegram?: string | null): string | null {
+  if (!telegram) return null;
+  const trimmed = telegram.trim();
+  if (!trimmed) return null;
+  if (
+    trimmed.toLowerCase() === "немає нікнейму" ||
+    trimmed.toLowerCase() === "в мене немає нікнейму" ||
+    trimmed.toLowerCase() === "нет" ||
+    trimmed.toLowerCase() === "none" ||
+    trimmed.toLowerCase() === "null"
+  ) {
+    return null;
+  }
+  const clean = trimmed.replace(/^@+/, "").trim();
+  return clean.length > 0 ? clean : null;
+}
+

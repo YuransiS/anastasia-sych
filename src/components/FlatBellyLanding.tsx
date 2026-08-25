@@ -31,6 +31,7 @@ import {
   validateUkrainianPhone,
   validateTelegramHandle
 } from "@/lib/validation";
+import { getMarketingAttribution } from "@/lib/attribution";
 
 interface LeadFormData {
   name: string;
@@ -248,21 +249,20 @@ export default function FlatBellyLanding() {
     setErrorMessage("");
 
     try {
+      const attribution = getMarketingAttribution();
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...attribution,
           name: formData.name,
           phone: formData.phone,
           telegram: formData.telegram,
           notes: formData.notes || "Заявка на міні-курс (279 грн)",
           offer_variant: "mini-course",
-          amount: 279,
-          utm_source: utmSource,
-          utm_medium: utmMedium,
-          utm_campaign: utmCampaign,
-          utm_content: utmContent,
-          utm_term: utmTerm,
+          amount: 279.0,
+          currency: "UAH",
+          product_type: "tripwire",
           page_path: typeof window !== "undefined" ? window.location.pathname : "/mini-course/flat-belly",
           page_url: typeof window !== "undefined" ? window.location.href : "/mini-course/flat-belly",
         }),

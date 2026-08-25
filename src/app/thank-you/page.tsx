@@ -34,19 +34,22 @@ function ThankYouContent() {
   const isMiniCourse =
     orderData?.page_path?.startsWith("/mini-course") ||
     orderData?.offer_variant?.startsWith("mini-course") ||
+    orderData?.amount === 7.6 ||
     orderData?.amount === 279 ||
     orderData?.amount === 399;
 
   // Track Facebook Pixel Purchase event on Thank You page
   useEffect(() => {
-    const value = orderData?.amount || (isMiniCourse ? 279 : 480);
+    const currency = orderData?.raw_payload?.currency || (orderData?.amount === 7.6 ? "EUR" : "UAH");
+    const defaultValue = currency === "EUR" ? 7.6 : 279;
+    const value = orderData?.amount || (isMiniCourse ? defaultValue : 480);
     const contentName = isMiniCourse
       ? "Анастасія Сич - Міні-курс «Плаский живіт та струнка талія»"
       : "Анастасія Сич - Персональна діагностика";
 
     trackPixelEvent("Purchase", {
       value,
-      currency: "UAH",
+      currency,
       content_name: contentName,
       order_id: orderReference,
     });

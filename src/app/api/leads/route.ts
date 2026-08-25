@@ -3,17 +3,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { createOrUpdateSendPulseContact } from "@/lib/sendpulse";
 import { generateWayForPayPurchaseData } from "@/lib/wayforpay";
 import { getOfferLabel } from "@/lib/payment-handler";
-
-function cleanPhone(phone: string): string {
-  let cleaned = phone.replace(/\D/g, "");
-  if (cleaned.length === 10 && cleaned.startsWith("0")) {
-    cleaned = "38" + cleaned;
-  }
-  if (cleaned.length === 11 && cleaned.startsWith("80")) {
-    cleaned = "38" + cleaned.substring(1);
-  }
-  return cleaned;
-}
+import { normalizePhone, normalizeEmail, normalizeTelegram } from "@/lib/validation";
+import { upsertUnifiedCustomer, createUnifiedOrder, ProductType } from "@/lib/unified-crm";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
@@ -22,11 +13,12 @@ const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 async function sendTelegramLeadNotification(payload: {
   name: string;
   phone: string;
-  telegram?: string;
+  telegram?: string | null;
   notes?: string;
   offerVariant?: string;
   orderReference?: string;
   amount?: number;
+  currency?: string;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -39,8 +31,9 @@ async function sendTelegramLeadNotification(payload: {
       return null;
     }
 
-    const offerLabel = getOfferLabel(payload.offerVariant);
-    const amountText = payload.amount === 1 ? "1 UAH (ТЕСТ)" : `${payload.amount || 480} UAH`;
+    const cur = payload.currency || "UAH";
+    const offerLabel = getOfferLabel(payload.offerVariant, payload.amount, cur);
+    const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount || (cur === "EUR" ? 7.6 : 279)} ${cur}`;
 
     let message = `<b>🟡 Заявку зареєстровано (Очікує оплати)</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
@@ -104,34 +97,59 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log("[Leads Ingestion] Received lead payload:", body);
 
-    const name = body.name || "";
+    const name = (body.name || "").trim() || "Учасник";
     const rawPhone = body.phone || "";
-    const cleanedPhone = rawPhone ? cleanPhone(rawPhone) : "";
-    const telegram = body.telegram || "";
+    const cleanedPhone = normalizePhone(rawPhone);
+    const rawTelegram = body.telegram || "";
+    const cleanedTelegram = normalizeTelegram(rawTelegram);
+    const cleanedEmail = normalizeEmail(body.email);
     const notes = body.notes || "";
     const offerVariant = body.offer_variant || "1";
+
+    // Marketing Attribution parameters
     const utmSource = body.utm_source || "";
     const utmMedium = body.utm_medium || "";
     const utmCampaign = body.utm_campaign || "";
     const utmContent = body.utm_content || "";
     const utmTerm = body.utm_term || "";
+    const campaignId =
+      body.campaign_id ||
+      body.utm_id ||
+      (utmCampaign && /^\d+$/.test(utmCampaign) ? utmCampaign : undefined);
+    const adsetId = body.adset_id || undefined;
+    const adId = body.ad_id || undefined;
+    const fbclid = body.fbclid || undefined;
+    const gclid = body.gclid || undefined;
+    const fbp = body.fbp || undefined;
+    const fbc = body.fbc || undefined;
+
     const pagePath = body.page_path || "/diagnostic";
     const pageUrl = body.page_url || "";
     const visitorUuid = body.visitor_uuid || crypto.randomUUID();
 
     // Check for test payment handle yuransis / @yuransis
-    const cleanTg = telegram.replace("@", "").trim().toLowerCase();
-    const isTestPayment = cleanTg === "yuransis";
+    const isTestPayment =
+      cleanedTelegram?.toLowerCase() === "yuransis" ||
+      rawTelegram.toLowerCase().includes("yuransis");
 
     const isMiniCourse =
       pagePath.startsWith("/mini-course") ||
       offerVariant.startsWith("mini-course") ||
       offerVariant === "minicourse" ||
       offerVariant === "mc" ||
+      body.amount === 7.6 ||
+      body.amount === 7.60 ||
       body.amount === 279 ||
       body.amount === 399;
-    const defaultAmount = isMiniCourse ? 279 : 480;
-    const amount = isTestPayment ? 1 : (body.amount ? Number(body.amount) : defaultAmount);
+
+    const currency = body.currency || (body.amount === 7.6 || body.amount === 7.60 ? "EUR" : "UAH");
+    const defaultAmount = isMiniCourse ? (currency === "EUR" ? 7.60 : 279.0) : 480.0;
+    const amount = isTestPayment ? 1.0 : (body.amount ? Number(Number(body.amount).toFixed(2)) : defaultAmount);
+
+    const productType: ProductType = isMiniCourse ? "tripwire" : "consultation";
+    const productName = isTestPayment
+      ? (isMiniCourse ? `Тестовий міні-курс (1 ${currency})` : `Тестова діагностика (1 ${currency})`)
+      : (isMiniCourse ? "Міні-курс: «Плаский живіт та струнка талія» (Анастасія Сич)" : "Персональна діагностика (Анастасія Сич)");
 
     const orderReference = `AS_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
 
@@ -139,11 +157,12 @@ export async function POST(request: NextRequest) {
     const tgMessageId = await sendTelegramLeadNotification({
       name,
       phone: cleanedPhone || rawPhone,
-      telegram,
+      telegram: cleanedTelegram || rawTelegram,
       notes,
       offerVariant,
       orderReference,
       amount,
+      currency,
       utm_source: utmSource,
       utm_medium: utmMedium,
       utm_campaign: utmCampaign,
@@ -151,10 +170,60 @@ export async function POST(request: NextRequest) {
       utm_term: utmTerm,
     });
 
+    // 2. Canonical B&W CRM v2.0 Enrichment Protocol: Upsert unified customer & create unified order
+    let customerId: string | null = null;
+    try {
+      customerId = await upsertUnifiedCustomer({
+        name,
+        phone: cleanedPhone || rawPhone,
+        email: cleanedEmail,
+        telegram: cleanedTelegram,
+      });
+
+      if (customerId) {
+        await createUnifiedOrder({
+          order_id: orderReference,
+          customer_id: customerId,
+          amount,
+          currency: "UAH",
+          status: "pending",
+          product_type: productType,
+          product_name: productName,
+          payment_system: "wayforpay",
+          page_path: pagePath,
+          page_url: pageUrl,
+          utm_source: utmSource,
+          utm_medium: utmMedium,
+          utm_campaign: utmCampaign,
+          utm_content: utmContent,
+          utm_term: utmTerm,
+          campaign_id: campaignId,
+          adset_id: adsetId,
+          ad_id: adId,
+          fbclid,
+          gclid,
+          fbp,
+          fbc,
+          visitor_uuid: visitorUuid,
+          created_at: new Date().toISOString(),
+          extra_metadata: {
+            offer_variant: offerVariant,
+            notes,
+            tg_message_id: tgMessageId,
+            is_test_payment: isTestPayment,
+          },
+        });
+      }
+    } catch (crmErr) {
+      console.error("[Unified CRM] Order creation error:", crmErr);
+    }
+
+    // 3. Save to local anastasia_sych_leads table for backward compatibility & local reporting
     const dbPayload = {
       name,
       phone: cleanedPhone || rawPhone,
-      telegram,
+      telegram: cleanedTelegram || rawTelegram,
+      email: cleanedEmail,
       offer_variant: offerVariant,
       status: "Зареєстровано",
       amount,
@@ -172,31 +241,41 @@ export async function POST(request: NextRequest) {
       visitor_uuid: visitorUuid,
       raw_payload: {
         ...body,
+        campaign_id: campaignId,
+        adset_id: adsetId,
+        ad_id: adId,
+        fbclid,
+        gclid,
+        fbp,
+        fbc,
+        currency: "UAH",
+        product_type: productType,
+        product_name: productName,
+        customer_id: customerId,
         tg_message_id: tgMessageId,
         is_test_payment: isTestPayment,
       },
     };
 
-    // 2. Save strictly to Supabase with RLS compliance via admin client
     const { error: dbErr } = await supabaseAdmin
       .from("anastasia_sych_leads")
       .insert(dbPayload);
 
     if (dbErr) {
-      console.error("[Supabase] Database save error:", dbErr);
-      return NextResponse.json({ status: "error", message: dbErr.message }, { status: 500 });
+      console.error("[Supabase] Database save error (anastasia_sych_leads):", dbErr);
     }
 
-    // 3. Sync to SendPulse CRM REST API
+    // 4. Sync to SendPulse CRM REST API
     createOrUpdateSendPulseContact({
       name,
       phone: cleanedPhone || rawPhone,
-      telegram,
+      telegram: cleanedTelegram || rawTelegram,
+      email: cleanedEmail || undefined,
       offerVariant,
       status: "Зареєстровано",
     }).catch((err) => console.error("[SendPulse] Background error:", err));
 
-    // 4. Push to Central Analytics Gateway
+    // 5. Push to Central Analytics Gateway
     try {
       fetch("https://bnw-prod.vercel.app/api/v1/leads/register", {
         method: "POST",
@@ -207,8 +286,11 @@ export async function POST(request: NextRequest) {
           lead: {
             name,
             phone: cleanedPhone || rawPhone,
-            telegram: telegram || null,
+            telegram: cleanedTelegram || null,
+            email: cleanedEmail || null,
             amount,
+            currency: "UAH",
+            product_type: productType,
             status: "Зареєстровано",
           },
           marketing: {
@@ -217,14 +299,25 @@ export async function POST(request: NextRequest) {
             utm_campaign: utmCampaign || null,
             utm_content: utmContent || null,
             utm_term: utmTerm || null,
+            campaign_id: campaignId || null,
+            adset_id: adsetId || null,
+            ad_id: adId || null,
+            fbclid: fbclid || null,
+            gclid: gclid || null,
+            fbp: fbp || null,
+            fbc: fbc || null,
             visitor_uuid: visitorUuid,
             page_path: pagePath,
             page_url: pageUrl,
           },
           metadata: {
+            currency,
+            product_type: productType,
+            product_name: productName,
             offer_variant: offerVariant,
             notes,
             order_id: orderReference,
+            customer_id: customerId,
             is_test_payment: isTestPayment,
             tg_message_id: tgMessageId,
           },
@@ -234,18 +327,15 @@ export async function POST(request: NextRequest) {
       console.error("[Analytics Gateway] Exception:", err);
     }
 
-    // 5. Generate WayForPay payment data
+    // 6. Generate WayForPay payment data
     const host = request.headers.get("host") || "anastasiia-sych.vercel.app";
     const protocol = request.headers.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
     const baseUrl = `${protocol}://${host}`;
 
-    const productName = isTestPayment
-      ? (isMiniCourse ? "Тестовий міні-курс (1 грн)" : "Тестова діагностика (1 грн)")
-      : (isMiniCourse ? "Міні-курс: Плаский живіт та струнка талія (Анастасія Сич)" : "Персональна діагностика (Анастасія Сич)");
-
     const wayforpayData = generateWayForPayPurchaseData({
       orderReference,
       amount,
+      currency,
       productName,
       clientName: name,
       clientPhone: cleanedPhone || rawPhone,
@@ -258,6 +348,7 @@ export async function POST(request: NextRequest) {
       message: "Lead processed successfully.",
       visitor_uuid: visitorUuid,
       orderReference,
+      customerId,
       wayforpayData,
     });
   } catch (error: any) {
