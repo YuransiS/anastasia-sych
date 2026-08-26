@@ -60,7 +60,6 @@ export async function processPaymentStatusUpdate(payload: {
     console.error("[Payment Handler] Unified order status update error:", crmErr);
   }
 
-<<<<<<< HEAD
   // 3. Update status in local anastasia_sych_leads
   let updatedLead = null;
   if (existingLead) {
