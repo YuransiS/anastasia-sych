@@ -145,6 +145,12 @@ export async function upsertUnifiedCustomer(input: UnifiedCustomerInput): Promis
   }
 }
 
+function safeTruncate(str: string | null | undefined, maxLen = 100): string | null {
+  if (!str) return null;
+  const s = String(str).trim();
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
 /**
  * Creates or updates an order in unified_orders according to B&W CRM v2.0 enrichment protocol.
  */
@@ -165,26 +171,26 @@ export async function createUnifiedOrder(orderData: UnifiedOrderInput) {
     const dbPayload = {
       project_id: ANASTASIA_PROJECT_ID,
       customer_id: orderData.customer_id,
-      order_id: orderData.order_id,
+      order_id: safeTruncate(orderData.order_id, 100),
       amount,
-      status: orderData.status,
-      page_path: orderData.page_path || null,
-      page_url: orderData.page_url || null,
-      utm_source: orderData.utm_source || null,
-      utm_medium: orderData.utm_medium || null,
-      utm_campaign: orderData.utm_campaign || null,
-      utm_content: orderData.utm_content || null,
-      utm_term: orderData.utm_term || null,
-      campaign_id: orderData.campaign_id || null,
-      adset_id: orderData.adset_id || null,
-      ad_id: orderData.ad_id || null,
-      fbclid: orderData.fbclid || null,
-      gclid: orderData.gclid || null,
-      fbp: orderData.fbp || null,
-      fbc: orderData.fbc || null,
-      ip_address: orderData.ip_address || null,
-      user_agent: orderData.user_agent || null,
-      visitor_uuid: visitorUuid,
+      status: safeTruncate(orderData.status, 50) as CanonicalOrderStatus,
+      page_path: safeTruncate(orderData.page_path, 255),
+      page_url: safeTruncate(orderData.page_url, 500),
+      utm_source: safeTruncate(orderData.utm_source, 100),
+      utm_medium: safeTruncate(orderData.utm_medium, 100),
+      utm_campaign: safeTruncate(orderData.utm_campaign, 100),
+      utm_content: safeTruncate(orderData.utm_content, 100),
+      utm_term: safeTruncate(orderData.utm_term, 100),
+      campaign_id: safeTruncate(orderData.campaign_id, 100),
+      adset_id: safeTruncate(orderData.adset_id, 100),
+      ad_id: safeTruncate(orderData.ad_id, 100),
+      fbclid: safeTruncate(orderData.fbclid, 100),
+      gclid: safeTruncate(orderData.gclid, 100),
+      fbp: safeTruncate(orderData.fbp, 100),
+      fbc: safeTruncate(orderData.fbc, 100),
+      ip_address: safeTruncate(orderData.ip_address, 100),
+      user_agent: safeTruncate(orderData.user_agent, 500),
+      visitor_uuid: safeTruncate(visitorUuid, 100),
       created_at: orderData.created_at || new Date().toISOString(),
       metadata,
     };

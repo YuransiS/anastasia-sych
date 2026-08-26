@@ -219,27 +219,33 @@ export async function POST(request: NextRequest) {
       console.error("[Unified CRM] Order creation error:", crmErr);
     }
 
+function safeTruncate(str: string | null | undefined, maxLen = 100): string | null {
+  if (!str) return null;
+  const s = String(str).trim();
+  return s.length > maxLen ? s.slice(0, maxLen) : s;
+}
+
     // 3. Save to local anastasia_sych_leads table for backward compatibility & local reporting
     const dbPayload = {
-      name,
-      phone: cleanedPhone || rawPhone,
-      telegram: cleanedTelegram || rawTelegram,
-      email: cleanedEmail,
-      offer_variant: offerVariant,
+      name: safeTruncate(name, 150) || "Учасник",
+      phone: safeTruncate(cleanedPhone || rawPhone, 50) || "",
+      telegram: safeTruncate(cleanedTelegram || rawTelegram, 100),
+      email: safeTruncate(cleanedEmail, 150),
+      offer_variant: safeTruncate(offerVariant, 50) || "1",
       status: "Зареєстровано",
       amount,
       is_free: isFree,
-      order_id: orderReference,
+      order_id: safeTruncate(orderReference, 100) || orderReference,
       target_sheet: "Anastasia Sych",
       sheet_id: "0",
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
-      utm_content: utmContent,
-      utm_term: utmTerm,
-      page_path: pagePath,
-      page_url: pageUrl,
-      visitor_uuid: visitorUuid,
+      utm_source: safeTruncate(utmSource, 100),
+      utm_medium: safeTruncate(utmMedium, 100),
+      utm_campaign: safeTruncate(utmCampaign, 100),
+      utm_content: safeTruncate(utmContent, 100),
+      utm_term: safeTruncate(utmTerm, 100),
+      page_path: safeTruncate(pagePath, 255),
+      page_url: safeTruncate(pageUrl, 500),
+      visitor_uuid: safeTruncate(visitorUuid, 100),
       raw_payload: {
         ...body,
         campaign_id: campaignId,
