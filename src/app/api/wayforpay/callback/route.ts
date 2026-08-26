@@ -20,20 +20,24 @@ async function updateOrSendTelegramPaymentStatus(payload: {
   isPaid: boolean;
   reason?: string;
   tgMessageId?: number;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
 }) {
   try {
+    // Only send Telegram notifications for successful payments
+    if (!payload.isPaid) {
+      return;
+    }
+
     if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
 
     const offerTitle = payload.offerVariant ? `Офер #${payload.offerVariant}` : "Офер #1";
     const amountText = payload.amount === 1 ? "1 UAH (ТЕСТ)" : `${payload.amount} UAH`;
 
-    let message = "";
-    if (payload.isPaid) {
-      message += `<b>🟢 КУПИВ! УСПІШНА ОПЛАТА</b>\n\n`;
-    } else {
-      message += `<b>🔴 НЕ КУПИВ / ОПЛАТУ ВІДХИЛЕНО</b>\n\n`;
-    }
-
+    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
 
@@ -42,19 +46,23 @@ async function updateOrSendTelegramPaymentStatus(payload: {
       message += `📱 <b>Telegram:</b> ${tg}\n`;
     }
 
-    message += `🎯 <b>Офер з якого купив:</b> ${offerTitle} (Варіант #${payload.offerVariant || "1"})\n`;
+    message += `🎯 <b>Офер:</b> ${offerTitle}\n`;
     message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
     message += `🆔 <b>Order ID:</b> <code>${payload.orderReference}</code>\n`;
+    message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
 
-    if (payload.isPaid) {
-      message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
-    } else {
-      message += `❌ <b>Причина відмови:</b> ${payload.reason || "Скасовано або недостатньо коштів"}\n`;
-      message += `⚠️ <b>Статус:</b> Не оплачено\n`;
+    const hasUtm = payload.utm_source || payload.utm_medium || payload.utm_campaign || payload.utm_content || payload.utm_term;
+    if (hasUtm) {
+      message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+      if (payload.utm_source) message += `• <b>Source:</b> ${payload.utm_source}\n`;
+      if (payload.utm_medium) message += `• <b>Medium:</b> ${payload.utm_medium}\n`;
+      if (payload.utm_campaign) message += `• <b>Campaign:</b> ${payload.utm_campaign}\n`;
+      if (payload.utm_content) message += `• <b>Content:</b> ${payload.utm_content}\n`;
+      if (payload.utm_term) message += `• <b>Term:</b> ${payload.utm_term}\n`;
     }
 
     if (payload.tgMessageId) {
-      // Edit existing Telegram message in-place
+      // Edit existing Telegram message in-place if available
       const editUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/editMessageText`;
       const editRes = await fetch(editUrl, {
         method: "POST",
@@ -70,12 +78,10 @@ async function updateOrSendTelegramPaymentStatus(payload: {
       if (editResult.ok) {
         console.log(`[Telegram Bot] Successfully edited message #${payload.tgMessageId}`);
         return;
-      } else {
-        console.warn("[Telegram Bot] Message edit failed, falling back to sendMessage:", editResult.description);
       }
     }
 
-    // Fallback: send new message if edit wasn't possible
+    // Send clean success message
     const sendUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
     await fetch(sendUrl, {
       method: "POST",
@@ -176,18 +182,24 @@ export async function POST(request: NextRequest) {
         console.log(`[WayForPay Callback] Lead updated to ${legacyStatus} (${canonicalStatus}):`, updatedLead);
       }
 
-      // 4. Edit original Telegram message in thread 904 or send new status update
-      await updateOrSendTelegramPaymentStatus({
-        name: existingLead?.name || updatedLead?.name,
-        phone: existingLead?.phone || updatedLead?.phone,
-        telegram: existingLead?.telegram || updatedLead?.telegram,
-        offerVariant,
-        orderReference,
-        amount: paidAmount,
-        isPaid: isApproved,
-        reason: reason || (reasonCode ? `Код помилки: ${reasonCode}` : undefined),
-        tgMessageId,
-      });
+      // 4. Dispatch Telegram payment alert ONLY if payment is approved (successful)
+      if (isApproved) {
+        await updateOrSendTelegramPaymentStatus({
+          name: existingLead?.name || updatedLead?.name,
+          phone: existingLead?.phone || updatedLead?.phone,
+          telegram: existingLead?.telegram || updatedLead?.telegram,
+          offerVariant,
+          orderReference,
+          amount: paidAmount,
+          isPaid: true,
+          tgMessageId,
+          utm_source: existingLead?.utm_source,
+          utm_medium: existingLead?.utm_medium,
+          utm_campaign: existingLead?.utm_campaign,
+          utm_content: existingLead?.utm_content,
+          utm_term: existingLead?.utm_term,
+        });
+      }
 
       // 5. Central Analytics Gateway payment sync
       try {

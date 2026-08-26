@@ -60,6 +60,7 @@ export async function processPaymentStatusUpdate(payload: {
     console.error("[Payment Handler] Unified order status update error:", crmErr);
   }
 
+<<<<<<< HEAD
   // 3. Update status in local anastasia_sych_leads
   let updatedLead = null;
   if (existingLead) {
@@ -87,103 +88,89 @@ export async function processPaymentStatusUpdate(payload: {
     }
   }
 
-  // 4. Edit Telegram message in thread 904
-  const tgMessageId = existingLead?.raw_payload?.tg_message_id;
-  const offerVariant = existingLead?.offer_variant || "1";
-  const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
-  const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
-  const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
-  const userNotes = existingLead?.raw_payload?.notes;
-
-  let message = "";
+  // 4. Dispatch Telegram alert ONLY if payment is approved (successful)
   if (isApproved) {
-    message += `<b>🟢 Оплата успішна!</b>\n\n`;
-  } else {
-    message += `<b>🔴 Оплату відхилено</b>\n\n`;
-  }
+    const tgMessageId = existingLead?.raw_payload?.tg_message_id;
+    const offerVariant = existingLead?.offer_variant || "1";
+    const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
+    const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
+    const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
+    const userNotes = existingLead?.raw_payload?.notes;
 
-  message += `👤 <b>Ім'я:</b> ${existingLead?.name || "-"}\n`;
-  message += `📞 <b>Телефон:</b> <code>${existingLead?.phone || "-"}</code>\n`;
+    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
+    message += `👤 <b>Ім'я:</b> ${existingLead?.name || "-"}\n`;
+    message += `📞 <b>Телефон:</b> <code>${existingLead?.phone || "-"}</code>\n`;
 
-  if (existingLead?.telegram) {
-    const tg = existingLead.telegram.startsWith("@") ? existingLead.telegram : `@${existingLead.telegram}`;
-    message += `📱 <b>Telegram:</b> ${tg}\n`;
-  }
-
-  if (isApproved) {
-    message += `🎯 <b>Офер з якого купив:</b> ${offerLabel}\n`;
-  } else {
-    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
-  }
-
-  message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
-  message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
-
-  if (userNotes && String(userNotes).trim()) {
-    message += `💬 <b>Запит:</b> ${String(userNotes).trim()}\n`;
-  }
-
-  if (isApproved) {
-    message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
-  } else {
-    message += `❌ <b>Причина відмови:</b> ${reason || (reasonCode ? `Код: ${reasonCode}` : "Скасовано користувачем")}\n`;
-    message += `⚠️ <b>Статус:</b> Не оплачено\n`;
-  }
-
-  const utmSource = existingLead?.utm_source || existingLead?.raw_payload?.utm_source;
-  const utmMedium = existingLead?.utm_medium || existingLead?.raw_payload?.utm_medium;
-  const utmCampaign = existingLead?.utm_campaign || existingLead?.raw_payload?.utm_campaign;
-  const utmContent = existingLead?.utm_content || existingLead?.raw_payload?.utm_content;
-  const utmTerm = existingLead?.utm_term || existingLead?.raw_payload?.utm_term;
-
-  const hasUtm = utmSource || utmMedium || utmCampaign || utmContent || utmTerm;
-  if (hasUtm) {
-    message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
-    if (utmSource) message += `• <b>Source:</b> ${utmSource}\n`;
-    if (utmMedium) message += `• <b>Medium:</b> ${utmMedium}\n`;
-    if (utmCampaign) message += `• <b>Campaign:</b> ${utmCampaign}\n`;
-    if (utmContent) message += `• <b>Content:</b> ${utmContent}\n`;
-    if (utmTerm) message += `• <b>Term:</b> ${utmTerm}\n`;
-  }
-
-  if (tgMessageId) {
-    try {
-      const editUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/editMessageText`;
-      const editRes = await fetch(editUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          message_id: tgMessageId,
-          text: message.trim(),
-          parse_mode: "HTML",
-        }),
-      });
-      const editResult = await editRes.json();
-      if (editResult.ok) {
-        console.log(`[Payment Handler] Successfully edited Telegram message #${tgMessageId}`);
-      } else {
-        console.warn("[Payment Handler] Message edit returned error:", editResult.description);
-      }
-    } catch (err) {
-      console.error("[Payment Handler] Telegram edit exception:", err);
+    if (existingLead?.telegram) {
+      const tg = existingLead.telegram.startsWith("@") ? existingLead.telegram : `@${existingLead.telegram}`;
+      message += `📱 <b>Telegram:</b> ${tg}\n`;
     }
-  } else {
-    // Send fallback message if tgMessageId was missing
-    try {
-      const sendUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-      await fetch(sendUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          message_thread_id: TG_THREAD_ID ? parseInt(TG_THREAD_ID, 10) : undefined,
-          text: message.trim(),
-          parse_mode: "HTML",
-        }),
-      });
-    } catch (err) {
-      console.error("[Payment Handler] Fallback send message error:", err);
+
+    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
+    message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
+
+    if (userNotes && String(userNotes).trim()) {
+      message += `💬 <b>Запит:</b> ${String(userNotes).trim()}\n`;
+    }
+
+    message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
+
+    const utmSource = existingLead.utm_source || existingLead.raw_payload?.utm_source;
+    const utmMedium = existingLead.utm_medium || existingLead.raw_payload?.utm_medium;
+    const utmCampaign = existingLead.utm_campaign || existingLead.raw_payload?.utm_campaign;
+    const utmContent = existingLead.utm_content || existingLead.raw_payload?.utm_content;
+    const utmTerm = existingLead.utm_term || existingLead.raw_payload?.utm_term;
+
+    const hasUtm = utmSource || utmMedium || utmCampaign || utmContent || utmTerm;
+    if (hasUtm) {
+      message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+      if (utmSource) message += `• <b>Source:</b> ${utmSource}\n`;
+      if (utmMedium) message += `• <b>Medium:</b> ${utmMedium}\n`;
+      if (utmCampaign) message += `• <b>Campaign:</b> ${utmCampaign}\n`;
+      if (utmContent) message += `• <b>Content:</b> ${utmContent}\n`;
+      if (utmTerm) message += `• <b>Term:</b> ${utmTerm}\n`;
+    }
+
+    if (tgMessageId) {
+      try {
+        const editUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/editMessageText`;
+        const editRes = await fetch(editUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TG_CHAT_ID,
+            message_id: tgMessageId,
+            text: message.trim(),
+            parse_mode: "HTML",
+          }),
+        });
+        const editResult = await editRes.json();
+        if (editResult.ok) {
+          console.log(`[Payment Handler] Successfully edited Telegram message #${tgMessageId}`);
+        } else {
+          console.warn("[Payment Handler] Message edit returned error:", editResult.description);
+        }
+      } catch (err) {
+        console.error("[Payment Handler] Telegram edit exception:", err);
+      }
+    } else {
+      // Send message if tgMessageId was not previously stored
+      try {
+        const sendUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+        await fetch(sendUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TG_CHAT_ID,
+            message_thread_id: TG_THREAD_ID ? parseInt(TG_THREAD_ID, 10) : undefined,
+            text: message.trim(),
+            parse_mode: "HTML",
+          }),
+        });
+      } catch (err) {
+        console.error("[Payment Handler] Send message error:", err);
+      }
     }
   }
 

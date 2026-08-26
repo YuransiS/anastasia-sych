@@ -31,7 +31,52 @@
 
 ---
 
-## 3. B&W CRM v2.0 Canonical Enrichment Protocol
+## 3. Routes & Page Map
+- **`/` (Root Page):** Clean, high-end 404 page ("Ви не туди потрапили") with zero external links.
+- **`/mini-course/flat-belly` (13-Block Mini-Course Landing Page - August 2026):**
+  - High-converting landing page strictly based on 13-block technical specification and reference design (`sashahavryleiko-10kg.lovable.app`) for Anastasia Sych's mini-course «Зроби плаский живіт та струнку талію всього за 20 хвилин на день» (399 UAH instead of 3999 UAH, -90% discount).
+  - Features 13 structured blocks: Start 24.08 Hero with dual price comparisons, 6 pain point frames with frustration visuals, messenger chat bubbles around Anastasia's full-height portrait, 6 YouTube-style video lessons curriculum, 20-minute daily system, nutrition & fat percentage breakdown, multi-disciplinary synergy formula, Anastasia's 8-year expert profile, target audience checklist, transformation cases carousel with zoom lightbox, inside features summary, 4 FAQ items, and final high-conversion CTA block.
+  - Integrates persistent sticky bottom buy bar across the entire page, lead capture modal with auto-save to `localStorage`, phone formatting (`+380`), Telegram validation, Facebook Pixel tracking, and automatic WayForPay checkout.
+- **`/mini-course/waist` (Mini-Course Landing Page - August 2026):**
+  - High-converting landing page matching the consultation design reference for Anastasia Sych's mini-course «Позбудься випираючого живота та створи чітку талію з перших тренувань» (399 UAH instead of 2999 UAH, -87% discount).
+  - 12 structured blocks strictly following specifications: Hero, Price & 3 benefits, 6 Pain Points, Core Insight, 5 Lessons curriculum, Dedicated Bonus lesson on habits, Key outcomes, Target profile checklist, Anastasia Sych author profile, Transformation cases carousel with zoom lightbox, Final offer, and 5 FAQ items.
+  - Integrates contact lead modal with auto-save to `localStorage`, phone formatting (`+380`), Telegram validation, and automatic WayForPay checkout.
+- **`/mini-course` (Mini-Course Landing Page - 279 UAH / Start 27.08):**
+  - High-converting landing page for Anastasia Sych's 6-lesson mini-course «Плаский живіт та струнка талія» (279 UAH instead of 2999 UAH, -90% discount, Start 27.08).
+  - 12 comprehensive structural sections matching TZ: photo-top hero card, circular failure cycle infographic, 5 video lesson preview steps, 4-step progressive system, trainer credential bio, real case studies carousel with zoom lightbox, FAQ accordion, bonus lesson breakdown, and sticky countdown footer bar.
+  - Integrates contact lead modal with auto-save, phone formatting (`+380`), Telegram validation, and automatic WayForPay payment generation.
+- **`/diagnostic` (Diagnostic Landing Page):**
+  - Interactive landing page for Anastasia Sych's 60-minute personal diagnostics (480 UAH instead of 1190 UAH).
+  - Dynamic offer support via query parameter `?o=1` (Default), `?o=2`, `?o=3`.
+  - Integrates contact lead modal with phone formatting (`+380`), UTM parameter preservation, and automatic WayForPay payment form submission.
+- **`/thank-you` (Thank You & Bot Redirect Page):**
+  - Displays payment confirmation & 3-second countdown.
+  - Auto-redirects to `https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f`.
+  - Includes a fallback interactive button to manual open the Telegram bot.
+- **`/api/leads` (Ingestion & Order Creation API):**
+  - Saves lead into `anastasia_sych_leads` with `order_id`.
+  - Generates signed WayForPay payment payload (`merchantSignature`).
+  - Sends Telegram alert ONLY for free registrations (`is_free: true` / `amount: 0`). Intermediate pending payment notifications for paid funnels are silenced.
+  - Syncs contact to SendPulse CRM & Central Analytics Gateway.
+- **`/api/wayforpay/callback` (WayForPay Webhook API):**
+  - Validates HMAC-MD5 signature from WayForPay.
+  - Updates lead status in `anastasia_sych_leads` to `"Оплачено"`.
+  - Dispatches Telegram payment alert (`🟢 Оплата успішна!`) ONLY upon successful payments (`isApproved`). Suppresses failed/declined intermediate notifications.
+  - Returns `accept` signature response to WayForPay.
+- **`/api/wayforpay/status` (Order Status API):**
+  - Server-side status lookup by `orderReference`.
+- **`/api/cron/report` (Telegram Report Cron):**
+  - Runs daily at 09:00 Kyiv time via Vercel Cron (`vercel.json`).
+  - Pre-run trigger: calls `syncWayForPayTransactions` for the last 3 days to guarantee database accuracy before generating reports.
+- **`/api/cron/sync-payments` (Payment Status Sync Cron):**
+  - GET/POST endpoint to run `syncWayForPayTransactions`.
+  - Supports query parameters `?days=N` or `?start=YYYY-MM-DD&end=YYYY-MM-DD` and checks `CRON_SECRET` authorization.
+- **`scripts/run_sync.js` (Historical Sync Script):**
+  - Standalone script executing a historical run of `syncWayForPayTransactions` from the project launch date (2026-07-01) to today, chunked in 28-day intervals.
+
+---
+
+## 4. B&W CRM v2.0 Canonical Enrichment Protocol
 
 ### Project Identifiers
 - **Project UUID:** `39ace0eb-084a-455e-b058-c6f20cda7f74`

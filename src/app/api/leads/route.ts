@@ -10,7 +10,7 @@ const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRA
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
 const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 
-async function sendTelegramLeadNotification(payload: {
+async function sendTelegramFreeRegistrationNotification(payload: {
   name: string;
   phone: string;
   telegram?: string | null;
@@ -27,15 +27,14 @@ async function sendTelegramLeadNotification(payload: {
 }): Promise<number | null> {
   try {
     if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
-      console.warn("[Telegram Bot] Configurations missing; skipping lead notification.");
+      console.warn("[Telegram Bot] Configurations missing; skipping free registration notification.");
       return null;
     }
 
     const cur = payload.currency || "UAH";
     const offerLabel = getOfferLabel(payload.offerVariant, payload.amount, cur);
-    const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount || (cur === "EUR" ? 7.6 : 279)} ${cur}`;
 
-    let message = `<b>🟡 Заявку зареєстровано (Очікує оплати)</b>\n\n`;
+    let message = `<b>🟢 Нова реєстрація</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
 
@@ -45,9 +44,8 @@ async function sendTelegramLeadNotification(payload: {
     }
 
     message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
-    message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
     if (payload.orderReference) {
-      message += `🆔 <b>Order ID:</b> <code>${payload.orderReference}</code>\n`;
+      message += `🆔 <b>ID:</b> <code>${payload.orderReference}</code>\n`;
     }
 
     if (payload.notes && payload.notes.trim()) {
@@ -80,14 +78,14 @@ async function sendTelegramLeadNotification(payload: {
 
     const result = await res.json();
     if (result.ok && result.result?.message_id) {
-      console.log("[Telegram Bot] Notification sent successfully. Message ID:", result.result.message_id);
+      console.log("[Telegram Bot] Free registration notification sent. Message ID:", result.result.message_id);
       return result.result.message_id;
     } else {
-      console.error("[Telegram Bot] Notification failed:", result.description);
+      console.error("[Telegram Bot] Free registration notification failed:", result.description);
       return null;
     }
   } catch (err) {
-    console.error("[Telegram Bot] Error sending notification:", err);
+    console.error("[Telegram Bot] Error sending free registration notification:", err);
     return null;
   }
 }
@@ -141,10 +139,10 @@ export async function POST(request: NextRequest) {
       body.amount === 7.60 ||
       body.amount === 279 ||
       body.amount === 399;
-
     const currency = body.currency || (body.amount === 7.6 || body.amount === 7.60 ? "EUR" : "UAH");
     const defaultAmount = isMiniCourse ? (currency === "EUR" ? 7.60 : 279.0) : 480.0;
-    const amount = isTestPayment ? 1.0 : (body.amount ? Number(Number(body.amount).toFixed(2)) : defaultAmount);
+    const amount = isTestPayment ? 1.0 : (body.amount !== undefined ? Number(Number(body.amount).toFixed(2)) : defaultAmount);
+    const isFree = body.is_free === true || amount === 0;
 
     const productType: ProductType = isMiniCourse ? "tripwire" : "consultation";
     const productName = isTestPayment
@@ -153,22 +151,25 @@ export async function POST(request: NextRequest) {
 
     const orderReference = `AS_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
 
-    // 1. Dispatch initial Telegram alert to get message_id for editing on payment status update
-    const tgMessageId = await sendTelegramLeadNotification({
-      name,
-      phone: cleanedPhone || rawPhone,
-      telegram: cleanedTelegram || rawTelegram,
-      notes,
-      offerVariant,
-      orderReference,
-      amount,
-      currency,
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
-      utm_content: utmContent,
-      utm_term: utmTerm,
-    });
+    // Send Telegram alert ONLY for free registrations (paid landings alert only upon successful payment)
+    let tgMessageId: number | null = null;
+    if (isFree) {
+      tgMessageId = await sendTelegramFreeRegistrationNotification({
+        name,
+        phone: cleanedPhone || rawPhone,
+        telegram: cleanedTelegram || rawTelegram,
+        notes,
+        offerVariant,
+        orderReference,
+        amount,
+        currency,
+        utm_source: utmSource,
+        utm_medium: utmMedium,
+        utm_campaign: utmCampaign,
+        utm_content: utmContent,
+        utm_term: utmTerm,
+      });
+    }
 
     // 2. Canonical B&W CRM v2.0 Enrichment Protocol: Upsert unified customer & create unified order
     let customerId: string | null = null;
@@ -227,7 +228,7 @@ export async function POST(request: NextRequest) {
       offer_variant: offerVariant,
       status: "Зареєстровано",
       amount,
-      is_free: false,
+      is_free: isFree,
       order_id: orderReference,
       target_sheet: "Anastasia Sych",
       sheet_id: "0",
