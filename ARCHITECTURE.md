@@ -16,10 +16,10 @@
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase public anonymous key
 - `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (bypasses RLS for secure server-side API writes)
 - `NEXT_PUBLIC_FACEBOOK_PIXEL_ID` - Facebook Pixel ID for web event tracking (`1015433897324199`)
-- `TELEGRAM_LEADS_BOT_TOKEN` / `TELEGRAM_BOT_TOKEN` - Telegram bot API token for leads & payment alerts
-- `TELEGRAM_CHAT_ID` - Target Telegram Group/Channel ID (`-1003943120978`)
-- `TELEGRAM_THREAD_ID` - Thread ID for sales leads topic (`904`)
-- `TELEGRAM_REPORT_THREAD_ID` - Thread ID for daily/weekly reports topic (`908`)
+- `TELEGRAM_LEADS_BOT_TOKEN` / `TELEGRAM_BOT_TOKEN` - Telegram bot API token for leads & payment alerts (`7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ`)
+- `TELEGRAM_CHAT_ID` - Target Telegram Supergroup ID (`-1004405563488`)
+- `TELEGRAM_THREAD_ID` - Thread ID for sales leads / successful payments topic (`23`)
+- `TELEGRAM_REPORT_THREAD_ID` - Thread ID for daily/weekly reports topic (`21`)
 - `CRON_SECRET` - Authentication token for automated report cron jobs
 - `SENDPULSE_CLIENT_ID` - SendPulse API client ID
 - `SENDPULSE_CLIENT_SECRET` - SendPulse API client secret
