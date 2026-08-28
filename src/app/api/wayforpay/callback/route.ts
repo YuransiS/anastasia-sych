@@ -5,6 +5,7 @@ import {
   generateWayForPayCallbackResponse,
 } from "@/lib/wayforpay";
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
+import { getOfferLabel } from "@/lib/payment-handler";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
 const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
@@ -17,6 +18,7 @@ async function updateOrSendTelegramPaymentStatus(payload: {
   offerVariant?: string;
   orderReference: string;
   amount: number;
+  currency?: string;
   isPaid: boolean;
   reason?: string;
   tgMessageId?: number;
@@ -34,8 +36,9 @@ async function updateOrSendTelegramPaymentStatus(payload: {
 
     if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
 
-    const offerTitle = payload.offerVariant ? `Офер #${payload.offerVariant}` : "Офер #1";
-    const amountText = payload.amount === 1 ? "1 UAH (ТЕСТ)" : `${payload.amount} UAH`;
+    const cur = payload.currency || (payload.amount === 7.6 || payload.amount === 7.60 ? "EUR" : "UAH");
+    const offerTitle = getOfferLabel(payload.offerVariant, payload.amount, cur);
+    const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount} ${cur}`;
 
     let message = `<b>🟢 Оплата успішна!</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
@@ -101,25 +104,42 @@ async function updateOrSendTelegramPaymentStatus(payload: {
 export async function POST(request: NextRequest) {
   try {
     let payload: Record<string, any> = {};
+    const rawText = await request.text();
 
-    const contentType = request.headers.get("content-type") || "";
-    if (contentType.includes("application/json")) {
-      payload = await request.json();
-    } else if (contentType.includes("application/x-www-form-urlencoded")) {
-      const formData = await request.formData();
-      formData.forEach((value, key) => {
-        payload[key] = value;
-      });
-    } else {
-      const rawText = await request.text();
+    try {
+      payload = JSON.parse(rawText);
+    } catch {
       try {
-        payload = JSON.parse(rawText);
-      } catch {
         const params = new URLSearchParams(rawText);
-        params.forEach((value, key) => {
-          payload[key] = value;
+        const parsed: Record<string, any> = {};
+        params.forEach((val, key) => {
+          parsed[key] = val;
         });
+        payload = parsed;
+      } catch {
+        payload = {};
       }
+    }
+
+    // Handle edge case where the entire JSON string is received as a single key (e.g. from urlencoded form post)
+    const keys = Object.keys(payload);
+    if (keys.length === 1 && (keys[0].startsWith("{") || keys[0].includes("merchantAccount"))) {
+      try {
+        const nested = JSON.parse(keys[0]);
+        if (nested && typeof nested === "object") {
+          payload = nested;
+        }
+      } catch {}
+    } else if (!payload.orderReference && rawText.includes("merchantAccount")) {
+      try {
+        const match = rawText.match(/\{[\s\S]*\}/);
+        if (match) {
+          const extracted = JSON.parse(match[0]);
+          if (extracted?.orderReference) {
+            payload = extracted;
+          }
+        }
+      } catch {}
     }
 
     console.log("[WayForPay Callback] Received payload:", payload);
@@ -129,13 +149,14 @@ export async function POST(request: NextRequest) {
       console.warn("[WayForPay Callback] Signature verification mismatch.");
     }
 
-    const { orderReference, transactionStatus, amount, reason, reasonCode } = payload;
+    const { orderReference, transactionStatus, amount, currency: callbackCurrency, reason, reasonCode } = payload;
     const isApproved = transactionStatus === "Approved";
 
     if (orderReference) {
       const legacyStatus = isApproved ? "Оплачено" : "Не оплачено";
       const canonicalStatus = isApproved ? "closed_won" : "declined";
-      const paidAmount = amount ? Number(Number(amount).toFixed(2)) : 480.0;
+      const paidAmount = amount != null ? Number(Number(amount).toFixed(2)) : 7.6;
+      const currency = callbackCurrency || (paidAmount === 7.6 || paidAmount === 7.60 ? "EUR" : "UAH");
 
       // 1. Fetch existing lead to get tg_message_id and lead details
       const { data: existingLead } = await supabaseAdmin
@@ -145,7 +166,7 @@ export async function POST(request: NextRequest) {
         .maybeSingle();
 
       const tgMessageId = existingLead?.raw_payload?.tg_message_id;
-      const offerVariant = existingLead?.offer_variant || "1";
+      const offerVariant = existingLead?.offer_variant || (paidAmount === 7.6 || paidAmount === 279 ? "mini-course" : "1");
 
       // 2. Canonical B&W CRM v2.0 Enrichment Protocol: Update unified_orders
       try {
@@ -169,6 +190,7 @@ export async function POST(request: NextRequest) {
           raw_payload: {
             ...(existingLead?.raw_payload || {}),
             canonical_status: canonicalStatus,
+            currency,
             wayforpay_callback: payload,
           },
         })
@@ -184,13 +206,18 @@ export async function POST(request: NextRequest) {
 
       // 4. Dispatch Telegram payment alert ONLY if payment is approved (successful)
       if (isApproved) {
+        const clientName = payload.clientName || existingLead?.name || updatedLead?.name;
+        const clientPhone = payload.phone || existingLead?.phone || updatedLead?.phone;
+        const clientTg = existingLead?.telegram || updatedLead?.telegram;
+
         await updateOrSendTelegramPaymentStatus({
-          name: existingLead?.name || updatedLead?.name,
-          phone: existingLead?.phone || updatedLead?.phone,
-          telegram: existingLead?.telegram || updatedLead?.telegram,
+          name: clientName,
+          phone: clientPhone,
+          telegram: clientTg,
           offerVariant,
           orderReference,
           amount: paidAmount,
+          currency,
           isPaid: true,
           tgMessageId,
           utm_source: existingLead?.utm_source,
@@ -210,16 +237,17 @@ export async function POST(request: NextRequest) {
             project_slug: "anastasia_sych",
             api_key: "bw_analytics_anastasia_sych_key_2026",
             lead: {
-              name: existingLead?.name || "",
-              phone: existingLead?.phone || "",
+              name: existingLead?.name || payload.clientName || "",
+              phone: existingLead?.phone || payload.phone || "",
               telegram: existingLead?.telegram || null,
               amount: paidAmount,
-              currency: "UAH",
+              currency,
               status: legacyStatus,
             },
             metadata: {
               order_id: orderReference,
               canonical_status: canonicalStatus,
+              currency,
               payment_gateway: "WayForPay",
               transaction_status: transactionStatus,
               reason,

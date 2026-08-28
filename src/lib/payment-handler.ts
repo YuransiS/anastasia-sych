@@ -7,8 +7,9 @@ const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
 
 export function getOfferLabel(variant?: string, amount?: number | string, currency?: string): string {
   const v = String(variant || "1");
+  const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
   if (v === "mini-course" || v === "minicourse" || v === "mc" || v.startsWith("mini-course")) {
-    if (amount === 7.6 || currency === "EUR") {
+    if (numAmount === 7.6 || numAmount === 7.60 || currency === "EUR") {
       return "Міні-курс: «Плаский живіт та струнка талія» (7,6€)";
     }
     return "Міні-курс: «Плаский живіт та струнка талія» (279 грн)";

@@ -204,26 +204,39 @@ async function runHistoricalSync() {
           if (isApproved) {
             const clientName = tx.clientName || tx.cardHolder || tx.email || "WayForPay Direct Payment";
             const clientPhone = tx.phone || tx.clientPhone || "";
-            const productType = amount === 279 ? "tripwire" : "consultation";
-            const productName = amount === 279
+            const currency = tx.currency || (amount === 7.6 || amount === 7.60 ? "EUR" : "UAH");
+            const isMiniCourse = amount === 279 || amount === 7.6 || amount === 7.60 || amount === 399;
+            const productType = isMiniCourse ? "tripwire" : "consultation";
+            const productName = isMiniCourse
               ? "Міні-курс: «Плаский живіт та струнка талія» (Анастасія Сич)"
               : "Персональна діагностика (Анастасія Сич)";
 
             // Insert into unified_customers & unified_orders
             try {
               let customerId = null;
-              const { data: newCust } = await supabaseAdmin
+              const { data: existingCust } = await supabaseAdmin
                 .from("unified_customers")
-                .insert({
-                  project_id: ANASTASIA_PROJECT_ID,
-                  name: clientName,
-                  phone: clientPhone || null,
-                  email: tx.email || null,
-                })
                 .select("id")
-                .single();
+                .eq("project_id", ANASTASIA_PROJECT_ID)
+                .or(`phone.eq.${clientPhone},email.eq.${tx.email || ""}`)
+                .maybeSingle();
 
-              if (newCust) customerId = newCust.id;
+              if (existingCust) {
+                customerId = existingCust.id;
+              } else {
+                const { data: newCust } = await supabaseAdmin
+                  .from("unified_customers")
+                  .insert({
+                    project_id: ANASTASIA_PROJECT_ID,
+                    name: clientName,
+                    phone: clientPhone || null,
+                    email: tx.email || null,
+                  })
+                  .select("id")
+                  .single();
+
+                if (newCust) customerId = newCust.id;
+              }
 
               await supabaseAdmin
                 .from("unified_orders")
@@ -233,10 +246,10 @@ async function runHistoricalSync() {
                   order_id: orderRef,
                   amount: amount,
                   status: "closed_won",
-                  page_path: amount === 279 ? "/mini-course" : "/diagnostic",
+                  page_path: isMiniCourse ? "/mini-course" : "/diagnostic",
                   created_at: new Date(tx.createdDate * 1000).toISOString(),
                   metadata: {
-                    currency: "UAH",
+                    currency,
                     product_type: productType,
                     product_name: productName,
                     payment_system: "wayforpay",
@@ -259,7 +272,7 @@ async function runHistoricalSync() {
                 created_at: new Date(tx.createdDate * 1000).toISOString(),
                 raw_payload: {
                   canonical_status: "closed_won",
-                  currency: "UAH",
+                  currency,
                   product_type: productType,
                   wayforpay_sync: tx,
                 }

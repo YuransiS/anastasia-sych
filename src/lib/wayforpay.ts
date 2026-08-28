@@ -81,25 +81,78 @@ export function verifyWayForPayCallbackSignature(
 ): boolean {
   const secretKey = process.env.WAYFORPAY_SECRET_KEY || "ba0f0779bda0299f07c5b7df630c95786ac06398";
 
-  const fields = [
-    data.merchantAccount || "",
-    data.orderReference || "",
-    data.amount != null ? data.amount.toString() : "",
-    data.currency || "",
-    data.authCode || "",
-    data.cardPan || "",
-    data.transactionStatus || "",
-    data.reasonCode != null ? data.reasonCode.toString() : "",
-    data.reason || "",
+  const merchantAccount = data.merchantAccount || "";
+  const orderReference = data.orderReference || "";
+  const amountStr = data.amount != null ? data.amount.toString() : "";
+  const currency = data.currency || "";
+  const authCode = data.authCode || "";
+  const cardPan = data.cardPan || "";
+  const transactionStatus = data.transactionStatus || "";
+  const reasonCodeStr = data.reasonCode != null ? data.reasonCode.toString() : "";
+  const reason = data.reason || "";
+  const receivedSig = (data.merchantSignature || "").toLowerCase();
+
+  if (!receivedSig) return false;
+
+  const baseFields = [
+    merchantAccount,
+    orderReference,
+    amountStr,
+    currency,
+    authCode,
+    cardPan,
+    transactionStatus,
+    reasonCodeStr,
   ];
 
-  const signatureString = fields.join(";");
-  const expectedSignature = crypto
+  // Variant A: without reason (standard WayForPay approved callback)
+  const sigA = crypto
     .createHmac("md5", secretKey)
-    .update(signatureString, "utf8")
-    .digest("hex");
+    .update(baseFields.join(";"), "utf8")
+    .digest("hex")
+    .toLowerCase();
 
-  return expectedSignature.toLowerCase() === (data.merchantSignature || "").toLowerCase();
+  if (sigA === receivedSig) return true;
+
+  // Variant B: with reason
+  const sigB = crypto
+    .createHmac("md5", secretKey)
+    .update([...baseFields, reason].join(";"), "utf8")
+    .digest("hex")
+    .toLowerCase();
+
+  if (sigB === receivedSig) return true;
+
+  // Variant C/D: with fixed 2 decimal places if applicable (e.g. 7.6 -> 7.60)
+  if (data.amount != null && !isNaN(Number(data.amount))) {
+    const fixedAmount = Number(data.amount).toFixed(2);
+    const fieldsWithFixed = [
+      merchantAccount,
+      orderReference,
+      fixedAmount,
+      currency,
+      authCode,
+      cardPan,
+      transactionStatus,
+      reasonCodeStr,
+    ];
+
+    const sigC = crypto
+      .createHmac("md5", secretKey)
+      .update(fieldsWithFixed.join(";"), "utf8")
+      .digest("hex")
+      .toLowerCase();
+    if (sigC === receivedSig) return true;
+
+    const sigD = crypto
+      .createHmac("md5", secretKey)
+      .update([...fieldsWithFixed, reason].join(";"), "utf8")
+      .digest("hex")
+      .toLowerCase();
+    if (sigD === receivedSig) return true;
+  }
+
+  return false;
 }
 
 export function generateWayForPayCallbackResponse(orderReference: string) {

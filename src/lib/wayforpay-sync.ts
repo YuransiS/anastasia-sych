@@ -179,8 +179,10 @@ export async function syncWayForPayTransactions(options: SyncOptions = {}) {
             const clientName = tx.clientName || tx.cardHolder || tx.email || "WayForPay Direct Payment";
             const clientPhone = tx.phone || tx.clientPhone || "";
             const clientEmail = tx.email || null;
-            const productType: ProductType = amount === 279 ? "tripwire" : "consultation";
-            const productName = amount === 279
+            const currency = tx.currency || (amount === 7.6 || amount === 7.60 ? "EUR" : "UAH");
+            const isMiniCourse = amount === 279 || amount === 7.6 || amount === 7.60 || amount === 399;
+            const productType: ProductType = isMiniCourse ? "tripwire" : "consultation";
+            const productName = isMiniCourse
               ? "Міні-курс: «Плаский живіт та струнка талія» (Анастасія Сич)"
               : "Персональна діагностика (Анастасія Сич)";
 
@@ -197,12 +199,12 @@ export async function syncWayForPayTransactions(options: SyncOptions = {}) {
                 order_id: orderRef,
                 customer_id: customerId || undefined,
                 amount,
-                currency: "UAH",
+                currency,
                 status: "closed_won",
                 product_type: productType,
                 product_name: productName,
                 payment_system: "wayforpay",
-                page_path: amount === 279 ? "/mini-course" : "/diagnostic",
+                page_path: isMiniCourse ? "/mini-course" : "/diagnostic",
                 created_at: new Date(tx.createdDate * 1000).toISOString(),
                 extra_metadata: {
                   wayforpay_direct_sync: true,
@@ -226,7 +228,7 @@ export async function syncWayForPayTransactions(options: SyncOptions = {}) {
                 created_at: new Date(tx.createdDate * 1000).toISOString(),
                 raw_payload: {
                   canonical_status: "closed_won",
-                  currency: "UAH",
+                  currency,
                   product_type: productType,
                   customer_id: customerId,
                   wayforpay_sync: tx,
