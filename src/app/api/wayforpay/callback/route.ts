@@ -7,9 +7,9 @@ import {
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
 import { getOfferLabel } from "@/lib/payment-handler";
 
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
-const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
+const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
+const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "";
 
 async function updateOrSendTelegramPaymentStatus(payload: {
   name?: string;
@@ -28,8 +28,81 @@ async function updateOrSendTelegramPaymentStatus(payload: {
   utm_content?: string;
   utm_term?: string;
 }) {
-  // Telegram notifications temporarily paused while channel destination is being reconfigured
-  console.log("[Telegram Bot] Payment notification skipped (paused per configuration).");
+  try {
+    // Only send Telegram notifications for successful payments
+    if (!payload.isPaid) {
+      return;
+    }
+
+    if (!TG_BOT_TOKEN || !TG_CHAT_ID) return;
+
+    const cur = payload.currency || (payload.amount === 7.6 || payload.amount === 7.60 ? "EUR" : "UAH");
+    const offerTitle = getOfferLabel(payload.offerVariant, payload.amount, cur);
+    const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount} ${cur}`;
+
+    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
+    message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
+    message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
+
+    if (payload.telegram) {
+      const tg = payload.telegram.startsWith("@") ? payload.telegram : `@${payload.telegram}`;
+      message += `📱 <b>Telegram:</b> ${tg}\n`;
+    }
+
+    message += `🎯 <b>Офер:</b> ${offerTitle}\n`;
+    message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
+    message += `🆔 <b>Order ID:</b> <code>${payload.orderReference}</code>\n`;
+    message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
+
+    const hasUtm = payload.utm_source || payload.utm_medium || payload.utm_campaign || payload.utm_content || payload.utm_term;
+    if (hasUtm) {
+      message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+      if (payload.utm_source) message += `• <b>Source:</b> ${payload.utm_source}\n`;
+      if (payload.utm_medium) message += `• <b>Medium:</b> ${payload.utm_medium}\n`;
+      if (payload.utm_campaign) message += `• <b>Campaign:</b> ${payload.utm_campaign}\n`;
+      if (payload.utm_content) message += `• <b>Content:</b> ${payload.utm_content}\n`;
+      if (payload.utm_term) message += `• <b>Term:</b> ${payload.utm_term}\n`;
+    }
+
+    if (payload.tgMessageId) {
+      // Edit existing Telegram message in-place if available
+      const editUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/editMessageText`;
+      const editRes = await fetch(editUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          message_id: payload.tgMessageId,
+          text: message.trim(),
+          parse_mode: "HTML",
+        }),
+      });
+      const editResult = await editRes.json();
+      if (editResult.ok) {
+        console.log(`[Telegram Bot] Successfully edited message #${payload.tgMessageId}`);
+        return;
+      }
+    }
+
+    // Send clean success message
+    const sendUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+    const body: Record<string, any> = {
+      chat_id: TG_CHAT_ID,
+      text: message.trim(),
+      parse_mode: "HTML",
+    };
+    if (TG_THREAD_ID && !isNaN(parseInt(TG_THREAD_ID, 10))) {
+      body.message_thread_id = parseInt(TG_THREAD_ID, 10);
+    }
+
+    await fetch(sendUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (err) {
+    console.error("[Telegram Bot] Payment status update error:", err);
+  }
 }
 
 export async function POST(request: NextRequest) {

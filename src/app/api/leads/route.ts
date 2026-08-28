@@ -6,9 +6,9 @@ import { getOfferLabel } from "@/lib/payment-handler";
 import { normalizePhone, normalizeEmail, normalizeTelegram } from "@/lib/validation";
 import { upsertUnifiedCustomer, createUnifiedOrder, ProductType } from "@/lib/unified-crm";
 
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
-const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
+const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
+const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "";
 
 async function sendTelegramFreeRegistrationNotification(payload: {
   name: string;
@@ -25,9 +25,71 @@ async function sendTelegramFreeRegistrationNotification(payload: {
   utm_content?: string;
   utm_term?: string;
 }): Promise<number | null> {
-  // Telegram dispatches temporarily paused while channel destination is being reconfigured
-  console.log("[Telegram Bot] Free registration notification skipped (paused per configuration).");
-  return null;
+  try {
+    if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
+      console.warn("[Telegram Bot] Configurations missing; skipping free registration notification.");
+      return null;
+    }
+
+    const cur = payload.currency || "UAH";
+    const offerLabel = getOfferLabel(payload.offerVariant, payload.amount, cur);
+
+    let message = `<b>🟢 Нова реєстрація</b>\n\n`;
+    message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
+    message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
+
+    if (payload.telegram) {
+      const tg = payload.telegram.startsWith("@") ? payload.telegram : `@${payload.telegram}`;
+      message += `📱 <b>Telegram:</b> ${tg}\n`;
+    }
+
+    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    if (payload.orderReference) {
+      message += `🆔 <b>ID:</b> <code>${payload.orderReference}</code>\n`;
+    }
+
+    if (payload.notes && payload.notes.trim()) {
+      message += `💬 <b>Запит:</b> ${payload.notes.trim()}\n`;
+    }
+
+    const hasUtm = payload.utm_source || payload.utm_medium || payload.utm_campaign || payload.utm_content || payload.utm_term;
+    if (hasUtm) {
+      message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+      if (payload.utm_source) message += `• <b>Source:</b> ${payload.utm_source}\n`;
+      if (payload.utm_medium) message += `• <b>Medium:</b> ${payload.utm_medium}\n`;
+      if (payload.utm_campaign) message += `• <b>Campaign:</b> ${payload.utm_campaign}\n`;
+      if (payload.utm_content) message += `• <b>Content:</b> ${payload.utm_content}\n`;
+      if (payload.utm_term) message += `• <b>Term:</b> ${payload.utm_term}\n`;
+    }
+
+    const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+    const body: Record<string, any> = {
+      chat_id: TG_CHAT_ID,
+      text: message.trim(),
+      parse_mode: "HTML",
+    };
+    if (TG_THREAD_ID && !isNaN(parseInt(TG_THREAD_ID, 10))) {
+      body.message_thread_id = parseInt(TG_THREAD_ID, 10);
+    }
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const result = await res.json();
+    if (result.ok && result.result?.message_id) {
+      console.log("[Telegram Bot] Free registration notification sent. Message ID:", result.result.message_id);
+      return result.result.message_id;
+    } else {
+      console.error("[Telegram Bot] Free registration notification failed:", result.description);
+      return null;
+    }
+  } catch (err) {
+    console.error("[Telegram Bot] Error sending free registration notification:", err);
+    return null;
+  }
 }
 
 export async function POST(request: NextRequest) {

@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { syncWayForPayTransactions } from "@/lib/wayforpay-sync";
 
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
+const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
 const REPORT_THREAD_ID = process.env.TELEGRAM_REPORT_THREAD_ID
   ? parseInt(process.env.TELEGRAM_REPORT_THREAD_ID, 10)
-  : 908;
+  : undefined;
 
 function getTimeRangeForOffsetDays(startOffset: number, endOffset: number) {
   const now = new Date();
@@ -36,16 +36,19 @@ function getTimeRangeForOffsetDays(startOffset: number, endOffset: number) {
 }
 
 async function sendTelegramMessage(text: string): Promise<boolean> {
-  // Telegram reports temporarily paused while channel destination is being reconfigured
-  console.log("[Report Bot] Telegram reports paused per configuration.");
-  return true;
+  if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
+    console.warn("[Report Bot] Telegram configuration is missing.");
+    return false;
+  }
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-  const body = {
+  const body: Record<string, any> = {
     chat_id: TG_CHAT_ID,
-    message_thread_id: REPORT_THREAD_ID,
     text: text,
     parse_mode: "HTML",
   };
+  if (REPORT_THREAD_ID && !isNaN(REPORT_THREAD_ID)) {
+    body.message_thread_id = REPORT_THREAD_ID;
+  }
 
   try {
     const res = await fetch(url, {

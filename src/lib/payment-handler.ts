@@ -2,8 +2,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
 
 const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1003943120978";
-const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "904";
+const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
+const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "";
 
 export function getOfferLabel(variant?: string, amount?: number | string, currency?: string): string {
   const v = String(variant || "1");
@@ -88,9 +88,94 @@ export async function processPaymentStatusUpdate(payload: {
     }
   }
 
-  // 4. Dispatch Telegram alert ONLY if payment is approved (temporarily paused while reconfiguring channel)
+  // 4. Dispatch Telegram alert ONLY if payment is approved (successful)
   if (isApproved) {
-    console.log(`[Payment Handler] Telegram alert skipped for ${orderReference} (paused per configuration).`);
+    const tgMessageId = existingLead?.raw_payload?.tg_message_id;
+    const offerVariant = existingLead?.offer_variant || "1";
+    const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
+    const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
+    const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
+    const userNotes = existingLead?.raw_payload?.notes;
+
+    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
+    message += `👤 <b>Ім'я:</b> ${existingLead?.name || "-"}\n`;
+    message += `📞 <b>Телефон:</b> <code>${existingLead?.phone || "-"}</code>\n`;
+
+    if (existingLead?.telegram) {
+      const tg = existingLead.telegram.startsWith("@") ? existingLead.telegram : `@${existingLead.telegram}`;
+      message += `📱 <b>Telegram:</b> ${tg}\n`;
+    }
+
+    message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
+    message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
+
+    if (userNotes && String(userNotes).trim()) {
+      message += `💬 <b>Запит:</b> ${String(userNotes).trim()}\n`;
+    }
+
+    message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
+
+    const utmSource = existingLead?.utm_source || existingLead?.raw_payload?.utm_source;
+    const utmMedium = existingLead?.utm_medium || existingLead?.raw_payload?.utm_medium;
+    const utmCampaign = existingLead?.utm_campaign || existingLead?.raw_payload?.utm_campaign;
+    const utmContent = existingLead?.utm_content || existingLead?.raw_payload?.utm_content;
+    const utmTerm = existingLead?.utm_term || existingLead?.raw_payload?.utm_term;
+
+    const hasUtm = utmSource || utmMedium || utmCampaign || utmContent || utmTerm;
+    if (hasUtm) {
+      message += `\n🔍 <b>UTM-маркетинг:</b>\n`;
+      if (utmSource) message += `• <b>Source:</b> ${utmSource}\n`;
+      if (utmMedium) message += `• <b>Medium:</b> ${utmMedium}\n`;
+      if (utmCampaign) message += `• <b>Campaign:</b> ${utmCampaign}\n`;
+      if (utmContent) message += `• <b>Content:</b> ${utmContent}\n`;
+      if (utmTerm) message += `• <b>Term:</b> ${utmTerm}\n`;
+    }
+
+    if (tgMessageId) {
+      try {
+        const editUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/editMessageText`;
+        const editRes = await fetch(editUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TG_CHAT_ID,
+            message_id: tgMessageId,
+            text: message.trim(),
+            parse_mode: "HTML",
+          }),
+        });
+        const editResult = await editRes.json();
+        if (editResult.ok) {
+          console.log(`[Payment Handler] Successfully edited Telegram message #${tgMessageId}`);
+        } else {
+          console.warn("[Payment Handler] Message edit returned error:", editResult.description);
+        }
+      } catch (err) {
+        console.error("[Payment Handler] Telegram edit exception:", err);
+      }
+    } else {
+      // Send message if tgMessageId was not previously stored
+      try {
+        const sendUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+        const body: Record<string, any> = {
+          chat_id: TG_CHAT_ID,
+          text: message.trim(),
+          parse_mode: "HTML",
+        };
+        if (TG_THREAD_ID && !isNaN(parseInt(TG_THREAD_ID, 10))) {
+          body.message_thread_id = parseInt(TG_THREAD_ID, 10);
+        }
+
+        await fetch(sendUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } catch (err) {
+        console.error("[Payment Handler] Send message error:", err);
+      }
+    }
   }
 
   return updatedLead;
