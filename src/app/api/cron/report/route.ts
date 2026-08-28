@@ -36,10 +36,9 @@ function getTimeRangeForOffsetDays(startOffset: number, endOffset: number) {
 }
 
 async function sendTelegramMessage(text: string): Promise<boolean> {
-  if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
-    console.warn("[Report Bot] Telegram configuration is missing.");
-    return false;
-  }
+  // Telegram reports temporarily paused while channel destination is being reconfigured
+  console.log("[Report Bot] Telegram reports paused per configuration.");
+  return true;
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
   const body = {
     chat_id: TG_CHAT_ID,
