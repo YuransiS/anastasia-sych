@@ -5,10 +5,7 @@ import { generateWayForPayPurchaseData } from "@/lib/wayforpay";
 import { getOfferLabel } from "@/lib/payment-handler";
 import { normalizePhone, normalizeEmail, normalizeTelegram } from "@/lib/validation";
 import { upsertUnifiedCustomer, createUnifiedOrder, ProductType } from "@/lib/unified-crm";
-
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
-const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "";
+import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
 
 async function sendTelegramFreeRegistrationNotification(payload: {
   name: string;
@@ -68,8 +65,8 @@ async function sendTelegramFreeRegistrationNotification(payload: {
       text: message.trim(),
       parse_mode: "HTML",
     };
-    if (TG_THREAD_ID && !isNaN(parseInt(TG_THREAD_ID, 10))) {
-      body.message_thread_id = parseInt(TG_THREAD_ID, 10);
+    if (TG_LEADS_THREAD_ID && !isNaN(TG_LEADS_THREAD_ID)) {
+      body.message_thread_id = TG_LEADS_THREAD_ID;
     }
 
     const res = await fetch(url, {

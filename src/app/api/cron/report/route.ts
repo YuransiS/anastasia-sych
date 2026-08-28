@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { syncWayForPayTransactions } from "@/lib/wayforpay-sync";
-
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
-const REPORT_THREAD_ID = process.env.TELEGRAM_REPORT_THREAD_ID
-  ? parseInt(process.env.TELEGRAM_REPORT_THREAD_ID, 10)
-  : undefined;
+import { TG_BOT_TOKEN, TG_CHAT_ID, TG_REPORT_THREAD_ID } from "@/lib/telegram";
 
 function getTimeRangeForOffsetDays(startOffset: number, endOffset: number) {
   const now = new Date();
@@ -46,8 +41,8 @@ async function sendTelegramMessage(text: string): Promise<boolean> {
     text: text,
     parse_mode: "HTML",
   };
-  if (REPORT_THREAD_ID && !isNaN(REPORT_THREAD_ID)) {
-    body.message_thread_id = REPORT_THREAD_ID;
+  if (TG_REPORT_THREAD_ID && !isNaN(TG_REPORT_THREAD_ID)) {
+    body.message_thread_id = TG_REPORT_THREAD_ID;
   }
 
   try {

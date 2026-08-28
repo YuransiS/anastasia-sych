@@ -1,9 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
-
-const TG_BOT_TOKEN = process.env.TELEGRAM_LEADS_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || "7889462444:AAGCjyk-5h6SKWk94txoMlyhV2qyZuwcWaQ";
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "-1004405563488";
-const TG_THREAD_ID = process.env.TELEGRAM_THREAD_ID || "";
+import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
 
 export function getOfferLabel(variant?: string, amount?: number | string, currency?: string): string {
   const v = String(variant || "1");
@@ -163,8 +160,8 @@ export async function processPaymentStatusUpdate(payload: {
           text: message.trim(),
           parse_mode: "HTML",
         };
-        if (TG_THREAD_ID && !isNaN(parseInt(TG_THREAD_ID, 10))) {
-          body.message_thread_id = parseInt(TG_THREAD_ID, 10);
+        if (TG_LEADS_THREAD_ID && !isNaN(TG_LEADS_THREAD_ID)) {
+          body.message_thread_id = TG_LEADS_THREAD_ID;
         }
 
         await fetch(sendUrl, {
