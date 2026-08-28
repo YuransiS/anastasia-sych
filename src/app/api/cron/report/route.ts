@@ -62,81 +62,170 @@ async function sendTelegramMessage(text: string): Promise<boolean> {
   }
 }
 
+import { getOfferLabel } from "@/lib/payment-handler";
+
 async function generateReportText(
   start: string,
   end: string,
   label: string,
   isWeekly: boolean
 ): Promise<string> {
-  const { data: leads, error } = await supabaseAdmin
+  const { data: leads, error: leadsErr } = await supabaseAdmin
     .from("anastasia_sych_leads")
     .select("*")
     .gte("created_at", start)
     .lte("created_at", end);
 
-  if (error) {
-    throw new Error(`Failed to fetch leads for report: ${error.message}`);
+  if (leadsErr) {
+    throw new Error(`Failed to fetch leads for report: ${leadsErr.message}`);
   }
 
-  const rows = leads || [];
-  const totalLeads = rows.length;
+  const { data: unifiedOrders, error: unifiedErr } = await supabaseAdmin
+    .from("unified_orders")
+    .select("*")
+    .eq("project_id", "39ace0eb-084a-455e-b058-c6f20cda7f74")
+    .gte("created_at", start)
+    .lte("created_at", end);
 
-  // Paid vs Unpaid counts & revenue
+  if (unifiedErr) {
+    console.warn("[Report Cron] Warning fetching unified_orders:", unifiedErr.message);
+  }
+
+  // Merge and deduplicate by order_id
+  const orderMap = new Map<string, {
+    order_id: string;
+    status: string;
+    amount: number;
+    currency: string;
+    utm_source?: string | null;
+    utm_medium?: string | null;
+    utm_campaign?: string | null;
+    utm_content?: string | null;
+    utm_term?: string | null;
+    offer_variant?: string;
+    page_path?: string | null;
+    created_at: string;
+  }>();
+
+  (unifiedOrders || []).forEach((u) => {
+    if (u.order_id) {
+      const amt = Number(u.amount);
+      const cur = (u.metadata as any)?.currency || (amt === 7.6 || amt === 7.60 ? "EUR" : "UAH");
+      orderMap.set(u.order_id, {
+        order_id: u.order_id,
+        status: u.status,
+        amount: amt,
+        currency: cur,
+        utm_source: u.utm_source,
+        utm_medium: u.utm_medium,
+        utm_campaign: u.utm_campaign,
+        utm_content: u.utm_content,
+        utm_term: u.utm_term,
+        offer_variant: (u.metadata as any)?.offer_variant || (amt === 7.6 || amt === 279 ? "mini-course" : "1"),
+        page_path: u.page_path,
+        created_at: u.created_at,
+      });
+    }
+  });
+
+  (leads || []).forEach((l) => {
+    const existing = orderMap.get(l.order_id);
+    const amt = Number(l.amount);
+    const cur = (l.raw_payload as any)?.currency || (amt === 7.6 || amt === 7.60 ? "EUR" : "UAH");
+    const isPaid = l.status === "Оплачено";
+
+    if (!existing) {
+      orderMap.set(l.order_id, {
+        order_id: l.order_id,
+        status: isPaid ? "closed_won" : (l.status === "Не оплачено" ? "declined" : "pending"),
+        amount: amt,
+        currency: cur,
+        utm_source: l.utm_source,
+        utm_medium: l.utm_medium,
+        utm_campaign: l.utm_campaign,
+        utm_content: l.utm_content,
+        utm_term: l.utm_term,
+        offer_variant: l.offer_variant || (amt === 7.6 || amt === 279 ? "mini-course" : "1"),
+        page_path: l.page_path,
+        created_at: l.created_at,
+      });
+    } else {
+      existing.utm_source = existing.utm_source || l.utm_source;
+      existing.utm_medium = existing.utm_medium || l.utm_medium;
+      existing.utm_campaign = existing.utm_campaign || l.utm_campaign;
+      existing.utm_content = existing.utm_content || l.utm_content;
+      existing.utm_term = existing.utm_term || l.utm_term;
+      if (isPaid) {
+        existing.status = "closed_won";
+      }
+    }
+  });
+
+  const orders = Array.from(orderMap.values());
+  const totalLeads = orders.length;
+
+  if (totalLeads === 0) {
+    const titleEmoji = isWeekly ? "📈" : "📊";
+    const reportType = isWeekly ? "Тижневий" : "Щоденний";
+    return `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич</b>\n📅 <b>Період:</b> ${label}\n\nНемає нових заявок за вказаний період.`;
+  }
+
   let paidCount = 0;
   let unpaidCount = 0;
-  let totalRevenue = 0;
-
-  // Offer breakdown: total and paid
-  const offerTotal: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
-  const offerPaid: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
-  const offerRevenue: Record<string, number> = { "1": 0, "2": 0, "3": 0 };
+  const revenueByCurrency: Record<string, number> = {};
+  const offerStats: Record<string, { total: number; paid: number; revenue: number; currency: string }> = {};
   const utmCounts: Record<string, number> = {};
 
-  rows.forEach((row) => {
-    const offerKey = String(row.offer_variant || "1");
-    offerTotal[offerKey] = (offerTotal[offerKey] || 0) + 1;
+  orders.forEach((o) => {
+    const isPaid = o.status === "closed_won" || o.status === "paid" || o.status === "Оплачено";
+    const cur = o.currency || "UAH";
+    const amt = o.amount || 0;
+    const offerLabel = getOfferLabel(o.offer_variant, amt, cur);
 
-    const isPaid = row.status === "Оплачено";
-    const amount = Number(row.amount || 480);
+    if (!offerStats[offerLabel]) {
+      offerStats[offerLabel] = { total: 0, paid: 0, revenue: 0, currency: cur };
+    }
+    offerStats[offerLabel].total += 1;
 
     if (isPaid) {
       paidCount += 1;
-      totalRevenue += amount;
-      offerPaid[offerKey] = (offerPaid[offerKey] || 0) + 1;
-      offerRevenue[offerKey] = (offerRevenue[offerKey] || 0) + amount;
+      revenueByCurrency[cur] = (revenueByCurrency[cur] || 0) + amt;
+      offerStats[offerLabel].paid += 1;
+      offerStats[offerLabel].revenue += amt;
     } else {
       unpaidCount += 1;
     }
 
-    const src = row.utm_source || "direct";
-    const camp = row.utm_campaign || "none";
-    const key = `${src} / ${camp}`;
-    utmCounts[key] = (utmCounts[key] || 0) + 1;
+    const src = o.utm_source || "direct";
+    const med = o.utm_medium ? ` / ${o.utm_medium}` : "";
+    const camp = o.utm_campaign ? ` / ${o.utm_campaign}` : "";
+    const utmKey = `${src}${med}${camp}`;
+    utmCounts[utmKey] = (utmCounts[utmKey] || 0) + 1;
   });
+
+  const totalRevenueText = Object.entries(revenueByCurrency)
+    .map(([cur, sum]) => `${sum.toFixed(1).replace(/\.0$/, "")} ${cur}`)
+    .join(" + ") || "0 UAH";
 
   const conversionRate = totalLeads > 0 ? ((paidCount / totalLeads) * 100).toFixed(1) : "0.0";
   const titleEmoji = isWeekly ? "📈" : "📊";
   const reportType = isWeekly ? "Тижневий" : "Щоденний";
 
-  let reportText = `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич [Діагностика]</b>\n`;
+  let reportText = `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич</b>\n`;
   reportText += `📅 <b>Період:</b> ${label}\n\n`;
 
-  if (totalLeads === 0) {
-    reportText += `Немає нових заявок за вказаний період.`;
-    return reportText;
-  }
-
   reportText += `💰 <b>ФІНАНСИ ТА ПРОДАЖІ:</b>\n`;
-  reportText += `• <b>Загальний доход:</b> <code>${totalRevenue} UAH</code>\n`;
+  reportText += `• <b>Загальний доход:</b> <code>${totalRevenueText}</code>\n`;
   reportText += `• <b>Скільки купило (Оплачено):</b> <code>${paidCount} шт.</code>\n`;
   reportText += `• <b>Скільки не купило:</b> <code>${unpaidCount} шт.</code>\n`;
   reportText += `• <b>Всього заявок:</b> <code>${totalLeads} шт.</code>\n`;
   reportText += `• <b>Конверсія в оплату:</b> <code>${conversionRate}%</code>\n\n`;
 
-  reportText += `🎯 <b>ПРОДАЖІ ЗА ВАРІАНТАМИ ОФЕРІВ:</b>\n`;
-  reportText += `• <b>Офер #1 (Після дієти):</b> Купило: <code>${offerPaid["1"] || 0}</code> з <code>${offerTotal["1"] || 0}</code> (${offerRevenue["1"] || 0} UAH)\n`;
-  reportText += `• <b>Офер #2 (Дзеркало / Не подобається):</b> Купило: <code>${offerPaid["2"] || 0}</code> з <code>${offerTotal["2"] || 0}</code> (${offerRevenue["2"] || 0} UAH)\n`;
-  reportText += `• <b>Офер #3 (Марафон закінчився):</b> Купило: <code>${offerPaid["3"] || 0}</code> з <code>${offerTotal["3"] || 0}</code> (${offerRevenue["3"] || 0} UAH)\n\n`;
+  reportText += `🎯 <b>ПРОДАЖІ ЗА ОФЕРАМИ:</b>\n`;
+  Object.entries(offerStats).forEach(([name, stat]) => {
+    reportText += `• <b>${name}:</b> Купило: <code>${stat.paid}</code> з <code>${stat.total}</code> (${stat.revenue.toFixed(1).replace(/\.0$/, "")} ${stat.currency})\n`;
+  });
+  reportText += `\n`;
 
   const topUtm = Object.entries(utmCounts)
     .sort((a, b) => b[1] - a[1])
