@@ -5,7 +5,7 @@ import {
   generateWayForPayCallbackResponse,
 } from "@/lib/wayforpay";
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
-import { getOfferLabel } from "@/lib/payment-handler";
+import { getOfferLabel, getLandingLabel } from "@/lib/payment-handler";
 import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
 
 async function updateOrSendTelegramPaymentStatus(payload: {
@@ -19,6 +19,8 @@ async function updateOrSendTelegramPaymentStatus(payload: {
   isPaid: boolean;
   reason?: string;
   tgMessageId?: number;
+  pagePath?: string | null;
+  pageUrl?: string | null;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -35,6 +37,7 @@ async function updateOrSendTelegramPaymentStatus(payload: {
 
     const cur = payload.currency || (payload.amount === 7.6 || payload.amount === 7.60 ? "EUR" : "UAH");
     const offerTitle = getOfferLabel(payload.offerVariant, payload.amount, cur);
+    const landingLabel = getLandingLabel(payload.pagePath, payload.pageUrl);
     const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount} ${cur}`;
 
     let message = `<b>🟢 Оплата успішна!</b>\n\n`;
@@ -47,6 +50,7 @@ async function updateOrSendTelegramPaymentStatus(payload: {
     }
 
     message += `🎯 <b>Офер:</b> ${offerTitle}\n`;
+    message += `🌐 <b>Лендінг:</b> ${landingLabel}\n`;
     message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
     message += `🆔 <b>Order ID:</b> <code>${payload.orderReference}</code>\n`;
     message += `✅ <b>Статус:</b> Успішно оплачено (WayForPay)\n`;
@@ -221,6 +225,8 @@ export async function POST(request: NextRequest) {
           currency,
           isPaid: true,
           tgMessageId,
+          pagePath: existingLead?.page_path,
+          pageUrl: existingLead?.page_url,
           utm_source: existingLead?.utm_source,
           utm_medium: existingLead?.utm_medium,
           utm_campaign: existingLead?.utm_campaign,

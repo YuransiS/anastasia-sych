@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { createOrUpdateSendPulseContact } from "@/lib/sendpulse";
 import { generateWayForPayPurchaseData } from "@/lib/wayforpay";
-import { getOfferLabel } from "@/lib/payment-handler";
+import { getOfferLabel, getLandingLabel } from "@/lib/payment-handler";
 import { normalizePhone, normalizeEmail, normalizeTelegram } from "@/lib/validation";
 import { upsertUnifiedCustomer, createUnifiedOrder, ProductType } from "@/lib/unified-crm";
 import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
@@ -16,6 +16,8 @@ async function sendTelegramFreeRegistrationNotification(payload: {
   orderReference?: string;
   amount?: number;
   currency?: string;
+  pagePath?: string | null;
+  pageUrl?: string | null;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
@@ -30,6 +32,7 @@ async function sendTelegramFreeRegistrationNotification(payload: {
 
     const cur = payload.currency || "UAH";
     const offerLabel = getOfferLabel(payload.offerVariant, payload.amount, cur);
+    const landingLabel = getLandingLabel(payload.pagePath, payload.pageUrl);
 
     let message = `<b>🟢 Нова реєстрація</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
@@ -41,6 +44,7 @@ async function sendTelegramFreeRegistrationNotification(payload: {
     }
 
     message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    message += `🌐 <b>Лендінг:</b> ${landingLabel}\n`;
     if (payload.orderReference) {
       message += `🆔 <b>ID:</b> <code>${payload.orderReference}</code>\n`;
     }
@@ -162,6 +166,8 @@ export async function POST(request: NextRequest) {
         orderReference,
         amount,
         currency,
+        pagePath,
+        pageUrl,
         utm_source: utmSource,
         utm_medium: utmMedium,
         utm_campaign: utmCampaign,

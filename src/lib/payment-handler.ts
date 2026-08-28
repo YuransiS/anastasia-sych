@@ -16,6 +16,29 @@ export function getOfferLabel(variant?: string, amount?: number | string, curren
   return "Офер #1 (Дієта закінчилась - нарешті можна наїстись?)";
 }
 
+export function getLandingLabel(pagePath?: string | null, pageUrl?: string | null): string {
+  const p = (pagePath || "").toLowerCase();
+  const u = (pageUrl || "").toLowerCase();
+
+  if (p === "/mini-course" || u.includes("/mini-course?") || u.endsWith("/mini-course")) {
+    return "Міні-курс (7.60 EUR / evergreen)";
+  }
+  if (p === "/mini-course/flat-belly" || u.includes("/mini-course/flat-belly")) {
+    return "Міні-курс: «Плаский живіт» (279 грн)";
+  }
+  if (p === "/mini-course/waist" || u.includes("/mini-course/waist")) {
+    return "Міні-курс: «Струнка талія» (279 грн)";
+  }
+  if (p === "/diagnostic" || u.includes("/diagnostic")) {
+    return "Персональна діагностика (/diagnostic)";
+  }
+  if (p === "/consultation" || u.includes("/consultation")) {
+    return "Консультація (/consultation)";
+  }
+  if (pagePath) return pagePath;
+  return "Головний лендінг";
+}
+
 export async function processPaymentStatusUpdate(payload: {
   orderReference: string;
   transactionStatus: string;
@@ -91,6 +114,7 @@ export async function processPaymentStatusUpdate(payload: {
     const offerVariant = existingLead?.offer_variant || "1";
     const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
     const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
+    const landingLabel = getLandingLabel(existingLead?.page_path, existingLead?.page_url);
     const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
     const userNotes = existingLead?.raw_payload?.notes;
 
@@ -104,6 +128,7 @@ export async function processPaymentStatusUpdate(payload: {
     }
 
     message += `🎯 <b>Офер:</b> ${offerLabel}\n`;
+    message += `🌐 <b>Лендінг:</b> ${landingLabel}\n`;
     message += `💳 <b>Сума:</b> <code>${amountText}</code>\n`;
     message += `🆔 <b>Order ID:</b> <code>${orderReference}</code>\n`;
 
