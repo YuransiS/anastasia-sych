@@ -38,9 +38,10 @@ async function updateOrSendTelegramPaymentStatus(payload: {
     const cur = payload.currency || (payload.amount === 7.6 || payload.amount === 7.60 ? "EUR" : "UAH");
     const offerTitle = getOfferLabel(payload.offerVariant, payload.amount, cur);
     const landingLabel = getLandingLabel(payload.pagePath, payload.pageUrl);
-    const amountText = payload.amount === 1 ? `1 ${cur} (ТЕСТ)` : `${payload.amount} ${cur}`;
+    const isTest = payload.amount === 1 || payload.orderReference.toLowerCase().includes("test") || !!payload.reason?.includes("TEST");
+    const amountText = isTest ? `${payload.amount} ${cur} (ТЕСТ)` : `${payload.amount} ${cur}`;
 
-    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
+    let message = isTest ? `🧪 <b>[ТЕСТОВЕ ОПОВІЩЕННЯ]</b>\n<b>🟢 Оплата успішна!</b>\n\n` : `<b>🟢 Оплата успішна!</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
 

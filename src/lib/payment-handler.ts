@@ -115,10 +115,11 @@ export async function processPaymentStatusUpdate(payload: {
     const currency = existingLead?.raw_payload?.currency || (paidAmount === 7.6 ? "EUR" : "UAH");
     const offerLabel = getOfferLabel(offerVariant, paidAmount, currency);
     const landingLabel = getLandingLabel(existingLead?.page_path, existingLead?.page_url);
-    const amountText = paidAmount === 1 ? `1 ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
+    const isTest = paidAmount === 1 || orderReference.toLowerCase().includes("test") || !!existingLead?.raw_payload?.is_test;
+    const amountText = isTest ? `${paidAmount} ${currency} (ТЕСТ)` : `${paidAmount} ${currency}`;
     const userNotes = existingLead?.raw_payload?.notes;
 
-    let message = `<b>🟢 Оплата успішна!</b>\n\n`;
+    let message = isTest ? `🧪 <b>[ТЕСТОВЕ ОПОВІЩЕННЯ]</b>\n<b>🟢 Оплата успішна!</b>\n\n` : `<b>🟢 Оплата успішна!</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${existingLead?.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${existingLead?.phone || "-"}</code>\n`;
 

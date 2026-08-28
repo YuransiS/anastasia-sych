@@ -34,7 +34,9 @@ async function sendTelegramFreeRegistrationNotification(payload: {
     const offerLabel = getOfferLabel(payload.offerVariant, payload.amount, cur);
     const landingLabel = getLandingLabel(payload.pagePath, payload.pageUrl);
 
-    let message = `<b>🟢 Нова реєстрація</b>\n\n`;
+    const isTest = payload.amount === 1 || (payload.orderReference && payload.orderReference.toLowerCase().includes("test"));
+
+    let message = isTest ? `🧪 <b>[ТЕСТОВЕ ОПОВІЩЕННЯ]</b>\n<b>🟢 Нова реєстрація</b>\n\n` : `<b>🟢 Нова реєстрація</b>\n\n`;
     message += `👤 <b>Ім'я:</b> ${payload.name || "-"}\n`;
     message += `📞 <b>Телефон:</b> <code>${payload.phone || "-"}</code>\n`;
 
