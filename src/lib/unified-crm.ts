@@ -256,17 +256,19 @@ export async function updateUnifiedOrderStatus(params: {
   reason?: string;
 }) {
   try {
-    const { data: existingOrder, error: selectErr } = await supabaseAdmin
+    const { data: existingOrders, error: selectErr } = await supabaseAdmin
       .from("unified_orders")
       .select("*")
       .eq("project_id", ANASTASIA_PROJECT_ID)
       .eq("order_id", params.orderId)
-      .maybeSingle();
+      .order("created_at", { ascending: false });
 
-    if (selectErr || !existingOrder) {
+    if (selectErr || !existingOrders || existingOrders.length === 0) {
       console.warn("[Unified CRM] Order not found for status update:", params.orderId, selectErr?.message);
       return null;
     }
+
+    const existingOrder = existingOrders[0];
 
     const updatedMetadata = {
       ...(existingOrder.metadata || {}),
@@ -286,12 +288,11 @@ export async function updateUnifiedOrderStatus(params: {
       updateFields.amount = Number(Number(params.amount).toFixed(2));
     }
 
-    const { data: updated, error: updateErr } = await supabaseAdmin
+    const { error: updateErr } = await supabaseAdmin
       .from("unified_orders")
       .update(updateFields)
-      .eq("id", existingOrder.id)
-      .select()
-      .single();
+      .eq("project_id", ANASTASIA_PROJECT_ID)
+      .eq("order_id", params.orderId);
 
     if (updateErr) {
       console.error("[Unified CRM] Failed to update order status:", updateErr);
@@ -299,7 +300,7 @@ export async function updateUnifiedOrderStatus(params: {
     }
 
     console.log(`[Unified CRM] Order ${params.orderId} status updated to ${params.status}`);
-    return updated;
+    return existingOrder;
   } catch (err) {
     console.error("[Unified CRM] updateUnifiedOrderStatus exception:", err);
     return null;
