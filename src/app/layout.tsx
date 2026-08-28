@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import FacebookPixel from "@/components/FacebookPixel";
+import AttributionTracker from "@/components/AttributionTracker";
 import Script from "next/script";
 
 export const metadata: Metadata = {
@@ -32,6 +33,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#f8fafc] text-[#0f172a] antialiased selection:bg-[#0284c7] selection:text-white">
         <FacebookPixel />
+        <AttributionTracker />
         <Script
           id="microsoft-clarity"
           strategy="afterInteractive"

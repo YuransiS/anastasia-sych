@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Sparkles, Send, ArrowRight, Video } from "lucide-react";
 import { trackPixelEvent } from "@/components/FacebookPixel";
 
-const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f";
+const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
@@ -113,7 +113,7 @@ function ThankYouContent() {
           </div>
           <p className="text-[11px] text-slate-500 font-medium">
             {isMiniCourse
-              ? "У боті ви одразу отримаєте доступ до уроку та інформацію про старт 27.08."
+              ? "У боті ви одразу отримаєте доступ до уроків та матеріалів курсу."
               : "У боті ви отримаєте бонусний урок та зможете обрати зручний час зустрічі."}
           </p>
         </div>

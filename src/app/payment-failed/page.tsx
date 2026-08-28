@@ -4,7 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AlertCircle, RefreshCw, Send, ArrowRight } from "lucide-react";
 
-const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f";
+const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
 
 function PaymentFailedContent() {
   const searchParams = useSearchParams();

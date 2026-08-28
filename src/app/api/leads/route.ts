@@ -130,6 +130,96 @@ export async function POST(request: NextRequest) {
     const pageUrl = body.page_url || "";
     const visitorUuid = body.visitor_uuid || crypto.randomUUID();
 
+    const safeTruncate = (str: string | null | undefined, maxLen = 100): string | null => {
+      if (!str) return null;
+      const s = String(str).trim();
+      return s.length > maxLen ? s.slice(0, maxLen) : s;
+    };
+
+    // 1. Handle Cold Visit Click Sessions
+    if (body.is_cold || body.isCold || body.status === "Клик") {
+      const coldPayload = {
+        name: "Клик",
+        phone: "",
+        telegram: null,
+        email: null,
+        offer_variant: safeTruncate(offerVariant, 50) || "cold",
+        status: body.status || "Клик",
+        amount: 0.00,
+        is_free: true,
+        order_id: `COLD_${Date.now()}_${visitorUuid.slice(0, 8)}`,
+        target_sheet: "Anastasia Sych",
+        sheet_id: "0",
+        utm_source: safeTruncate(utmSource, 100),
+        utm_medium: safeTruncate(utmMedium, 100),
+        utm_campaign: safeTruncate(utmCampaign, 100),
+        utm_content: safeTruncate(utmContent, 100),
+        utm_term: safeTruncate(utmTerm, 100),
+        page_path: safeTruncate(pagePath, 255),
+        page_url: safeTruncate(pageUrl, 500),
+        visitor_uuid: safeTruncate(visitorUuid, 100),
+        raw_payload: {
+          ...body,
+          campaign_id: campaignId || null,
+          adset_id: adsetId || null,
+          ad_id: adId || null,
+          fbclid: fbclid || null,
+          gclid: gclid || null,
+          fbp: fbp || null,
+          fbc: fbc || null,
+          bw_cid: body.bw_cid || null,
+          currency: "UAH",
+          product_type: "lead",
+        },
+      };
+
+      try {
+        await supabaseAdmin.from("anastasia_sych_leads").insert(coldPayload);
+      } catch (dbErr) {
+        console.warn("[Anastasia Cold Ingest] anastasia_sych_leads insert warning:", dbErr);
+      }
+
+      // Record in central traffic_clicks table
+      try {
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        const validVisitorUuid = uuidRegex.test(visitorUuid) ? visitorUuid : null;
+
+        const { data: proj } = await supabaseAdmin.from("projects").select("id").eq("slug", "anastasia_sych").maybeSingle();
+        const projectId = proj?.id || "39ace0eb-084a-455e-b058-c6f20cda7f74";
+
+        await supabaseAdmin.from("traffic_clicks").insert({
+          project_id: projectId,
+          visitor_uuid: validVisitorUuid,
+          status: body.status || "Клик",
+          utm_source: utmSource || null,
+          utm_medium: utmMedium || null,
+          utm_campaign: utmCampaign || null,
+          utm_content: utmContent || null,
+          utm_term: utmTerm || null,
+          page_path: pagePath || "/",
+          page_url: pageUrl || "",
+          metadata: {
+            campaign_id: campaignId || null,
+            adset_id: adsetId || null,
+            ad_id: adId || null,
+            fbclid: fbclid || null,
+            gclid: gclid || null,
+            fbp: fbp || null,
+            fbc: fbc || null,
+            bw_cid: body.bw_cid || null,
+            raw_payload: body,
+            enrichment_protocol: "v2.0",
+            recorded_at: new Date().toISOString(),
+          },
+          created_at: new Date().toISOString(),
+        });
+      } catch (tcErr) {
+        console.warn("[Anastasia Cold Ingest] traffic_clicks insert warning:", tcErr);
+      }
+
+      return NextResponse.json({ status: "success", visitor_uuid: visitorUuid });
+    }
+
     // Check for test payment handle yuransis / @yuransis
     const isTestPayment =
       cleanedTelegram?.toLowerCase() === "yuransis" ||
@@ -226,11 +316,6 @@ export async function POST(request: NextRequest) {
       console.error("[Unified CRM] Order creation error:", crmErr);
     }
 
-function safeTruncate(str: string | null | undefined, maxLen = 100): string | null {
-  if (!str) return null;
-  const s = String(str).trim();
-  return s.length > maxLen ? s.slice(0, maxLen) : s;
-}
 
     // 3. Save to local anastasia_sych_leads table for backward compatibility & local reporting
     const dbPayload = {

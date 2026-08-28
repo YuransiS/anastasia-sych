@@ -27,7 +27,7 @@
 - `WAYFORPAY_SECRET_KEY` - WayForPay HMAC Secret Key (`ba0f0779bda0299f07c5b7df630c95786ac06398`)
 - `WAYFORPAY_MERCHANT_PASSWORD` - WayForPay Merchant Password (`54ab149f47dc235036c91fba16807bc0`)
 - `WAYFORPAY_MERCHANT_DOMAIN_NAME` - Merchant domain name (`anastasia-sych.vercel.app`)
-- `NEXT_PUBLIC_TG_BOT_URL` - Telegram bot redirect link (`https://t.me/anastasiiasychbot?start=6a6cd40e6f9471d0600b322f`)
+- `NEXT_PUBLIC_TG_BOT_URL` - Telegram bot redirect link (`https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd`)
 
 ---
 
