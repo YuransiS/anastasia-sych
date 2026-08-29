@@ -74,6 +74,64 @@ function cleanUtmString(str?: string | null): string {
   }
 }
 
+function resolveOfferAndLanding(
+  pagePath?: string | null,
+  pageUrl?: string | null,
+  rawVariant?: string | null,
+  amount?: number | null,
+  currency?: string | null
+) {
+  const p = (pagePath || "").toLowerCase();
+  const u = (pageUrl || "").toLowerCase();
+  const amt = Number(amount) || 0;
+
+  if (p === "/mini-course" || u.includes("/mini-course?") || u.endsWith("/mini-course") || amt === 7.6 || amt === 7.60 || currency === "EUR") {
+    return {
+      landing: "Міні-курс (/mini-course)",
+      offer: "Міні-курс: «Плаский живіт та струнка талія» (7,6€)",
+      currency: "EUR",
+    };
+  }
+  if (p === "/mini-course/flat-belly" || u.includes("/mini-course/flat-belly")) {
+    return {
+      landing: "Міні-курс: «Плаский живіт» (/mini-course/flat-belly)",
+      offer: "Міні-курс: «Плаский живіт» (279 грн)",
+      currency: "UAH",
+    };
+  }
+  if (p === "/mini-course/waist" || u.includes("/mini-course/waist")) {
+    return {
+      landing: "Міні-курс: «Струнка талія» (/mini-course/waist)",
+      offer: "Міні-курс: «Струнка талія» (279 грн)",
+      currency: "UAH",
+    };
+  }
+  if (p === "/diagnostic" || u.includes("/diagnostic")) {
+    const v = String(rawVariant || "1");
+    let offerTitle = "Офер #1 (Дієта закінчилась - нарешті можна наїстись?)";
+    if (v === "2") offerTitle = "Офер #2 (Дивишся в дзеркало і тобі не подобається відображення?)";
+    if (v === "3") offerTitle = "Офер #3 (Марафон закінчився, мотивація зникла, а старі звички повернулися?)";
+    return {
+      landing: "Персональна діагностика (/diagnostic)",
+      offer: offerTitle,
+      currency: "UAH",
+    };
+  }
+  if (p === "/consultation" || u.includes("/consultation")) {
+    return {
+      landing: "Консультація (/consultation)",
+      offer: "Персональна консультація",
+      currency: "UAH",
+    };
+  }
+
+  return {
+    landing: pagePath ? `${pagePath}` : "Головний лендінг",
+    offer: "Базовий офер",
+    currency: currency || "EUR",
+  };
+}
+
 async function generateReportText(
   start: string,
   end: string,
@@ -114,18 +172,21 @@ async function generateReportText(
     utm_term?: string | null;
     page_path?: string | null;
     page_url?: string | null;
+    landing: string;
+    offer: string;
     created_at: string;
   }>();
 
   (unifiedOrders || []).forEach((u) => {
     if (u.order_id) {
       const amt = Number(u.amount);
-      const cur = (u.metadata as any)?.currency || (amt === 7.6 || amt === 7.60 ? "EUR" : "UAH");
+      const rawCur = (u.metadata as any)?.currency;
+      const meta = resolveOfferAndLanding(u.page_path, u.page_url, (u.metadata as any)?.offer_variant, amt, rawCur);
       orderMap.set(u.order_id, {
         order_id: u.order_id,
         status: u.status,
         amount: amt,
-        currency: cur,
+        currency: meta.currency,
         utm_source: u.utm_source,
         utm_medium: u.utm_medium,
         utm_campaign: u.utm_campaign,
@@ -133,6 +194,8 @@ async function generateReportText(
         utm_term: u.utm_term,
         page_path: u.page_path,
         page_url: u.page_url,
+        landing: meta.landing,
+        offer: meta.offer,
         created_at: u.created_at,
       });
     }
@@ -141,15 +204,16 @@ async function generateReportText(
   (leads || []).forEach((l) => {
     const existing = orderMap.get(l.order_id);
     const amt = Number(l.amount);
-    const cur = (l.raw_payload as any)?.currency || (amt === 7.6 || amt === 7.60 ? "EUR" : "UAH");
+    const rawCur = (l.raw_payload as any)?.currency;
     const isPaid = l.status === "Оплачено";
+    const meta = resolveOfferAndLanding(l.page_path, l.page_url, l.offer_variant, amt, rawCur);
 
     if (!existing) {
       orderMap.set(l.order_id, {
         order_id: l.order_id,
         status: isPaid ? "closed_won" : (l.status === "Не оплачено" ? "declined" : (l.status === "Клик" ? "click" : "pending")),
         amount: amt,
-        currency: cur,
+        currency: meta.currency,
         utm_source: l.utm_source,
         utm_medium: l.utm_medium,
         utm_campaign: l.utm_campaign,
@@ -157,6 +221,8 @@ async function generateReportText(
         utm_term: l.utm_term,
         page_path: l.page_path,
         page_url: l.page_url,
+        landing: meta.landing,
+        offer: meta.offer,
         created_at: l.created_at,
       });
     } else {
@@ -167,6 +233,10 @@ async function generateReportText(
       existing.utm_term = existing.utm_term || l.utm_term;
       existing.page_path = existing.page_path || l.page_path;
       existing.page_url = existing.page_url || l.page_url;
+      const reMeta = resolveOfferAndLanding(existing.page_path, existing.page_url, existing.offer || l.offer_variant, existing.amount, existing.currency);
+      existing.landing = reMeta.landing;
+      existing.offer = reMeta.offer;
+      existing.currency = reMeta.currency;
       if (isPaid) {
         existing.status = "closed_won";
       }
@@ -185,18 +255,21 @@ async function generateReportText(
   let totalForms = 0;
   let totalPaid = 0;
   const revenueByCurrency: Record<string, number> = {};
-  const landingsStats: Record<string, { visits: number; forms: number; paid: number; revenue: Record<string, number> }> = {};
+  const breakdownStats: Record<string, { landing: string; offer: string; visits: number; forms: number; paid: number; revenue: Record<string, number> }> = {};
   const utmStats: Record<string, { visits: number; forms: number; paid: number; revenue: Record<string, number> }> = {};
 
   orders.forEach((o) => {
     const isCold = (o.order_id && o.order_id.startsWith("COLD_")) || o.status === "click";
     const isPaid = o.status === "closed_won" || o.status === "paid" || o.status === "Оплачено";
-    const landing = getLandingLabel(o.page_path, o.page_url);
-    const cur = o.currency || (o.amount === 7.6 ? "EUR" : "UAH");
+    const landing = o.landing;
+    const offer = o.offer;
+    const cur = o.currency || "EUR";
     const amt = o.amount || 0;
 
-    if (!landingsStats[landing]) {
-      landingsStats[landing] = { visits: 0, forms: 0, paid: 0, revenue: {} };
+    const breakdownKey = `${landing}__SPLIT__${offer}`;
+
+    if (!breakdownStats[breakdownKey]) {
+      breakdownStats[breakdownKey] = { landing, offer, visits: 0, forms: 0, paid: 0, revenue: {} };
     }
 
     const src = cleanUtmString(o.utm_source) || "direct";
@@ -210,20 +283,20 @@ async function generateReportText(
 
     if (isCold) {
       totalVisits += 1;
-      landingsStats[landing].visits += 1;
+      breakdownStats[breakdownKey].visits += 1;
       utmStats[utmKey].visits += 1;
     } else {
       totalForms += 1;
-      landingsStats[landing].forms += 1;
+      breakdownStats[breakdownKey].forms += 1;
       utmStats[utmKey].forms += 1;
 
       if (isPaid) {
         totalPaid += 1;
-        landingsStats[landing].paid += 1;
+        breakdownStats[breakdownKey].paid += 1;
         utmStats[utmKey].paid += 1;
 
         revenueByCurrency[cur] = (revenueByCurrency[cur] || 0) + amt;
-        landingsStats[landing].revenue[cur] = (landingsStats[landing].revenue[cur] || 0) + amt;
+        breakdownStats[breakdownKey].revenue[cur] = (breakdownStats[breakdownKey].revenue[cur] || 0) + amt;
         utmStats[utmKey].revenue[cur] = (utmStats[utmKey].revenue[cur] || 0) + amt;
       }
     }
@@ -245,20 +318,26 @@ async function generateReportText(
 
   reportText += `📈 <b>ЗАГАЛЬНА ВОРОНКА КОНВЕРСІЇ:</b>\n`;
   reportText += `• 🌐 <b>Переходи на сайт (Кліки):</b> <code>${totalVisits}</code>\n`;
-  reportText += `• 📝 <b>Заповнено форму (Ініційовано):</b> <code>${totalForms}</code>\n`;
+  reportText += `• 📝 <b>Заповнено форму (Ліди):</b> <code>${totalForms}</code>\n`;
   reportText += `• 💳 <b>Успішно сплачено:</b> <code>${totalPaid}</code>\n`;
   if (siteConv !== "-") {
-    reportText += `• ⚡ <b>Конверсія сайту у форму:</b> <code>${siteConv}%</code>\n`;
+    reportText += `• ⚡ <b>Конверсія Клік → Лід:</b> <code>${siteConv}%</code>\n`;
   }
-  reportText += `• 🎯 <b>Конверсія з форми в оплату:</b> <code>${formConv}%</code>\n\n`;
+  reportText += `• 🎯 <b>Конверсія Лід → Оплата:</b> <code>${formConv}%</code>\n\n`;
 
-  reportText += `🌐 <b>РОЗБИВКА ПО ЛЕНДІНГАХ:</b>\n`;
-  Object.entries(landingsStats).forEach(([name, s]) => {
-    const lConv = s.forms > 0 ? ((s.paid / s.forms) * 100).toFixed(1) : (s.paid > 0 ? "100.0" : "0.0");
+  reportText += `🌐 <b>РОЗБИВКА ПО ЛЕНДІНГАХ ТА ОФЕРАХ:</b>\n`;
+  Object.values(breakdownStats).forEach((s) => {
+    const clickToLeadConv = s.visits > 0 ? ((s.forms / s.visits) * 100).toFixed(1) : "-";
+    const leadToPayConv = s.forms > 0 ? ((s.paid / s.forms) * 100).toFixed(1) : (s.paid > 0 ? "100.0" : "0.0");
     const rev = Object.entries(s.revenue).map(([c, v]) => `${v.toFixed(2)} ${c}`).join(" + ") || "0.00 EUR";
-    reportText += `📍 <b>${name}</b>\n`;
-    reportText += `  ↳ Переходи: <code>${s.visits}</code> | Форми: <code>${s.forms}</code> | Оплачено: <code>${s.paid}</code> (${rev})\n`;
-    reportText += `  ↳ Конверсія в оплату: <code>${lConv}%</code>\n\n`;
+
+    reportText += `📍 <b>Лендінг:</b> ${s.landing}\n`;
+    reportText += `  🎯 <b>Офер:</b> ${s.offer}\n`;
+    reportText += `  ↳ Кліки: <code>${s.visits}</code> | Ліди: <code>${s.forms}</code> | Оплачено: <code>${s.paid}</code> (${rev})\n`;
+    if (clickToLeadConv !== "-") {
+      reportText += `  ↳ Конверсія Клік → Лід: <code>${clickToLeadConv}%</code>\n`;
+    }
+    reportText += `  ↳ Конверсія Лід → Оплата: <code>${leadToPayConv}%</code>\n\n`;
   });
 
   reportText += `🔍 <b>ДЖЕРЕЛА ТРАФІКУ ТА ЕФЕКТИВНІСТЬ (UTM):</b>\n`;
@@ -267,7 +346,7 @@ async function generateReportText(
     const rev = Object.entries(s.revenue).map(([c, v]) => `${v.toFixed(2)} ${c}`).join(" + ");
     const revText = rev ? ` (${rev})` : "";
     reportText += `• <code>${key}</code>\n`;
-    reportText += `  ↳ ${s.visits} переходів → ${s.forms} форм → <b>${s.paid} оплат</b>${revText}\n`;
+    reportText += `  ↳ ${s.visits} кліків → ${s.forms} лідів → <b>${s.paid} оплат</b>${revText}\n`;
   });
 
   return reportText.trim();
