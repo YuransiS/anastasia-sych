@@ -157,3 +157,24 @@ CREATE TRIGGER trg_sync_anastasia_sych_lead
 AFTER INSERT OR UPDATE ON public.anastasia_sych_leads
 FOR EACH ROW EXECUTE FUNCTION fn_sync_lead_to_unified();
 ```
+
+---
+
+## 6. 🛡️ Стандарт разработки новых лендингов и страниц (New Landing Mandatory Standard)
+
+При создании любой новой посадочной страницы (например, новых мини-курсов, консультаций или разборов) **ОБЯЗАТЕЛЬНО**:
+
+1. **Dual-Storage Атрибуция (`attribution.ts`):**
+   - Все параметры (`utm_*`, `campaign_id`, `adset_id`, `ad_id`, `fbclid`, `gclid`) и Meta-cookies (`_fbp`, `_fbc`) сохраняются в `localStorage` (`bw_attribution_params`) **И** в 1st-party Cookie на 30 дней (`SameSite=Lax; path=/`).
+   - Генерация стабильных `visitor_uuid` и `bw_cid`.
+   - Автоматическая фиксация cold-кликов на входе (`status: "Клик"`, `is_cold: true`) в `traffic_clicks` и `anastasia_sych_leads`.
+
+2. **Meta Pixel & Conversions API (`capi.ts` / `FacebookPixel.tsx`):**
+   - Чистые SPA-переходы без дублей `PageView`.
+   - **Защита `Purchase`**: На `/thank-you` событие `Purchase` вызывается строго после подтверждения успешной оплаты.
+   - **Серверный CAPI**: Отправка `Lead` и `Purchase` через `sendFacebookCapiEvent` в `/api/leads` и `/api/wayforpay/callback` с SHA-256 хэшированием контактов, IP/UA и `event_id`.
+
+3. **Сохранение UTM при оплате:**
+   - Предварительное создание заказа в `unified_orders` и `anastasia_sych_leads` перед переходом на WayForPay.
+   - Вебхук WayForPay обновляет статус заказа по `orderReference` без обнуления UTM-колонок.
+
