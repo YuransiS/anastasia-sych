@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { Suspense } from "react";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,7 +34,9 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-[#f8fafc] text-[#0f172a] antialiased selection:bg-[#0284c7] selection:text-white">
-        <FacebookPixel />
+        <Suspense fallback={null}>
+          <FacebookPixel />
+        </Suspense>
         <AttributionTracker />
         <Script
           id="microsoft-clarity"

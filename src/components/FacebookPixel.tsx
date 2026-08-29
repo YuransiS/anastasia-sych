@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || "1015433897324199";
@@ -12,18 +13,35 @@ declare global {
   }
 }
 
-export function trackPixelEvent(eventName: string, params?: Record<string, any>) {
+export function trackPixelEvent(
+  eventName: string,
+  params?: Record<string, any>,
+  eventId?: string
+) {
   if (typeof window !== "undefined" && window.fbq) {
-    window.fbq("track", eventName, params);
+    if (eventId) {
+      window.fbq("track", eventName, params, { eventID: eventId });
+    } else {
+      window.fbq("track", eventName, params);
+    }
   }
 }
 
 export default function FacebookPixel() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     if (PIXEL_ID) {
       trackPixelEvent("PageView");
     }
-  }, []);
+  }, [pathname, searchParams]);
 
   if (!PIXEL_ID) return null;
 

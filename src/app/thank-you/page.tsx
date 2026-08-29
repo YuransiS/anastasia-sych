@@ -38,22 +38,36 @@ function ThankYouContent() {
     orderData?.amount === 279 ||
     orderData?.amount === 399;
 
-  // Track Facebook Pixel Purchase event on Thank You page
+  // Track Facebook Pixel Purchase event on Thank You page only after payment is confirmed
   useEffect(() => {
-    const currency = orderData?.raw_payload?.currency || (orderData?.amount === 7.6 ? "EUR" : "UAH");
-    const defaultValue = currency === "EUR" ? 7.6 : 279;
-    const value = orderData?.amount || (isMiniCourse ? defaultValue : 480);
-    const contentName = isMiniCourse
-      ? "Анастасія Сич - Міні-курс «Плаский живіт та струнка талія»"
-      : "Анастасія Сич - Персональна діагностика";
+    if (!orderReference) return;
+    if (orderData && orderData.status === "Не оплачено") return;
 
-    trackPixelEvent("Purchase", {
-      value,
-      currency,
-      content_name: contentName,
-      order_id: orderReference,
-    });
-  }, [orderReference, orderData, isMiniCourse]);
+    // Check if orderData is resolved or searchParams indicate APPROVED
+    const transactionStatus = searchParams.get("transactionStatus");
+    const isApprovedParam = transactionStatus && transactionStatus.toUpperCase() === "APPROVED";
+
+    if (!orderData && !isApprovedParam) return;
+
+    const dedupKey = `purchase_tracked_${orderReference}`;
+    if (typeof window !== "undefined" && !sessionStorage.getItem(dedupKey)) {
+      sessionStorage.setItem(dedupKey, "true");
+
+      const currency = orderData?.raw_payload?.currency || (orderData?.amount === 7.6 ? "EUR" : "UAH");
+      const defaultValue = currency === "EUR" ? 7.6 : 279;
+      const value = orderData?.amount || (isMiniCourse ? defaultValue : 480);
+      const contentName = isMiniCourse
+        ? "Анастасія Сич - Міні-курс «Плаский живіт та струнка талія»"
+        : "Анастасія Сич - Персональна діагностика";
+
+      trackPixelEvent("Purchase", {
+        value,
+        currency,
+        content_name: contentName,
+        order_id: orderReference,
+      }, orderReference);
+    }
+  }, [orderReference, orderData, isMiniCourse, searchParams]);
 
   useEffect(() => {
     const timer = setInterval(() => {

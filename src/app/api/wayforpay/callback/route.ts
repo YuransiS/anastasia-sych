@@ -7,6 +7,7 @@ import {
 import { updateUnifiedOrderStatus } from "@/lib/unified-crm";
 import { getOfferLabel, getLandingLabel } from "@/lib/payment-handler";
 import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
+import { sendFacebookCapiEvent } from "@/lib/capi";
 
 async function updateOrSendTelegramPaymentStatus(payload: {
   name?: string;
@@ -234,6 +235,33 @@ export async function POST(request: NextRequest) {
           utm_content: existingLead?.utm_content,
           utm_term: existingLead?.utm_term,
         });
+
+        // Dispatch Facebook CAPI Purchase event on approved transaction
+        const clientIpAddress = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+                                request.headers.get("x-real-ip") || undefined;
+        const clientUserAgent = request.headers.get("user-agent") || undefined;
+        const eventSourceUrl = request.headers.get("referer") || existingLead?.page_url || undefined;
+        const rawPayload = (existingLead?.raw_payload as any) || {};
+
+        sendFacebookCapiEvent("Purchase", {
+          eventSourceUrl,
+          clientIpAddress,
+          clientUserAgent,
+          phone: existingLead?.phone || payload.phone || undefined,
+          name: existingLead?.name || payload.clientName || undefined,
+          email: existingLead?.email || rawPayload.email || undefined,
+          visitorUuid: existingLead?.visitor_uuid || undefined,
+          eventId: String(orderReference),
+          fbp: existingLead?.fbp || rawPayload.fbp || undefined,
+          fbc: existingLead?.fbc || rawPayload.fbc || undefined,
+          customData: {
+            value: paidAmount || Number(existingLead?.amount) || 0,
+            currency: currency || "UAH",
+            content_name: getOfferLabel(offerVariant) || "Anastasia Sych Purchase",
+            content_type: "product",
+            order_id: String(orderReference),
+          },
+        }).catch((err) => console.error("[Anastasia Purchase CAPI Error]:", err));
       }
 
       // 5. Central Analytics Gateway payment sync

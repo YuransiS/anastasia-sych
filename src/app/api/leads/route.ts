@@ -6,6 +6,7 @@ import { getOfferLabel, getLandingLabel } from "@/lib/payment-handler";
 import { normalizePhone, normalizeEmail, normalizeTelegram } from "@/lib/validation";
 import { upsertUnifiedCustomer, createUnifiedOrder, ProductType } from "@/lib/unified-crm";
 import { TG_BOT_TOKEN, TG_CHAT_ID, TG_LEADS_THREAD_ID } from "@/lib/telegram";
+import { sendFacebookCapiEvent } from "@/lib/capi";
 
 async function sendTelegramFreeRegistrationNotification(payload: {
   name: string;
@@ -441,6 +442,32 @@ export async function POST(request: NextRequest) {
       domainName: host.split(":")[0],
       baseUrl,
     });
+
+    // Dispatch Facebook CAPI Lead event for registrations
+    const clientIpAddress = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+                            request.headers.get("x-real-ip") || undefined;
+    const clientUserAgent = request.headers.get("user-agent") || undefined;
+    const eventSourceUrl = request.headers.get("referer") || pageUrl || undefined;
+
+    sendFacebookCapiEvent("Lead", {
+      eventSourceUrl,
+      clientIpAddress,
+      clientUserAgent,
+      email: cleanedEmail || undefined,
+      phone: cleanedPhone || rawPhone || undefined,
+      name: name || undefined,
+      visitorUuid: visitorUuid || undefined,
+      fbp: fbp || undefined,
+      fbc: fbc || undefined,
+      customData: {
+        content_name: productName || "Lead Registration",
+        currency: currency || "UAH",
+        value: amount,
+        utm_source: utmSource || undefined,
+        utm_medium: utmMedium || undefined,
+        utm_campaign: utmCampaign || undefined,
+      },
+    }).catch((err) => console.error("[Anastasia Leads CAPI Error]:", err));
 
     return NextResponse.json({
       status: "success",
