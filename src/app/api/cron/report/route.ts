@@ -59,7 +59,20 @@ async function sendTelegramMessage(text: string): Promise<boolean> {
   }
 }
 
-import { getOfferLabel } from "@/lib/payment-handler";
+import { getOfferLabel, getLandingLabel } from "@/lib/payment-handler";
+
+function cleanUtmString(str?: string | null): string {
+  if (!str) return "";
+  try {
+    let decoded = decodeURIComponent(str);
+    if (decoded.includes("%20") || decoded.includes("%2F") || decoded.includes("%2C") || decoded.includes("+")) {
+      decoded = decodeURIComponent(decoded.replace(/\+/g, " "));
+    }
+    return decoded.replace(/\+/g, " ").trim();
+  } catch {
+    return str.replace(/\+/g, " ").trim();
+  }
+}
 
 async function generateReportText(
   start: string,
@@ -99,8 +112,8 @@ async function generateReportText(
     utm_campaign?: string | null;
     utm_content?: string | null;
     utm_term?: string | null;
-    offer_variant?: string;
     page_path?: string | null;
+    page_url?: string | null;
     created_at: string;
   }>();
 
@@ -118,8 +131,8 @@ async function generateReportText(
         utm_campaign: u.utm_campaign,
         utm_content: u.utm_content,
         utm_term: u.utm_term,
-        offer_variant: (u.metadata as any)?.offer_variant || (amt === 7.6 || amt === 279 ? "mini-course" : "1"),
         page_path: u.page_path,
+        page_url: u.page_url,
         created_at: u.created_at,
       });
     }
@@ -134,7 +147,7 @@ async function generateReportText(
     if (!existing) {
       orderMap.set(l.order_id, {
         order_id: l.order_id,
-        status: isPaid ? "closed_won" : (l.status === "Не оплачено" ? "declined" : "pending"),
+        status: isPaid ? "closed_won" : (l.status === "Не оплачено" ? "declined" : (l.status === "Клик" ? "click" : "pending")),
         amount: amt,
         currency: cur,
         utm_source: l.utm_source,
@@ -142,8 +155,8 @@ async function generateReportText(
         utm_campaign: l.utm_campaign,
         utm_content: l.utm_content,
         utm_term: l.utm_term,
-        offer_variant: l.offer_variant || (amt === 7.6 || amt === 279 ? "mini-course" : "1"),
         page_path: l.page_path,
+        page_url: l.page_url,
         created_at: l.created_at,
       });
     } else {
@@ -152,6 +165,8 @@ async function generateReportText(
       existing.utm_campaign = existing.utm_campaign || l.utm_campaign;
       existing.utm_content = existing.utm_content || l.utm_content;
       existing.utm_term = existing.utm_term || l.utm_term;
+      existing.page_path = existing.page_path || l.page_path;
+      existing.page_url = existing.page_url || l.page_url;
       if (isPaid) {
         existing.status = "closed_won";
       }
@@ -159,78 +174,101 @@ async function generateReportText(
   });
 
   const orders = Array.from(orderMap.values());
-  const totalLeads = orders.length;
+  const titleEmoji = isWeekly ? "📈" : "📊";
+  const reportType = isWeekly ? "Тижневий" : "Щоденний";
 
-  if (totalLeads === 0) {
-    const titleEmoji = isWeekly ? "📈" : "📊";
-    const reportType = isWeekly ? "Тижневий" : "Щоденний";
-    return `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич</b>\n📅 <b>Період:</b> ${label}\n\nНемає нових заявок за вказаний період.`;
+  if (orders.length === 0) {
+    return `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич</b>\n📅 <b>Період:</b> ${label}\n\nНемає даних за вказаний період.`;
   }
 
-  let paidCount = 0;
-  let unpaidCount = 0;
+  let totalVisits = 0;
+  let totalForms = 0;
+  let totalPaid = 0;
   const revenueByCurrency: Record<string, number> = {};
-  const offerStats: Record<string, { total: number; paid: number; revenue: number; currency: string }> = {};
-  const utmCounts: Record<string, number> = {};
+  const landingsStats: Record<string, { visits: number; forms: number; paid: number; revenue: Record<string, number> }> = {};
+  const utmStats: Record<string, { visits: number; forms: number; paid: number; revenue: Record<string, number> }> = {};
 
   orders.forEach((o) => {
+    const isCold = (o.order_id && o.order_id.startsWith("COLD_")) || o.status === "click";
     const isPaid = o.status === "closed_won" || o.status === "paid" || o.status === "Оплачено";
-    const cur = o.currency || "UAH";
+    const landing = getLandingLabel(o.page_path, o.page_url);
+    const cur = o.currency || (o.amount === 7.6 ? "EUR" : "UAH");
     const amt = o.amount || 0;
-    const offerLabel = getOfferLabel(o.offer_variant, amt, cur);
 
-    if (!offerStats[offerLabel]) {
-      offerStats[offerLabel] = { total: 0, paid: 0, revenue: 0, currency: cur };
+    if (!landingsStats[landing]) {
+      landingsStats[landing] = { visits: 0, forms: 0, paid: 0, revenue: {} };
     }
-    offerStats[offerLabel].total += 1;
 
-    if (isPaid) {
-      paidCount += 1;
-      revenueByCurrency[cur] = (revenueByCurrency[cur] || 0) + amt;
-      offerStats[offerLabel].paid += 1;
-      offerStats[offerLabel].revenue += amt;
+    const src = cleanUtmString(o.utm_source) || "direct";
+    const med = cleanUtmString(o.utm_medium);
+    const camp = cleanUtmString(o.utm_campaign);
+    const utmKey = (med || camp) ? `${src} / ${med || "-"} / ${camp || "-"}` : src;
+
+    if (!utmStats[utmKey]) {
+      utmStats[utmKey] = { visits: 0, forms: 0, paid: 0, revenue: {} };
+    }
+
+    if (isCold) {
+      totalVisits += 1;
+      landingsStats[landing].visits += 1;
+      utmStats[utmKey].visits += 1;
     } else {
-      unpaidCount += 1;
-    }
+      totalForms += 1;
+      landingsStats[landing].forms += 1;
+      utmStats[utmKey].forms += 1;
 
-    const src = o.utm_source || "direct";
-    const med = o.utm_medium ? ` / ${o.utm_medium}` : "";
-    const camp = o.utm_campaign ? ` / ${o.utm_campaign}` : "";
-    const utmKey = `${src}${med}${camp}`;
-    utmCounts[utmKey] = (utmCounts[utmKey] || 0) + 1;
+      if (isPaid) {
+        totalPaid += 1;
+        landingsStats[landing].paid += 1;
+        utmStats[utmKey].paid += 1;
+
+        revenueByCurrency[cur] = (revenueByCurrency[cur] || 0) + amt;
+        landingsStats[landing].revenue[cur] = (landingsStats[landing].revenue[cur] || 0) + amt;
+        utmStats[utmKey].revenue[cur] = (utmStats[utmKey].revenue[cur] || 0) + amt;
+      }
+    }
   });
 
   const totalRevenueText = Object.entries(revenueByCurrency)
-    .map(([cur, sum]) => `${sum.toFixed(1).replace(/\.0$/, "")} ${cur}`)
-    .join(" + ") || "0 UAH";
+    .map(([cur, sum]) => `${sum.toFixed(2)} ${cur}`)
+    .join(" + ") || "0.00 EUR";
 
-  const conversionRate = totalLeads > 0 ? ((paidCount / totalLeads) * 100).toFixed(1) : "0.0";
-  const titleEmoji = isWeekly ? "📈" : "📊";
-  const reportType = isWeekly ? "Тижневий" : "Щоденний";
+  const siteConv = totalVisits > 0 ? ((totalForms / totalVisits) * 100).toFixed(1) : "-";
+  const formConv = totalForms > 0 ? ((totalPaid / totalForms) * 100).toFixed(1) : (totalPaid > 0 ? "100.0" : "0.0");
 
   let reportText = `${titleEmoji} <b>${reportType} аналітичний звіт: Анастасія Сич</b>\n`;
   reportText += `📅 <b>Період:</b> ${label}\n\n`;
 
   reportText += `💰 <b>ФІНАНСИ ТА ПРОДАЖІ:</b>\n`;
-  reportText += `• <b>Загальний доход:</b> <code>${totalRevenueText}</code>\n`;
-  reportText += `• <b>Скільки купило (Оплачено):</b> <code>${paidCount} шт.</code>\n`;
-  reportText += `• <b>Скільки не купило:</b> <code>${unpaidCount} шт.</code>\n`;
-  reportText += `• <b>Всього заявок:</b> <code>${totalLeads} шт.</code>\n`;
-  reportText += `• <b>Конверсія в оплату:</b> <code>${conversionRate}%</code>\n\n`;
+  reportText += `• <b>Загальний дохід:</b> <code>${totalRevenueText}</code>\n`;
+  reportText += `• <b>Оплачених замовлень:</b> <code>${totalPaid} шт.</code>\n\n`;
 
-  reportText += `🎯 <b>ПРОДАЖІ ЗА ОФЕРАМИ:</b>\n`;
-  Object.entries(offerStats).forEach(([name, stat]) => {
-    reportText += `• <b>${name}:</b> Купило: <code>${stat.paid}</code> з <code>${stat.total}</code> (${stat.revenue.toFixed(1).replace(/\.0$/, "")} ${stat.currency})\n`;
+  reportText += `📈 <b>ЗАГАЛЬНА ВОРОНКА КОНВЕРСІЇ:</b>\n`;
+  reportText += `• 🌐 <b>Переходи на сайт (Кліки):</b> <code>${totalVisits}</code>\n`;
+  reportText += `• 📝 <b>Заповнено форму (Ініційовано):</b> <code>${totalForms}</code>\n`;
+  reportText += `• 💳 <b>Успішно сплачено:</b> <code>${totalPaid}</code>\n`;
+  if (siteConv !== "-") {
+    reportText += `• ⚡ <b>Конверсія сайту у форму:</b> <code>${siteConv}%</code>\n`;
+  }
+  reportText += `• 🎯 <b>Конверсія з форми в оплату:</b> <code>${formConv}%</code>\n\n`;
+
+  reportText += `🌐 <b>РОЗБИВКА ПО ЛЕНДІНГАХ:</b>\n`;
+  Object.entries(landingsStats).forEach(([name, s]) => {
+    const lConv = s.forms > 0 ? ((s.paid / s.forms) * 100).toFixed(1) : (s.paid > 0 ? "100.0" : "0.0");
+    const rev = Object.entries(s.revenue).map(([c, v]) => `${v.toFixed(2)} ${c}`).join(" + ") || "0.00 EUR";
+    reportText += `📍 <b>${name}</b>\n`;
+    reportText += `  ↳ Переходи: <code>${s.visits}</code> | Форми: <code>${s.forms}</code> | Оплачено: <code>${s.paid}</code> (${rev})\n`;
+    reportText += `  ↳ Конверсія в оплату: <code>${lConv}%</code>\n\n`;
   });
-  reportText += `\n`;
 
-  const topUtm = Object.entries(utmCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([key, count]) => `• <code>${key}</code>: ${count} заявок`)
-    .join("\n") || "• Немає даних";
-
-  reportText += `🔍 <b>ТОП UTM-ДЖЕРЕЛА ТРАФІКУ:</b>\n${topUtm}`;
+  reportText += `🔍 <b>ДЖЕРЕЛА ТРАФІКУ ТА ЕФЕКТИВНІСТЬ (UTM):</b>\n`;
+  const sortedUtm = Object.entries(utmStats).sort((a, b) => (b[1].paid - a[1].paid) || (b[1].forms - a[1].forms) || (b[1].visits - a[1].visits));
+  sortedUtm.forEach(([key, s]) => {
+    const rev = Object.entries(s.revenue).map(([c, v]) => `${v.toFixed(2)} ${c}`).join(" + ");
+    const revText = rev ? ` (${rev})` : "";
+    reportText += `• <code>${key}</code>\n`;
+    reportText += `  ↳ ${s.visits} переходів → ${s.forms} форм → <b>${s.paid} оплат</b>${revText}\n`;
+  });
 
   return reportText.trim();
 }
