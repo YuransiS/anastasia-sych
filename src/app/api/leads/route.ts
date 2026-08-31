@@ -304,6 +304,7 @@ export async function POST(request: NextRequest) {
           fbp,
           fbc,
           visitor_uuid: visitorUuid,
+          bw_cid: body.bw_cid || (visitorUuid ? `bw_${visitorUuid.replace(/-/g, '')}` : null),
           created_at: new Date().toISOString(),
           extra_metadata: {
             offer_variant: offerVariant,

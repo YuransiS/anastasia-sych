@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Sparkles, Send, ArrowRight, Video } from "lucide-react";
 import { trackPixelEvent } from "@/components/FacebookPixel";
 
-const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
+const DEFAULT_TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
@@ -13,6 +13,19 @@ function ThankYouContent() {
   const orderReference = searchParams.get("orderReference") || "";
   const [orderData, setOrderData] = useState<any>(null);
   const [countdown, setCountdown] = useState(3);
+
+  const getDynamicBotUrl = () => {
+    const baseBotUrl = DEFAULT_TG_BOT_URL;
+    const bwCid = searchParams.get("bw_cid") || (typeof window !== "undefined" ? localStorage.getItem("bw_cid") : null) || "";
+    const cleanPhone = orderData?.phone?.replace(/\D/g, "") || "";
+    const orderRef = orderReference || "";
+
+    let url = baseBotUrl;
+    if (bwCid) url += `&bw_cid=${encodeURIComponent(bwCid)}`;
+    if (orderRef) url += `&order_id=${encodeURIComponent(orderRef)}`;
+    if (cleanPhone) url += `&phone=${encodeURIComponent(cleanPhone)}`;
+    return url;
+  };
 
   // Check order status from database to prevent failed payment user from seeing thank-you page
   useEffect(() => {
@@ -74,7 +87,7 @@ function ThankYouContent() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          window.location.href = TG_BOT_URL;
+          window.location.href = getDynamicBotUrl();
           return 0;
         }
         return prev - 1;
@@ -82,10 +95,10 @@ function ThankYouContent() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [orderData, orderReference, searchParams]);
 
   const handleManualRedirect = () => {
-    window.location.href = TG_BOT_URL;
+    window.location.href = getDynamicBotUrl();
   };
 
   return (

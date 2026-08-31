@@ -52,6 +52,7 @@ export interface UnifiedOrderInput {
   fbp?: string | null;
   fbc?: string | null;
   visitor_uuid?: string | null;
+  bw_cid?: string | null;
   ip_address?: string | null;
   user_agent?: string | null;
   created_at?: string | null;
@@ -159,12 +160,14 @@ export async function createUnifiedOrder(orderData: UnifiedOrderInput) {
     const currency: CanonicalCurrency = (orderData.currency || "UAH").toUpperCase() as CanonicalCurrency;
     const amount = Number(Number(orderData.amount || 0).toFixed(2));
     const visitorUuid = orderData.visitor_uuid || null;
+    const bwCid = orderData.bw_cid || (visitorUuid ? `bw_${visitorUuid.replace(/-/g, '')}` : (orderData.customer_id ? `bw_${orderData.customer_id.replace(/-/g, '').substring(0, 16)}` : null));
 
     const metadata = {
       currency,
       product_type: orderData.product_type,
       product_name: orderData.product_name,
       payment_system: orderData.payment_system || "wayforpay",
+      bw_cid: bwCid,
       ...(orderData.extra_metadata || {}),
     };
 
@@ -191,6 +194,7 @@ export async function createUnifiedOrder(orderData: UnifiedOrderInput) {
       ip_address: safeTruncate(orderData.ip_address, 100),
       user_agent: safeTruncate(orderData.user_agent, 500),
       visitor_uuid: safeTruncate(visitorUuid, 100),
+      bw_cid: safeTruncate(bwCid, 100),
       created_at: orderData.created_at || new Date().toISOString(),
       metadata,
     };
