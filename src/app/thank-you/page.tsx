@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, Sparkles, Send, ArrowRight, Video } from "lucide-react";
 import { trackPixelEvent } from "@/components/FacebookPixel";
 
-const DEFAULT_TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
+const DEFAULT_TG_BOT_URL = "https://tg.pulse.is/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
 
 function ThankYouContent() {
   const searchParams = useSearchParams();
@@ -22,8 +22,8 @@ function ThankYouContent() {
 
     let url = baseBotUrl;
     if (bwCid) url += `&bw_cid=${encodeURIComponent(bwCid)}`;
-    if (orderRef) url += `&order_id=${encodeURIComponent(orderRef)}`;
     if (cleanPhone) url += `&phone=${encodeURIComponent(cleanPhone)}`;
+    if (orderRef) url += `&order_id=${encodeURIComponent(orderRef)}`;
     return url;
   };
 

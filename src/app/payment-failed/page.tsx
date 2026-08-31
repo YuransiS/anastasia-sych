@@ -4,7 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AlertCircle, RefreshCw, Send, ArrowRight } from "lucide-react";
 
-const TG_BOT_URL = "https://t.me/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
+const TG_BOT_URL = "https://tg.pulse.is/anastasiiasychbot?start=6a8588c358b407c61a0461fd";
 
 function PaymentFailedContent() {
   const searchParams = useSearchParams();
@@ -13,6 +13,7 @@ function PaymentFailedContent() {
   const rawReason = searchParams.get("reason") || "";
 
   const [reason, setReason] = useState(rawReason || "Скасовано користувачем або недостатньо коштів на картці");
+  const [orderPhone, setOrderPhone] = useState("");
 
   useEffect(() => {
     if (orderReference && !rawReason) {
@@ -21,6 +22,9 @@ function PaymentFailedContent() {
         .then((data) => {
           if (data.status === "success" && data.order?.raw_payload?.wayforpay_callback?.reason) {
             setReason(data.order.raw_payload.wayforpay_callback.reason);
+          }
+          if (data.order?.phone) {
+            setOrderPhone(data.order.phone);
           }
         })
         .catch(() => {});
@@ -32,7 +36,13 @@ function PaymentFailedContent() {
   };
 
   const handleOpenTelegram = () => {
-    window.location.href = TG_BOT_URL;
+    const bwCid = (typeof window !== "undefined" ? localStorage.getItem("bw_cid") : null) || searchParams.get("bw_cid") || "";
+    const cleanPhone = orderPhone.replace(/\D/g, "");
+    let url = TG_BOT_URL;
+    if (bwCid) url += `&bw_cid=${encodeURIComponent(bwCid)}`;
+    if (cleanPhone) url += `&phone=${encodeURIComponent(cleanPhone)}`;
+    if (orderReference) url += `&order_id=${encodeURIComponent(orderReference)}`;
+    window.location.href = url;
   };
 
   return (
