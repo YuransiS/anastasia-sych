@@ -17,7 +17,7 @@ export async function sendFacebookCapiEvent(
   }
 ) {
   const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || "1015433897324199";
-  const accessToken = process.env.FACEBOOK_ACCESS_TOKEN;
+  const accessToken = process.env.FACEBOOK_ACCESS_TOKEN || "EAAWcjCyZBn3EBSY11QlEE25kX4pQmmVTiD4tUJ5Uk3x8nZAnW2gLFNaPkyJYZAX0KObMhiu7hCgwP7X8rsXnU0pGFiDuT7irxN59ZBxi9WSG1Bvt4BH37ag4OUiJtUMmxys33HDabYYfTBPTP2fb5a7ayixZAf1I7mZBM7XgavSlDdXG2eCyvxbev7XeWD4q7aKgZDZD";
 
   if (!accessToken) {
     console.log(`[CAPI] Skip sending ${eventName} event: FACEBOOK_ACCESS_TOKEN is not defined.`);
